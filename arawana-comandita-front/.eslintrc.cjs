@@ -14,5 +14,11 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    "no-trailing-spaces": "error",
+    "eol-last": ["error", "always"],
+    "semi": [2, "always"],
+    "max-len": ["error", { "code": 80,  "tabWidth": 2, "ignoreTrailingComments": true, "ignoreComments": true}],
+    '@typescript-eslint/no-explicit-any': "off",
+    "object-curly-spacing": ["error", "always"],
   },
 }
