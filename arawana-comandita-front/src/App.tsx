@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 
 export const App = () => {
   return (
@@ -10,5 +11,5 @@ export const App = () => {
         <p className="text-slate-500">You have a new message!</p>
       </div>
     </div>
-  )
-}
+  );
+};
