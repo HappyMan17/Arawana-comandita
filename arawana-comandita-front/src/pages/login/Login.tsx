@@ -6,13 +6,12 @@ import { useForm, useUser } from "../../hooks";
 export const Login = () => {
     // const navigate = useNavigate();
     const { onChangeValue, email, password } = useForm();
-    const { loginUser } = useUser();
+    const { startLogin } = useUser();
 
     const onSubmit = (event: any) => {
         event.preventDefault();
-        console.log({ email, password });
-        loginUser();
-        // navigate('aplication');
+        // console.log({ email, password });
+        startLogin({ email, password });
     };
 
     return (

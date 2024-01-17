@@ -1,23 +1,40 @@
 import { createSlice } from '@reduxjs/toolkit';
-// import type { PayloadAction } from '@reduxjs/toolkit';
+import { User } from '../../types';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
-  isLoggedIn: boolean
+  status: 'checking' | 'not-authorized' | 'authorized';
+  user: Partial<User>;
+  errorMessage: string | null;
 }
 
 const initialState: UserState = {
-  isLoggedIn: false,
+  status: 'checking',
+  user: {},
+  errorMessage: null,
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    loggin: (state) => {
-      state.isLoggedIn = true;
+    onLogin: (state, action: PayloadAction<Partial<User>>) => {
+      state.status = 'authorized';
+      state.user = {
+        ...state.user,
+        ...action.payload,
+      };
     },
-    loggout: (state) => {
-      state.isLoggedIn = false;
+    onLogout: (state, action: PayloadAction<string | null>) => {
+      state.status = 'not-authorized';
+      state.user = {};
+      state.errorMessage = action.payload;
+    },
+    onChecking: (state) => {
+      state.status = 'checking';
+    },
+    clearErrorMessage: (state) => {
+      state.errorMessage = null;
     },
     // loggin: (state, action: PayloadAction<number>) => {
     //   state.isLoggedIn = true;
@@ -26,6 +43,11 @@ export const userSlice = createSlice({
 });
 
 //Action creators are generated for each case reducer function
-export const { loggin, loggout } = userSlice.actions;
+export const {
+  onLogin,
+  onLogout,
+  onChecking,
+  clearErrorMessage,
+} = userSlice.actions;
 
 export default userSlice.reducer;

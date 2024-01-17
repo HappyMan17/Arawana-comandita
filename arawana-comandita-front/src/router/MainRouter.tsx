@@ -23,7 +23,7 @@ const AuthRouter = () => {
 };
 
 export const MainRouter = () => {
-    const { isLoggedIn } = useUser();
+    const { status } = useUser();
 
     const Navigator = ({ isSignUp }: NavigatorProps) => {
         return isSignUp ? <AppRouter /> : <AuthRouter />;
@@ -34,7 +34,7 @@ export const MainRouter = () => {
 
             <Route
                 path="/*"
-                element={ <Navigator isSignUp={ isLoggedIn } /> }
+                element={ <Navigator isSignUp={ status === 'authorized' } /> }
             />
 
         </Routes>
