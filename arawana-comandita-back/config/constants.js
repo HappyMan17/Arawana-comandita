@@ -1,4 +1,4 @@
-import { envs } from "./env";
+import { envs } from "./env.js";
 
 
 const constants = {

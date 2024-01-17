@@ -5,5 +5,5 @@ const { get } = pkg;
 export const envs = {
   PORT: get('PORT').required().asInt(),
   DB_CN: get('DB_CN').required().asString(),
-  SECRET_JWT_SEED: get('DB_CN').required().asString(),
+  SECRET_JWT_SEED: get('SECRET_JWT_SEED').required().asString(),
 };
