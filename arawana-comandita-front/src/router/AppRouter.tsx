@@ -6,11 +6,11 @@ import { Tables } from "../pages/tables/Tables";
 import { useUser } from "../hooks";
 
 export const AppRouter = () => {
-  const { logoutUser } = useUser();
+  const { startLogout } = useUser();
   const Layout = () => {
     return (
       <>
-        <Sidebar logout={logoutUser}>
+        <Sidebar logout={startLogout}>
           <Suspense fallback={<h2>Loading...</h2>}>
             <Outlet />
           </Suspense>

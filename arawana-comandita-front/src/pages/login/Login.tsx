@@ -1,18 +1,25 @@
 /* eslint-disable max-len */
 
-// import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { useForm, useUser } from "../../hooks";
+import Swal from "sweetalert2";
 
 export const Login = () => {
     // const navigate = useNavigate();
     const { onChangeValue, email, password } = useForm();
-    const { startLogin } = useUser();
+    const { startLogin, errorMessage } = useUser();
 
     const onSubmit = (event: any) => {
         event.preventDefault();
         // console.log({ email, password });
         startLogin({ email, password });
     };
+
+    useEffect(() => {
+      if (errorMessage) {
+        Swal.fire('Error', errorMessage, 'error');
+      }
+    }, [errorMessage]);
 
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
