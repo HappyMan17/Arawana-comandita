@@ -6,8 +6,7 @@
 import express from "express";
 import { createUser, loginUser, checkUserToken } from "../controllers/auth.js";
 import { check } from "express-validator";
-import { validateFields } from "../middlewares/fieldsValidator.js";
-import { JWTValidation } from "../middlewares/jwtValidation.js";
+import { JWTValidation, validateFields } from "../middlewares/index.js";
 
 const authRouter = express.Router();
 
@@ -18,6 +17,7 @@ authRouter.post('/create',
     check('email', 'email is required').not().isEmpty().isEmail(),
     check('password', 'password is required').not().isEmpty(),
     check('password', 'password most have more that 5 characteres').isLength({ min: 8 }),
+    JWTValidation,
     validateFields,
   ],
   createUser);
@@ -28,6 +28,7 @@ authRouter.post('/login',
     check('email', 'email is required').not().isEmpty().isEmail(),
     check('password', 'password is required').not().isEmpty(),
     check('password', 'password most have more that 5 characteres').isLength({ min: 8 }),
+    JWTValidation,
     validateFields,
   ],
   loginUser);

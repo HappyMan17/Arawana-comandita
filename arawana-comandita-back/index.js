@@ -1,6 +1,6 @@
 import express from "express";
 import { envs } from './config/env.js';
-import authRouter from './routes/auth.js';
+import { authRouter } from './routes/index.js';
 import cors from 'cors';
 import { dbConection } from "./database/config.js";
 import constants from "./config/constants.js";
