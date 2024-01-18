@@ -1,6 +1,6 @@
 import { response } from "express";
 import { DaySummaryModel } from "../models/DaySummaryModel.js";
-import { daySummaryMapper } from "../mappers/daySummary.js";
+import { daySummaryMapper } from "../mappers/daySummaryMapper.js";
 
 export const getSummary = async (req, res) => {
   try {

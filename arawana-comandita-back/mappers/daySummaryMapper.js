@@ -1,4 +1,4 @@
-import { getTotal } from "../helpers/getTotal";
+import { getTotal } from "../helpers/getTotal.js";
 
 export const daySummaryMapper = (object) => {
   const {
