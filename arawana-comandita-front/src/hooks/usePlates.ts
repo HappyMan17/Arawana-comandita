@@ -7,6 +7,7 @@ import {
   setIsLoading,
   updatePlate,
   setCurrentPlate as addCurrentPlate,
+  clearCurrentPlate,
 } from "../redux";
 import { Plate } from "../types";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
@@ -96,9 +97,11 @@ export const usePlates = () => {
 
   };
 
-  const setCurrentPlate = async (plateId: string) => {
+  const setCurrentPlate = async (plateId: string | null) => {
     if (plateId) {
       dispatch(addCurrentPlate(plateId));
+    } else {
+      dispatch(clearCurrentPlate());
     }
   };
 

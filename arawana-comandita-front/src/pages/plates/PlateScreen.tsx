@@ -29,6 +29,9 @@ export const PlateScreen = () => {
       if (type === 'Modify') {
         id && setCurrentPlate(id);
       }
+      if (type === 'Create') {
+        setCurrentPlate(null);
+      }
       setModalValues({ isShown: true, title, type });
     };
 

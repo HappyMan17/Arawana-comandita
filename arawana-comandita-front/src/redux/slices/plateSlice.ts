@@ -30,6 +30,10 @@ export const plateSlice = createSlice({
         plate.id === action.payload,
       ) ?? null;
     },
+    clearCurrentPlate: (state) => {
+      state.isLoading = false;
+      state.currentPlate = null;
+    },
     updatePlate: (state, action: PayloadAction<Plate>) => {
       state.isLoading = false;
       state.plates = state.plates.map(plate => {
@@ -71,6 +75,7 @@ export const plateSlice = createSlice({
 export const {
   addPlate,
   setCurrentPlate,
+  clearCurrentPlate,
   setIsLoading,
   updatePlate,
   removePlate,
