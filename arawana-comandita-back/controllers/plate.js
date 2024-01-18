@@ -5,7 +5,6 @@ import { PlateModel } from "../models/PlateModel.js";
 export const getPlate = async (req, res) => {
   try {
     const plate = await PlateModel.findById(req.params.id).exec();
-    console.log({ plate }); //todo remove
     if (!plate) {
       return res.status(500).json({
         ok: false,
@@ -20,6 +19,7 @@ export const getPlate = async (req, res) => {
         name: plate.name,
         price: plate.price,
         description: plate.description,
+        image: plate.image,
       },
     });
   } catch (error) {
@@ -43,6 +43,7 @@ export const createPlate = async (req, res = response) => {
         name: plate.name,
         price: plate.price,
         description: plate.description,
+        image: plate.image,
       },
     });
 
@@ -64,7 +65,8 @@ export const updatePlate = async (req, res = response) => {
         {
           name: newPlate.name,
           price: newPlate.price,
-          description: newPlate.description
+          description: newPlate.description,
+          image: newPlate.image,
         }
       },
       { new: true },
@@ -84,6 +86,7 @@ export const updatePlate = async (req, res = response) => {
         name: plate.name,
         price: plate.price,
         description: plate.description,
+        image: plate.image,
       },
     });
 
