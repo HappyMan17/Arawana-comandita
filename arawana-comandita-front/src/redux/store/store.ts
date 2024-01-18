@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { userReducer } from '../slices';
+import { plateSlice, userReducer } from '../slices';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    plate: plateSlice.reducer,
   }
 });
 

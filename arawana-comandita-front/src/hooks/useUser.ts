@@ -9,7 +9,7 @@ import {
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
 
 export const useUser = () => {
-  const { status, errorMessage } = useAppSelector((state: RootState) =>
+  const { status, errorMessage, user } = useAppSelector((state: RootState) =>
     state.user
   );
   const dispatch = useAppDispatch();
@@ -28,7 +28,7 @@ export const useUser = () => {
       // console.log({ data });
       localStorage.setItem('token', data.token);
       localStorage.setItem('token-init-date', `${new Date().getTime()}`);
-      dispatch(onLogin({ name: data.user.name, email: data.user.email }));
+      dispatch(onLogin({ name: data.user.name, email, id: data.user.uid }));
 
     } catch (error) {
       console.log({ error });
@@ -51,7 +51,7 @@ export const useUser = () => {
       // console.log({ data });
       localStorage.setItem('token', data.token);
       localStorage.setItem('token-init-date', `${new Date().getTime()}`);
-      dispatch(onLogin({ name: data.user.name, email: data.user.email }));
+      dispatch(onLogin({ name: data.user.name, id: data.user.uid }));
 
     } catch (error) {
       console.log({ error });
@@ -64,6 +64,7 @@ export const useUser = () => {
 
   return {
     //? variables
+    user,
     status,
     errorMessage,
     //? methods
