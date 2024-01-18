@@ -1,6 +1,6 @@
 import express from "express";
 import { envs } from './config/env.js';
-import { authRouter } from './routes/index.js';
+import { authRouter, plateRouter } from './routes/index.js';
 import cors from 'cors';
 import { dbConection } from "./database/config.js";
 import constants from "./config/constants.js";
@@ -33,6 +33,7 @@ app.use(cors({
 
 // Rutes
 app.use('/api/auth', authRouter);
+app.use('/api/plate', plateRouter);
 
 app.listen(PORT, () => {
   console.log('Server running on port ' + PORT);

@@ -1,6 +1,6 @@
 import { response } from "express";
-import { plateMapper } from "../mappers/plateMapper";
-import { PlateModel } from "../models/PlateModel";
+import { plateMapper } from "../mappers/plateMapper.js";
+import { PlateModel } from "../models/PlateModel.js";
 
 export const getPlate = async (req, res) => {
   try {

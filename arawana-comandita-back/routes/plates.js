@@ -1,11 +1,17 @@
 import express from 'express';
 import { check } from 'express-validator';
-import { JWTValidation, validateFields } from '../middlewares';
+import { JWTValidation, validateFields } from '../middlewares/index.js';
+import {
+  createPlate,
+  deletPlate,
+  getPlate,
+  updatePlate,
+} from '../controllers/index.js';
 
 const router = express.Router();
 
 // get plate
-router.get('/:id', JWTValidation, () => null);
+router.get('/:id', JWTValidation, getPlate);
 
 // create plate
 router.post('/create',
@@ -15,7 +21,7 @@ router.post('/create',
   check('description', 'password is required').not().isEmpty(),
   validateFields,
   JWTValidation,
-], () => null);
+], createPlate);
 
 // update plate
 router.put('/update',
@@ -25,7 +31,9 @@ router.put('/update',
   check('description', 'password is required').not().isEmpty(),
   validateFields,
   JWTValidation,
-], () => null);
+], updatePlate);
 
 // delete plate
-router.put('/delete/:id', JWTValidation, () => null);
+router.put('/delete/:id', JWTValidation, deletPlate);
+
+export default router;
