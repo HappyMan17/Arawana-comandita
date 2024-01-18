@@ -13,6 +13,10 @@ export const PlateSchema = Schema({
     type: String,
     require: true,
   },
+  image: {
+    type: String,
+    require: true,
+  },
   uid: {
     type: String,
     require: true,
