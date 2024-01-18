@@ -12,7 +12,7 @@ export const TableCard: React.FC<TableCardProps> = ({ image, food, name, comment
     return (
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <div className="flex item-center justify-center">
-                <img className="rounded-t-lg" src={image ?? localImage} alt="" width="200" />
+                <img className="rounded-t-lg" src={image ? image : localImage} alt="" width="200" />
             </div>
             <div className="p-5">
                 <a href="#">
