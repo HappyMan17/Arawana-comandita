@@ -69,7 +69,13 @@ export const updatePlate = async (req, res = response) => {
       },
       { new: true },
     );
-    console.log({ plate }); //todo remove
+
+    if (!plate) {
+      return res.status(400).json({
+        ok: false,
+        message: 'Missing field',
+      });
+    }
 
     res.status(201).json({
       ok: true,
@@ -96,7 +102,13 @@ export const deletPlate = async (req, res = response) => {
     const plate = await PlateModel.findOneAndDelete(
       { _id: plateId },
     );
-    console.log({ plate }); //todo remove
+
+    if (!plate) {
+      return res.status(400).json({
+        ok: false,
+        message: 'Missing field',
+      });
+    }
 
     res.status(201).json({
       ok: true,
