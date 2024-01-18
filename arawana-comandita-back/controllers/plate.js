@@ -12,7 +12,6 @@ export const getUserPlates = async (req, res) => {
       });
     }
 
-    console.log({ plates }); // todo remove
     res.status(201).json({
       ok: true,
       plates: plates.map(plate => ({

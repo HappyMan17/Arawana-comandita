@@ -11,10 +11,7 @@ import { createTable, deletTable, getTables, getUserTable, updateTable } from '.
 const router = express.Router();
 
 // get user tables
-router.get('/tables', JWTValidation, getUserTable);
-
-// get table
-router.get('/:id', JWTValidation, getTables);
+router.get('/all', JWTValidation, getUserTable);
 
 // create table
 router.post('/create',
@@ -41,5 +38,8 @@ router.put('/update',
 
 // delete table
 router.delete('/delete/:id', JWTValidation, deletTable);
+
+// get table
+router.get('/:id', JWTValidation, getTables);
 
 export default router;

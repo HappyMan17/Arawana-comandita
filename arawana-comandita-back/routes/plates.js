@@ -16,11 +16,8 @@ import {
 
 const router = express.Router();
 
-// get plate
-router.get('/:id', JWTValidation, getPlate);
-
 // get user plates
-router.get('/plates', JWTValidation, getUserPlates);
+router.get('/all', JWTValidation, getUserPlates);
 
 // create plate
 router.post('/create',
@@ -28,7 +25,6 @@ router.post('/create',
   check('name', 'plate name is required').not().isEmpty(),
   check('price', 'plate price is required').not().isEmpty(),
   check('description', 'password is required').not().isEmpty(),
-  check('image', 'image is required').not().isEmpty(),
   check('uid', 'user id is required').not().isEmpty(),
   validateFields,
   JWTValidation,
@@ -41,7 +37,6 @@ router.put('/update',
   check('name', 'plate name is required').not().isEmpty(),
   check('price', 'plate price is required').not().isEmpty(),
   check('description', 'password is required').not().isEmpty(),
-  check('image', 'image is required').not().isEmpty(),
   check('uid', 'user id is required').not().isEmpty(),
   validateFields,
   JWTValidation,
@@ -49,5 +44,8 @@ router.put('/update',
 
 // delete plate
 router.delete('/delete/:id', JWTValidation, deletPlate);
+
+// get plate
+router.get('/:id', JWTValidation, getPlate);
 
 export default router;
