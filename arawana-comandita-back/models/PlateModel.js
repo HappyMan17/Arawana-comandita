@@ -5,11 +5,15 @@ export const PlateSchema = Schema({
     type: String,
     require: true,
   },
-  price: { 
+  price: {
     type: Number,
     require: true,
   },
-  description: { 
+  description: {
+    type: String,
+    require: true,
+  },
+  uid: {
     type: String,
     require: true,
   },

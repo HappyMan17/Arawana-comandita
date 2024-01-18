@@ -6,11 +6,15 @@ const DaySummarySchema = Schema({
     type: Date,
     default: Date.now,
   },
-  total: { 
+  total: {
     type: Number,
     require: true,
   },
-  comment: { 
+  comment: {
+    type: String,
+    require: true,
+  },
+  uid: {
     type: String,
     require: true,
   },

@@ -6,11 +6,15 @@ export const TableSchema = Schema({
     type: String,
     require: true,
   },
-  total: { 
+  total: {
     type: Number,
     require: true,
   },
-  comment: { 
+  comment: {
+    type: String,
+    require: true,
+  },
+  uid: {
     type: String,
     require: true,
   },
