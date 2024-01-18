@@ -49,7 +49,6 @@ export const usePlates = () => {
         console.log('error geting plates');
       }
       dispatch(clearPlates());
-      console.log({ dat: data, data: data.plates }); // todo remove
 
       data.plates.map((plate: Plate) => {
         dispatch(addPlate(plate));
@@ -87,7 +86,7 @@ export const usePlates = () => {
         console.log('error updating plates');
       }
       // dispatch(clearPlates());
-      console.log({ dat: data, data: data.plate }); // todo remove
+      // console.log({ dat: data, data: data.plate }); // todo remove
 
       dispatch(removePlate(plateId));
 
