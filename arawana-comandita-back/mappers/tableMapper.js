@@ -1,16 +1,20 @@
+import { getTotal } from "../helpers/getTotal";
+
 export const tableMapper = (object) => {
   const {
     name,
-    total,
     comment,
     uid,
     plates,
   } = object;
 
+  // plates list and price key
+  const total = getTotal(plates, 'price');
+
   return {
     name,
-    total,
     comment,
+    total,
     uid,
     plates,
   };

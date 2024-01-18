@@ -16,7 +16,6 @@ router.get('/:id', JWTValidation, () => null);
 router.post('/create',
 [ // middleware
   check('date', 'Summary date is required').not().isEmpty(),
-  check('total', 'total price is required').not().isEmpty(),
   check('comment', 'A comment is required').not().isEmpty(),
   check('uid', 'User id is required').not().isEmpty(),
   check('tables', 'Tables are required').not().isEmpty(),
@@ -28,7 +27,6 @@ router.post('/create',
 router.put('/update',
 [ // middleware
   check('date', 'Summary date is required').not().isEmpty(),
-  check('total', 'total price is required').not().isEmpty(),
   check('comment', 'A comment is required').not().isEmpty(),
   check('uid', 'User id is required').not().isEmpty(),
   check('tables', 'Tables are required').not().isEmpty(),

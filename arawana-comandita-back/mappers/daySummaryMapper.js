@@ -1,11 +1,15 @@
+import { getTotal } from "../helpers/getTotal";
+
 export const daySummaryMapper = (object) => {
   const {
     date,
-    total,
     comment,
     uid,
     tables,
   } = object;
+
+  // table list and total key
+  const total = getTotal(tables, 'total');
 
   return {
     date,

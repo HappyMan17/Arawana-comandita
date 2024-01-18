@@ -60,6 +60,7 @@ export const createTable = async (req, res = response) => {
 export const updateTable = async (req, res = response) => {
   try {
     const newTable = tableMapper(req.body);
+
     // db save plate
     const table = await TableModel.findOneAndUpdate(
       { _id: req.body.id },

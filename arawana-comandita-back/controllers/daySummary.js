@@ -60,6 +60,7 @@ export const createSummary = async (req, res = response) => {
 export const updateSummary = async (req, res = response) => {
   try {
     const newSummary = daySummaryMapper(req.body);
+
     // db save summary
     const summary = await DaySummaryModel.findOneAndUpdate(
       { _id: req.body.id },

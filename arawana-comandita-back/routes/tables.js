@@ -17,7 +17,6 @@ router.get('/:id', JWTValidation, getTables);
 router.post('/create',
 [ // middleware
   check('name', 'Table name is required').not().isEmpty(),
-  check('total', 'Table total is required').not().isEmpty(),
   check('comment', 'Comment is required').not().isEmpty(),
   check('uid', 'User id is required').not().isEmpty(),
   check('plates', 'Plates is required').not().isEmpty(),
@@ -30,7 +29,6 @@ router.put('/update',
 [ // middleware
   check('id', 'Table id is required').not().isEmpty(),
   check('name', 'Table name is required').not().isEmpty(),
-  check('total', 'Table total is required').not().isEmpty(),
   check('comment', 'Comment is required').not().isEmpty(),
   check('uid', 'User id is required').not().isEmpty(),
   check('plates', 'Plates is required').not().isEmpty(),
