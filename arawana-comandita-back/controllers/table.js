@@ -2,6 +2,36 @@ import { response } from "express";
 import { TableModel } from "../models/TableModel.js";
 import { tableMapper } from "../mappers/tableMapper.js";
 
+export const getUserTable = async (req, res) => {
+  try {
+    const tables = await TableModel.find({ uid: req.uid }).exec();
+    if (!tables) {
+      return res.status(500).json({
+        ok: false,
+        message: 'Tables not found',
+      });
+    }
+
+    console.log({ tables }); // todo remove
+    res.status(201).json({
+      ok: true,
+      tables: tables.map(table => ({
+        id: table.id,
+        name: table.name,
+        total: table.total,
+        comment: table.comment,
+        uid: table.uid,
+        plates: table.plates,
+      }))
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      message: 'Please talk with your administrator',
+    });
+  }
+};
+
 export const getTables = async (req, res) => {
   try {
     const table = await TableModel.findById(req.params.id).exec();
@@ -44,7 +74,7 @@ export const createTable = async (req, res = response) => {
         name: table.name,
         total: table.total,
         comment: table.comment,
-        uid: table.uid,
+        uid: req.uid,
         plates: table.plates,
       },
     });

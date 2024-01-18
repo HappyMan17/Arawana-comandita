@@ -6,9 +6,12 @@
 import express from 'express';
 import { check } from 'express-validator';
 import { JWTValidation, validateFields } from '../middlewares/index.js';
-import { createTable, deletTable, getTables, updateTable } from '../controllers/table.js';
+import { createTable, deletTable, getTables, getUserTable, updateTable } from '../controllers/table.js';
 
 const router = express.Router();
+
+// get user tables
+router.get('/tables', JWTValidation, getUserTable);
 
 // get table
 router.get('/:id', JWTValidation, getTables);

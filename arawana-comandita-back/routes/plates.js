@@ -10,6 +10,7 @@ import {
   createPlate,
   deletPlate,
   getPlate,
+  getUserPlates,
   updatePlate,
 } from '../controllers/index.js';
 
@@ -18,13 +19,17 @@ const router = express.Router();
 // get plate
 router.get('/:id', JWTValidation, getPlate);
 
+// get user plates
+router.get('/plates', JWTValidation, getUserPlates);
+
 // create plate
 router.post('/create',
 [ // middleware
   check('name', 'plate name is required').not().isEmpty(),
   check('price', 'plate price is required').not().isEmpty(),
   check('description', 'password is required').not().isEmpty(),
-  check('image', 'password is required').not().isEmpty(),
+  check('image', 'image is required').not().isEmpty(),
+  check('uid', 'user id is required').not().isEmpty(),
   validateFields,
   JWTValidation,
 ], createPlate);
@@ -36,7 +41,8 @@ router.put('/update',
   check('name', 'plate name is required').not().isEmpty(),
   check('price', 'plate price is required').not().isEmpty(),
   check('description', 'password is required').not().isEmpty(),
-  check('image', 'password is required').not().isEmpty(),
+  check('image', 'image is required').not().isEmpty(),
+  check('uid', 'user id is required').not().isEmpty(),
   validateFields,
   JWTValidation,
 ], updatePlate);

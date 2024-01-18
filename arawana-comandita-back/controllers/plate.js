@@ -2,6 +2,35 @@ import { response } from "express";
 import { plateMapper } from "../mappers/plateMapper.js";
 import { PlateModel } from "../models/PlateModel.js";
 
+export const getUserPlates = async (req, res) => {
+  try {
+    const plates = await PlateModel.find({ uid: req.uid }).exec();
+    if (!plates) {
+      return res.status(500).json({
+        ok: false,
+        message: 'Plates not found',
+      });
+    }
+
+    console.log({ plates }); // todo remove
+    res.status(201).json({
+      ok: true,
+      plates: plates.map(plate => ({
+        id: plate.id,
+        name: plate.name,
+        price: plate.price,
+        description: plate.description,
+        image: plate.image,
+      }))
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      message: 'Please talk with your administrator',
+    });
+  }
+};
+
 export const getPlate = async (req, res) => {
   try {
     const plate = await PlateModel.findById(req.params.id).exec();
@@ -42,6 +71,7 @@ export const createPlate = async (req, res = response) => {
         id: plate.id,
         name: plate.name,
         price: plate.price,
+        uid: req.uid,
         description: plate.description,
         image: plate.image,
       },
