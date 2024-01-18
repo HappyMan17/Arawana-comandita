@@ -1,9 +1,9 @@
+/* eslint-disable max-len */
 import image from '../../assets/table.jpg';
 import { TableCard } from "../../components";
 
 const productNames = ['carne', 'pollo', 'caldo'];
 
-/* eslint-disable max-len */
 export const Tables = () => {
     // todo remove table param id and dispatch with filter
     // todo modal to add product

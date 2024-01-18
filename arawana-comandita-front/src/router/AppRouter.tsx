@@ -1,8 +1,7 @@
 import { Suspense } from "react";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
-import { Home } from "../pages/";
+import { Home, PlateScreen, Tables } from "../pages/";
 import { Sidebar } from "../components/Sidebar";
-import { Tables } from "../pages/tables/Tables";
 import { useUser } from "../hooks";
 
 export const AppRouter = () => {
@@ -24,6 +23,7 @@ export const AppRouter = () => {
       <Route path='/' element={ <Layout /> } >
         <Route path="home" element={ <Home /> } />
         <Route path="tables" element={ <Tables /> } />
+        <Route path="plates" element={ <PlateScreen /> } />
         <Route path="/*" element={ <Navigate to="/home" replace={true} /> } />
       </Route>
     </Routes>
