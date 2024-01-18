@@ -11,13 +11,12 @@ import { JWTValidation, validateFields } from "../middlewares/index.js";
 const authRouter = express.Router();
 
 // create user
-authRouter.post('/create', 
+authRouter.post('/create',
   [ // middleware
     check('name', 'userName is required').not().isEmpty(),
     check('email', 'email is required').not().isEmpty().isEmail(),
     check('password', 'password is required').not().isEmpty(),
     check('password', 'password most have more that 5 characteres').isLength({ min: 8 }),
-    JWTValidation,
     validateFields,
   ],
   createUser);
@@ -28,7 +27,6 @@ authRouter.post('/login',
     check('email', 'email is required').not().isEmpty().isEmail(),
     check('password', 'password is required').not().isEmpty(),
     check('password', 'password most have more that 5 characteres').isLength({ min: 8 }),
-    JWTValidation,
     validateFields,
   ],
   loginUser);
