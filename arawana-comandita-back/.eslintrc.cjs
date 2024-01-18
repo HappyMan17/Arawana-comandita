@@ -22,7 +22,9 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
+      "no-trailing-spaces": "error",
       "semi": [2, "always"],
-      "eol-last": ["error", "always"]
+      "eol-last": ["error", "always"],
+      "object-curly-spacing": ["error", "always"],
     }
 };

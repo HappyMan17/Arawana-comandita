@@ -11,7 +11,7 @@ export const JWTValidation = (req, res = response, next) => {
   if (!authorization.startsWith('Bearer ')) {
     return res.status(403).json({ message: 'Token not provided' });
   }
-  
+
   const token = authorization.split(' ').at(1) ?? '';
 
   try {
@@ -25,6 +25,6 @@ export const JWTValidation = (req, res = response, next) => {
   } catch (error) {
     return res.status(403).json({ message: 'Not valid token' });
   }
-  
+
   next();
 };

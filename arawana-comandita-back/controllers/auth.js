@@ -10,7 +10,7 @@ const checkUserEmailAlreadyExist = async (email) => {
     return {
       emailExist: user,
       user,
-    };   
+    };
   } catch (error) {
     console.log('db connection error');
     return {
@@ -40,7 +40,7 @@ export const createUser = async (req, res = response) => {
 
     // token
     const token = await generateJWT(user.id, user.name);
-  
+
     res.status(201).json({
       ok: true,
       // message: 'Register made',
@@ -84,7 +84,7 @@ export const loginUser = async (req, res = response) => {
 
     // token
     const token = await generateJWT(user.id, user.name);
-  
+
     res.json({
       ok: true,
       user: {
