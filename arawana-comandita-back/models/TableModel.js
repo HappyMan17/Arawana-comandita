@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { PlateSchema } from "./PlateModel";
+import { PlateSchema } from "./PlateModel.js";
 
 export const TableSchema = Schema({
   name: {
