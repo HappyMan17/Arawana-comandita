@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { Login } from "../pages/";
 import { AppRouter } from "./AppRouter";
 import { useUser } from "../hooks";
+import { useEffect } from "react";
 
 interface NavigatorProps {
     isSignUp: boolean
@@ -23,7 +24,11 @@ const AuthRouter = () => {
 };
 
 export const MainRouter = () => {
-    const { status } = useUser();
+    const { status, startChecking } = useUser();
+
+    useEffect(() => {
+      startChecking();
+    }, []);
 
     const Navigator = ({ isSignUp }: NavigatorProps) => {
         return isSignUp ? <AppRouter /> : <AuthRouter />;
