@@ -9,7 +9,7 @@ const getValue = (item, key) => {
 
 export const getTotal = (objectList, objectKey) => {
   let total = 0;
-  console.log({ objectList, objectKey }); // todo remove
+  // console.log({ objectList, objectKey }); // todo remove
   if (!objectList) {
     return total;
   }
@@ -18,6 +18,6 @@ export const getTotal = (objectList, objectKey) => {
       total =+ getValue(item, objectKey);
     }
   });
-  console.log({ total }); // todo remove
+  // console.log({ total }); // todo remove
   return total;
 };
