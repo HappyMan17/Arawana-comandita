@@ -1,26 +1,42 @@
 /* eslint-disable max-len */
+import { useEffect, useState } from 'react';
 import { TablePlateCard } from '.';
 import { useTable } from '../hooks';
 import { Plate } from '../types';
 
 interface SelectProductProps {
-  tableId: string | null;
   plates: Plate[];
   onClose: () => void;
   onSave: (tablePlates: Plate[]) => void;
 }
 
-export const SelectProduct: React.FC<SelectProductProps> = ({ tableId, plates, onClose, onSave }) => {
+export const SelectProduct: React.FC<SelectProductProps> = ({ plates, onClose, onSave }) => {
   const { findTablePlate } = useTable();
-  const tablePlates: Plate[] = JSON.parse(JSON.stringify(plates));
-  if (plates.length === 0) {
-    return;
-  }
+  const [tablePlates, setTablePlates] = useState<Plate[]>([]);
 
   const onSaveTablePlates = () => {
     const selectedPlates = tablePlates.filter(plate => plate.isSelected);
     onSave(selectedPlates);
   };
+
+  useEffect(() => {
+    if (plates && plates.length > 0) {
+      // this function gets the previous table plates saved
+      const getTablePlates = () => {
+        const dbPlates: Plate[] = JSON.parse(JSON.stringify(plates));
+        const currentPlates: Plate[] = dbPlates.map(plate => {
+          const currentPlate = findTablePlate(plate.id!);
+          if (currentPlate) {
+            return currentPlate;
+          }
+          return plate;
+        });
+        setTablePlates(currentPlates);
+      };
+      getTablePlates();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plates]);
 
   return (
     <section className="absolute top-0 left-0 z-50 flex items-center justify-center w-full h-dvh bg-zinc-600 bg-opacity-80">
@@ -29,10 +45,8 @@ export const SelectProduct: React.FC<SelectProductProps> = ({ tableId, plates, o
         <section className="max-h-[650px] grid grid-cols-1 sm:grid-cols-2 grid-flow-row gap-4 mt-10 mb-3 overflow-scroll">
           {
             tablePlates.map(plate => {
-              // to show current table plate values
-              const currentPlate = findTablePlate(tableId, plate.id!);
               return (
-                <TablePlateCard plate={currentPlate ?? plate} key={plate.id} />
+                <TablePlateCard plate={plate} key={plate.id} />
               );
             })
           }

@@ -157,12 +157,12 @@ export const useTable = () => {
     }
   };
 
-  const findTablePlate = (tableId: string | null, plateId: string) => {
-    const table = tables.find(table => table.id === tableId);
-    if (!table) {
+  const findTablePlate = (plateId: string) => {
+    // console.log({currentTable})
+    if (!currentTable) {
       return null;
     }
-    const plate = table.plates.find(plate => {
+    const plate = currentTable.plates.find(plate => {
       return plate.id === plateId;
     });
 

@@ -33,7 +33,7 @@ export const Tables = () => {
     type: 'Create'
   });
 
-  const showFormModal = (title: string, type: ModalType, id: string | null) => {
+  const showFormModal = async (title: string, type: ModalType, id: string | null) => {
     // set currentPlate to show info in modal
     if (type === 'Modify') {
       // set current
@@ -41,17 +41,18 @@ export const Tables = () => {
     }
     if (type === 'Create') {
       // reset current
-      setCurrentTable(null);
+      await setCurrentTable(null);
     }
     setModalValues({ isShown: true, title, type });
   };
 
   // TABLE MODAL
-  const closeFormModal = () => {
+  const closeFormModal = async () => {
     setModalValues(prevState => ({
       ...prevState,
       isShown: false
     }));
+    await setCurrentTable(null);
   };
 
   // TABLE MODAL
@@ -87,6 +88,7 @@ export const Tables = () => {
       ...prevState,
       isShown: false
     }));
+    await setCurrentTable(null);
   };
 
   const onShowPlateModal = async (tableId: string | null) => {
@@ -98,12 +100,14 @@ export const Tables = () => {
       isShown: true,
       tableId,
     }));
+
+    await setCurrentTable(tableId);
   };
 
   const onSavePlateModal = async (tablePlates: Plate[]) => {
     // todo get table id
     if (plateModalValues.tableId) {
-      // console.log('id exist'); // todo remove
+      // console.log({ ms: 'id exist', plates: tablePlates }); // todo remove
       await startUpdatingTablePlates({ tableId: plateModalValues.tableId, selectedPlates: tablePlates });
     }
     startGetingTables();
@@ -151,7 +155,7 @@ export const Tables = () => {
       }
       {
         plateModalValues.isShown && (
-          <SelectProduct tableId={plateModalValues.tableId!} plates={plates ?? []} onClose={onClosePlateModal} onSave={onSavePlateModal} />
+          <SelectProduct plates={plates ?? []} onClose={onClosePlateModal} onSave={onSavePlateModal} />
         )
       }
     </>
