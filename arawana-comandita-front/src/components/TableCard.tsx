@@ -29,7 +29,7 @@ export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, remo
             plates.map(item => {
               return (
                 <a href="#" className="my-1 mx-1 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-400 rounded-lg hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800" key={item.id} >
-                  { item.name }
+                  { `${item.name} = ${item.quantity ?? 0}` }
                 </a>
               );
             })
