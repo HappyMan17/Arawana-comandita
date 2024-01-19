@@ -1,10 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { plateSlice, userReducer } from '../slices';
+import { plateSlice, tableSlice, userReducer } from '../slices';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     plate: plateSlice.reducer,
+    table: tableSlice.reducer,
   }
 });
 
