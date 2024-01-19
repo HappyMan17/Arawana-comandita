@@ -32,7 +32,7 @@ export const TablePlateCard: React.FC<TablePlateCardProps> = ({ plate }) => {
 
   const onChangeInputValue = ({ target }: any) => {
     let quantity: number | undefined = parseInt(target.value, 10);
-    if (isNaN(quantity)) {
+    if (isNaN(quantity) || quantity < 0) {
       quantity = plateState.quantity;
       if (`${plateState.quantity}`.length === 1) {
         quantity = undefined;
