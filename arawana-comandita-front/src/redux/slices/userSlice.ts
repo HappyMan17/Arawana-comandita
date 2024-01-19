@@ -5,12 +5,14 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 export interface UserState {
   status: 'checking' | 'not-authorized' | 'authorized';
   user: Partial<User>;
+  darkMode: 'dark' | '';
   errorMessage: string | null;
 }
 
 const initialState: UserState = {
   status: 'checking',
   user: {},
+  darkMode: 'dark',
   errorMessage: null,
 };
 
@@ -36,6 +38,9 @@ export const userSlice = createSlice({
     clearErrorMessage: (state) => {
       state.errorMessage = null;
     },
+    setDarkMode: (state, action: PayloadAction<'dark' | ''>) => {
+      state.darkMode = action.payload;
+    }
     // loggin: (state, action: PayloadAction<number>) => {
     //   state.isLoggedIn = true;
     // },
@@ -48,6 +53,7 @@ export const {
   onLogout,
   onChecking,
   clearErrorMessage,
+  setDarkMode,
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -4,12 +4,18 @@ import {
   clearErrorMessage,
   onChecking,
   onLogin,
-  onLogout
+  onLogout,
+  setDarkMode
 } from "../redux";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
 
 export const useUser = () => {
-  const { status, errorMessage, user } = useAppSelector((state: RootState) =>
+  const {
+    status,
+    errorMessage,
+    user,
+    darkMode,
+  } = useAppSelector((state: RootState) =>
     state.user
   );
   const dispatch = useAppDispatch();
@@ -62,14 +68,26 @@ export const useUser = () => {
     }
   };
 
+  const changeDarkMode = async () => {
+    if (darkMode === 'dark') {
+      dispatch(setDarkMode(''));
+      localStorage.setItem('darkMode', '');
+    } else {
+      dispatch(setDarkMode('dark'));
+      localStorage.setItem('darkMode', 'dark');
+    }
+  };
+
   return {
     //? variables
     user,
     status,
     errorMessage,
+    darkMode,
     //? methods
     startLogin,
     startLogout,
+    changeDarkMode,
     startChecking,
   };
 };
