@@ -12,7 +12,6 @@ export const getUserTable = async (req, res) => {
       });
     }
 
-    console.log({ tables }); // todo remove
     res.status(201).json({
       ok: true,
       tables: tables.map(table => ({
