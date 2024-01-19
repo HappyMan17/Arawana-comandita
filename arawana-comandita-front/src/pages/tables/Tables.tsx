@@ -132,7 +132,7 @@ export const Tables = () => {
       <h1 className="w-full font-semibold text-4xl">
         Tables
       </h1>
-      <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-10 overflow-hidden">
+      <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-5 overflow-hidden">
         {
           tables.map(table => {
             return (
