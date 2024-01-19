@@ -9,39 +9,40 @@ interface NavigatorProps {
 }
 
 const AuthRouter = () => {
-    return (
-        <Routes>
-            <Route
-                path="/login"
-                element={ <Login /> }
-            />
-            <Route
-                path="/*"
-                element={ <Navigate to="/login" replace={true} /> }
-            />
-        </Routes>
-    );
+  return (
+    <Routes>
+      <Route
+        path="/login"
+        element={ <Login /> }
+      />
+      <Route
+        path="/*"
+        element={ <Navigate to="/login" replace={true} /> }
+      />
+    </Routes>
+  );
 };
 
 export const MainRouter = () => {
-    const { status, startChecking } = useUser();
+  const { status, startChecking } = useUser();
 
-    useEffect(() => {
-      startChecking();
-    }, []);
+  useEffect(() => {
+    startChecking();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    const Navigator = ({ isSignUp }: NavigatorProps) => {
-        return isSignUp ? <AppRouter /> : <AuthRouter />;
-    };
+  const Navigator = ({ isSignUp }: NavigatorProps) => {
+    return isSignUp ? <AppRouter /> : <AuthRouter />;
+  };
 
-    return (
-        <Routes>
+  return (
+    <Routes>
 
-            <Route
-                path="/*"
-                element={ <Navigator isSignUp={ status === 'authorized' } /> }
-            />
+      <Route
+        path="/*"
+        element={ <Navigator isSignUp={ status === 'authorized' } /> }
+      />
 
-        </Routes>
-    );
+    </Routes>
+  );
 };

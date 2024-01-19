@@ -35,8 +35,8 @@ export const useTable = () => {
 
       dispatch(addTable(data.table));
     } catch (error) {
-        dispatch(setTableErrorMessage('Error creating table'));
-        console.log({ error });
+      dispatch(setTableErrorMessage('Error creating table'));
+      console.log({ error });
     } finally {
       setTimeout(() => {
         dispatch(clearTableErrorMessage());

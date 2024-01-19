@@ -15,6 +15,7 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "no-trailing-spaces": "error",
+    "indent": ["error", 2],
     "eol-last": ["error", "always"],
     "semi": [2, "always"],
     "max-len": ["error", { "code": 80,  "tabWidth": 2, "ignoreTrailingComments": true, "ignoreComments": true}],

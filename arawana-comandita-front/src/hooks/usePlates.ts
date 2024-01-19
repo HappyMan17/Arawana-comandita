@@ -13,12 +13,12 @@ import { Plate } from "../types";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
 
 export const usePlates = () => {
- const {
-  currentPlate,
-  isLoading,
-  errorMessage,
-  plates,
-} = useAppSelector(state => state.plate);
+  const {
+    currentPlate,
+    isLoading,
+    errorMessage,
+    plates,
+  } = useAppSelector(state => state.plate);
 
   const dispatch = useAppDispatch();
 
@@ -34,8 +34,8 @@ export const usePlates = () => {
 
       dispatch(addPlate(data.plate));
     } catch (error) {
-        dispatch(setErrorMessage('Error creating plate'));
-        console.log({ error });
+      dispatch(setErrorMessage('Error creating plate'));
+      console.log({ error });
     }
 
   };
