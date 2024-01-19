@@ -100,7 +100,7 @@ export const PlateScreen = () => {
             </section>
             {
               modalValues.isShown && (
-                <ProductForm onClose={closeFormModal} plate={currentPlate} title={modalValues.title} onSave={onSaveClick} />
+                <ProductForm onClose={closeFormModal} plate={currentPlate} title={modalValues.title ?? ''} onSave={onSaveClick} />
               )
             }
         </>

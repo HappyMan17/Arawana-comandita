@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from "react";
-import { TableCard, TableForm } from "../../components";
-import { ModalType, ModalState, Table } from "../../types";
-import { useTable, useUser } from "../../hooks";
+import { SelectProduct, TableCard, TableForm } from "../../components";
+import { ModalType, ModalState, Table, Plate } from "../../types";
+import { usePlates, useTable, useUser } from "../../hooks";
 import Swal from "sweetalert2";
 
 export const Tables = () => {
@@ -14,13 +14,22 @@ export const Tables = () => {
       currentTable,
       setCurrentTable,
       startRemovingTable,
+      startUpdatingTablePlates,
       errorMessage,
     } = useTable();
+    const { plates, startGetingPlates } = usePlates();
     const { user } = useUser();
 
+    // TABLE MODAL
     const [modalValues, setModalValues] = useState<ModalState>({
       isShown: false,
       title: '',
+      type: 'Create'
+    });
+    // PLATE MODAL
+    const [plateModalValues, setPlateModalValues] = useState<ModalState>({
+      isShown: false,
+      tableId: null,
       type: 'Create'
     });
 
@@ -37,6 +46,7 @@ export const Tables = () => {
       setModalValues({ isShown: true, title, type });
     };
 
+    // TABLE MODAL
     const closeFormModal = () => {
       setModalValues(prevState => ({
         ...prevState,
@@ -44,12 +54,13 @@ export const Tables = () => {
       }));
     };
 
+    // TABLE MODAL
     const removeTable = async (tableId: string | null) => {
         //todo remove plate
         tableId && (await startRemovingTable(tableId));
-        console.log('remove');
     };
 
+    // TABLE MODAL
     const onSaveClick = async (table: Table) => {
       if (user.id) {
         table.uid = user.id;
@@ -68,7 +79,36 @@ export const Tables = () => {
           await startUpdatingTable(table);
       }
       closeFormModal();
-  };
+    };
+
+    // Plate modal
+    const onClosePlateModal = async () => {
+      setPlateModalValues(prevState => ({
+        ...prevState,
+        isShown: false
+      }));
+    };
+
+    const onShowPlateModal = async (tableId: string | null) => {
+      if (!tableId) {
+        console.log('no table id'); // todo remove
+      }
+      setPlateModalValues(prevState => ({
+        ...prevState,
+        isShown: true,
+        tableId,
+      }));
+    };
+
+    const onSavePlateModal = async (tablePlates: Plate[]) => {
+      // todo get table id
+      if (plateModalValues.tableId) {
+        // console.log('id exist'); // todo remove
+        await startUpdatingTablePlates({ tableId: plateModalValues.tableId, selectedPlates: tablePlates });
+      }
+      startGetingTables();
+      onClosePlateModal();
+    };
 
     // Error message
     useEffect(() => {
@@ -79,6 +119,7 @@ export const Tables = () => {
 
     useEffect(() => {
       startGetingTables();
+      startGetingPlates();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -87,11 +128,11 @@ export const Tables = () => {
             <h1 className="w-full font-semibold text-4xl">
                 Tables
             </h1>
-            <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-10">
+            <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-10 overflow-hidden">
                 {
                   tables.map(table => {
                     return (
-                      <TableCard removeTable={removeTable} showFormModal={showFormModal} table={table} key={table.name} />
+                      <TableCard removeTable={removeTable} showFormModal={showFormModal} table={table} showPlateModal={onShowPlateModal} key={table.id} />
                     );
                   })
                 }
@@ -102,10 +143,16 @@ export const Tables = () => {
                   </svg>
                 </button>
             </section>
+            {/* Modals: */}
             {
               modalValues.isShown && (
-                <TableForm onClose={closeFormModal} onSave={onSaveClick} table={currentTable} title={modalValues.title} />
+                <TableForm onClose={closeFormModal} onSave={onSaveClick} table={currentTable} title={modalValues.title ?? ''} />
               )
+            }
+            {
+                plateModalValues.isShown && (
+                  <SelectProduct tableId={plateModalValues.tableId!} plates={plates ?? []} onClose={onClosePlateModal} onSave={onSavePlateModal} />
+                )
             }
         </>
     );

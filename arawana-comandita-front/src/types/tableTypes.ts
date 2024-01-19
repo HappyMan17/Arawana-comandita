@@ -8,3 +8,8 @@ export interface Table {
   uid: string;
   plates: Plate[];
 }
+
+export interface TablePlateObject {
+  tableId: string;
+  selectedPlates: Plate[];
+}

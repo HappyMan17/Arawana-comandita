@@ -17,7 +17,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
 
     return (
         <section className={ darkMode }>
-            <nav className="fixed top-0 left-0 w-full border-gray-700 bg-gray-800 dark:bg-gray-800 dark:border-gray-700">
+            <nav className="fixed top-0 z-50 left-0 w-full border-gray-700 bg-gray-800 dark:bg-gray-800 dark:border-gray-700">
                 <div className="max-w-screen-xl flex flex-wrap items-center mx-auto p-5 justify-between sm:justify-end">
                     <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" className="inline-flex items-center ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                         <span className="sr-only">Open sidebar</span>
@@ -34,7 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
             <DarkMode changeDarkMode={changeDarkMode} />
 
             {/* Sidebar */}
-            <aside id="default-sidebar" className="fixed left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+            <aside id="default-sidebar" className="fixed left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 overflow-hidden" aria-label="Sidebar">
                 <div className="h-full px-3 py-4 overflow-y-auto bg-gray-800 dark:bg-gray-800">
                     <ul className="space-y-2 font-medium">
                         <li>

@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 
 import localImage from '../assets/default_plate.png';
+import { convertToCurrency } from '../helpers';
 import { ModalType, Plate } from '../types';
 interface ProductCardProps {
     plate: Plate;
@@ -23,7 +24,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ plate, showFormModal, 
                     { description }
                 </p>
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                    { price }
+                    { convertToCurrency(price) }
                 </p>
                 {/* todo: add form to edit product information */}
                 <div className="flex flex-wrap justify-between mt-2">

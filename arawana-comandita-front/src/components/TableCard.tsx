@@ -1,21 +1,20 @@
 /* eslint-disable max-len */
 import localImage from '../assets/newTable.png';
+import { convertToCurrency } from '../helpers';
 import { ModalType, Table } from '../types';
 
 interface TableCardProps {
   table: Table;
+  showPlateModal: (tableId: string) => void;
   showFormModal: (title: string, type: ModalType, id: string | null) => void;
   removeTable: (id: string | null) => void;
 }
 
-export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, removeTable }) => {
+export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, removeTable, showPlateModal }) => {
     const { name, comment, plates, total } = table;
-    const COP = new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-    });
+
     return (
-        <div className="relative max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div className="relative max-w-sm z-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <div className="flex item-center justify-start">
                 <img className="rounded-t-lg" src={localImage} alt="" />
             </div>
@@ -29,7 +28,7 @@ export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, remo
                     {
                         plates.map(item => {
                             return (
-                                <a href="#" className="my-1 mx-1 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-400 rounded-lg hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800" key={item.name} >
+                                <a href="#" className="my-1 mx-1 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-400 rounded-lg hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800" key={item.id} >
                                     { item.name }
                                 </a>
                             );
@@ -37,7 +36,7 @@ export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, remo
                     }
                 </div>
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                    Total: { COP.format(total) }
+                    Total: { convertToCurrency(total) }
                 </p>
                 {/* add product */}
                 <div className="flex flex-wrap justify-between mt-2">
@@ -53,7 +52,7 @@ export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, remo
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"/>
                         </svg>
                     </button>
-                    <button onClick={() => removeTable(table.id ?? null)} className="w-full mt-3 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <button onClick={() => showPlateModal(table.id!)} className="w-full mt-3 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         New Service
                     </button>
                     <button onClick={() => removeTable(table.id ?? null)} className="w-full mt-3 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
