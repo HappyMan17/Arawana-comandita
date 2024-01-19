@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { PlateSchema } from "./PlateModel.js";
+import { PlateSchemaId } from "./PlateModel.js";
 
 export const TableSchema = Schema({
   name: {
@@ -18,7 +18,7 @@ export const TableSchema = Schema({
     type: String,
     require: true,
   },
-  plates: [PlateSchema],
+  plates: [PlateSchemaId],
 });
 
 export const TableModel = model('Table', TableSchema);
