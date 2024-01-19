@@ -15,7 +15,7 @@ export const getTotal = (objectList, objectKey) => {
   }
   objectList.map(item => {
     if (item[objectKey] && item[objectKey] > 0) {
-      total =+ getValue(item, objectKey);
+      total += getValue(item, objectKey);
     }
   });
   // console.log({ total }); // todo remove
