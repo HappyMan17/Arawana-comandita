@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import { DarkMode } from ".";
 
 /* eslint-disable max-len */
 type SidebarProps = {
@@ -7,13 +8,13 @@ type SidebarProps = {
     logout: () => void,
 }
 export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
     const onClickButton = (route: string) => {
       navigate(route);
     };
 
     return (
-        <>
+        <section className={localStorage.getItem('darkMode') ?? ''}>
             <nav className="fixed top-0 left-0 w-full border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
                 <div className="max-w-screen-xl flex flex-wrap items-center mx-auto p-5 justify-between sm:justify-end">
                     <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" className="inline-flex items-center ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
@@ -28,6 +29,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
                     </a>
                 </div>
             </nav>
+            <DarkMode />
 
             {/* Sidebar */}
             <aside id="default-sidebar" className="fixed left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
@@ -173,7 +175,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
                     </div>
                 </div> */}
             </div>
-        </>
+        </section>
 
     );
 };

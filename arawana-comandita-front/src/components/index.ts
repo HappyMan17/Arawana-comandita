@@ -3,3 +3,4 @@ export * from './Sidebar';
 export * from './TableCard';
 export * from './ProductForm';
 export * from './TableForm';
+export * from './DarkMode';
