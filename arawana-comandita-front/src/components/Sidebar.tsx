@@ -74,7 +74,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
       </aside>
 
       {/* Children */}
-      <div className="max-h-dvh p-4 mt-16 mb-5 sm:ml-64">
+      <div className="max-h-dvh p-4 mt-16 mb-20 sm:ml-64">
         {children}
       </div>
     </section>

@@ -20,15 +20,15 @@ export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, remo
       </div>
       <div className="p-5">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{ name }</h5>
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+        <p className="font-normal text-gray-700 dark:text-gray-400">
           { comment }
         </p>
         {/* Product list */}
-        <div className="flex flex-wrap">
+        <div className="flex flex-col max-h-[100px] w-full overflow-y-scroll my-2">
           {
             plates.map(item => {
               return (
-                <a href="#" className="my-1 mx-1 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-400 rounded-lg hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800" key={item.id} >
+                <a href="#" className="min-h-[45px] w-full my-0.5 flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800" key={item.id} >
                   { `${item.name} = ${item.quantity ?? 0}` }
                 </a>
               );
