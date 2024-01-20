@@ -57,8 +57,18 @@ export const Tables = () => {
 
   // TABLE MODAL
   const removeTable = async (tableId: string | null) => {
-    //todo remove plate
-    tableId && (await startRemovingTable(tableId));
+    //todo remove plate alert
+    const result = await Swal.fire({
+      title: 'Delete',
+      html: 'Do you really want to delete this table? This process can not be undone',
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      cancelButtonColor: 'red',
+    });
+    if (result && result.isConfirmed) {
+      tableId && (await startRemovingTable(tableId));
+    }
   };
 
   // TABLE MODAL

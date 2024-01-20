@@ -43,7 +43,18 @@ export const PlateScreen = () => {
   };
 
   const removePlate = async (plateId: string | null) => {
-    plateId && (await startRemovingPlate(plateId));
+    //todo remove plate alert
+    const result = await Swal.fire({
+      title: 'Delete',
+      html: 'Do you really want to delete this product? This process can not be undone',
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      cancelButtonColor: 'red',
+    });
+    if (result && result.isConfirmed) {
+      plateId && (await startRemovingPlate(plateId));
+    }
   };
 
   const onSaveClick = async (plate: Plate) => {
