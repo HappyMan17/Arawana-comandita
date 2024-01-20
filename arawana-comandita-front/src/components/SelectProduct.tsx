@@ -40,9 +40,11 @@ export const SelectProduct: React.FC<SelectProductProps> = ({ plates, onClose, o
 
   return (
     <section className="absolute top-0 left-0 z-50 flex items-center justify-center w-full h-dvh bg-zinc-600 bg-opacity-80">
+      {/* Card */}
       <div className="relative w-full h-full sm:w-1/2 sm:h-4/5 min-w-[480px] flex flex-col justify-start items-center p-9 rounded-none sm:rounded-xl bg-white dark:bg-gray-100 dark:border-gray-700">
         <h1 className="mb-2 text-2xl font-bold tracking-tight text-black"> { 'Select Product' } </h1>
-        <section className="max-h-[650px] grid grid-cols-1 sm:grid-cols-2 grid-flow-row gap-4 mt-10 mb-3 overflow-scroll">
+        {/* Product section */}
+        <section className="max-h-[350px] grid grid-cols-1 sm:grid-cols-2 grid-flow-row gap-4 mt-10 overflow-scroll">
           {
             tablePlates.map(plate => {
               return (
