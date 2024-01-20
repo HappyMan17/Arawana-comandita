@@ -3,6 +3,7 @@ import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { Home, PlateScreen, Tables } from "../pages/";
 import { Sidebar } from "../components/Sidebar";
 import { useUser } from "../hooks";
+import { Summary } from "../pages/day_summary";
 
 export const AppRouter = () => {
   const { startLogout } = useUser();
@@ -24,6 +25,7 @@ export const AppRouter = () => {
         <Route path="home" element={ <Home /> } />
         <Route path="tables" element={ <Tables /> } />
         <Route path="plates" element={ <PlateScreen /> } />
+        <Route path="summaries" element={ <Summary /> } />
         <Route path="/*" element={ <Navigate to="/home" replace={true} /> } />
       </Route>
     </Routes>
