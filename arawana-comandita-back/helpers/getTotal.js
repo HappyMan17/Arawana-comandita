@@ -7,6 +7,12 @@ const getValue = (item, key) => {
   return item[key];
 };
 
+/**
+ * Gets total from plates or tables
+ * @param {Table[] | Plate[]} objectList
+ * @param {'price' | 'total'} objectKey
+ * @returns total
+ */
 export const getTotal = (objectList, objectKey) => {
   let total = 0;
   // console.log({ objectList, objectKey }); // todo remove

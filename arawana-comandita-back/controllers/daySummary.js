@@ -1,14 +1,15 @@
 import { response } from "express";
 import { DaySummaryModel } from "../models/DaySummaryModel.js";
-import { getCurrentDaySummary, initFilter } from "../helpers/summaryHelper.js";
+import { getCurrentDaySummary } from "../helpers/summaryHelper.js";
+import { getTotal } from "../helpers/getTotal.js";
 
 //? all filtered
 export const getUserSummary = async (req, res) => {
   try {
-    const filter = req.body.filter ? new Date(req.body.filter) : initFilter;
+    const { init, end } = req.body.filter;
     const daySummaries = await DaySummaryModel.find({
       uid: req.uid,
-      date: { $gte: filter },
+      date: { $gte: new Date(init), $lte: new Date(end) },
     }).exec();
     if (!daySummaries) {
       return res.status(500).json({
@@ -121,6 +122,7 @@ export const addToDaySummary = async (req, res = response) => {
       { $set:
         {
           tables: req.body.tables,
+          total: getTotal(req.body.tables, 'total'),
         }
       },
       { new: true },
