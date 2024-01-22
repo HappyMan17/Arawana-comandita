@@ -12,7 +12,7 @@ export const daySummaryMapper = (object) => {
   const total = getTotal(tables, 'total');
 
   return {
-    date,
+    date: new Date(date),
     total,
     comment,
     uid,

@@ -4,42 +4,30 @@
 */
 
 import express from 'express';
-import { check } from 'express-validator';
-import { JWTValidation, validateFields } from '../middlewares/index.js';
-import { addToDaySummary } from '../controllers/daySummary.js';
+import { JWTValidation } from '../middlewares/index.js';
+import {
+  addToDaySummary,
+  getCurrentSummary,
+  getSummary,
+  getUserSummary,
+} from '../controllers/daySummary.js';
 
 const router = express.Router();
 
-// get summary
-router.get('/:id', JWTValidation, () => null);
+//? get user summary need filter in body
+router.post('/all', JWTValidation, getUserSummary);
+
+// get current day summary
+router.get('/current', JWTValidation, getCurrentSummary);
 
 // add table day summary
 // req.body.tables
 router.post('/add', JWTValidation, addToDaySummary);
 
-// create summary
-router.post('/create',
-[ // middleware
-  check('date', 'Summary date is required').not().isEmpty(),
-  check('comment', 'A comment is required').not().isEmpty(),
-  check('uid', 'User id is required').not().isEmpty(),
-  check('tables', 'Tables are required').not().isEmpty(),
-  validateFields,
-  JWTValidation,
-], () => null);
-
-// update summary
-router.put('/update',
-[ // middleware
-  check('date', 'Summary date is required').not().isEmpty(),
-  check('comment', 'A comment is required').not().isEmpty(),
-  check('uid', 'User id is required').not().isEmpty(),
-  check('tables', 'Tables are required').not().isEmpty(),
-  validateFields,
-  JWTValidation,
-], () => null);
-
 // delete summary
-router.delete('/delete/:id', JWTValidation, () => null);
+// router.delete('/delete/:id', JWTValidation, deleteSummary);
+
+// get summary
+router.get('/:id', JWTValidation, getSummary);
 
 export default router;

@@ -1,8 +1,13 @@
 import { DaySummaryModel } from "../models/DaySummaryModel.js";
 
-export const getCurrentDaySummary = async (uid) => {
+export const initFilter = new Date(new Date().getDate()-5);
+
+export const getCurrentDaySummary = async (uid, filter = initFilter) => {
   try {
-    const daySummaries = await DaySummaryModel.find({ uid }).exec();
+    const daySummaries = await DaySummaryModel.find({
+      uid,
+      date: { $gte: new Date(filter) },
+    }).exec();
     if (!daySummaries) {
       return null;
     }

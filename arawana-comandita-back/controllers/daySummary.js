@@ -1,11 +1,15 @@
 import { response } from "express";
 import { DaySummaryModel } from "../models/DaySummaryModel.js";
-import { daySummaryMapper } from "../mappers/daySummaryMapper.js";
-import { getCurrentDaySummary } from "../helpers/summaryHelper.js";
+import { getCurrentDaySummary, initFilter } from "../helpers/summaryHelper.js";
 
+//? all filtered
 export const getUserSummary = async (req, res) => {
   try {
-    const daySummaries = await DaySummaryModel.find({ uid: req.uid }).exec();
+    const filter = req.body.filter ? new Date(req.body.filter) : initFilter;
+    const daySummaries = await DaySummaryModel.find({
+      uid: req.uid,
+      date: { $gte: filter },
+    }).exec();
     if (!daySummaries) {
       return res.status(500).json({
         ok: false,
@@ -32,27 +36,44 @@ export const getUserSummary = async (req, res) => {
   }
 };
 
-// Current day summary
+//? Current day summary
 export const getCurrentSummary = async (req, res) => {
   try {
+    // filter now - 5 days
     const currentDaySummary = await getCurrentDaySummary(req.uid);
 
-    if (!currentDaySummary) {
-      return res.status(500).json({
-        ok: false,
-        message: 'No day summary not found',
+    if (currentDaySummary) {
+      return res.status(201).json({
+        ok: true,
+        summary: {
+          id: currentDaySummary.id,
+          date: currentDaySummary.date,
+          total: currentDaySummary.total,
+          comment: currentDaySummary.comment,
+          uid: currentDaySummary.uid,
+          tables: currentDaySummary.tables,
+        },
       });
     }
+    // if it doesn't exist, create it
+    const summary = new DaySummaryModel({
+      date: new Date(),
+      total: 0,
+      comment: '',
+      uid: req.uid,
+      tables: [],
+    });
+    await summary.save();
 
     res.status(201).json({
       ok: true,
-      daySummary: {
-        id: currentDaySummary.id,
-        date: currentDaySummary.date,
-        total: currentDaySummary.total,
-        comment: currentDaySummary.comment,
-        uid: currentDaySummary.uid,
-        tables: currentDaySummary.tables,
+      summary: {
+        id: summary.id,
+        date: summary.date,
+        total: summary.total,
+        comment: summary.comment,
+        uid: summary.uid,
+        tables: summary.tables,
       },
     });
   } catch (error) {
@@ -92,146 +113,18 @@ export const getSummary = async (req, res) => {
   }
 };
 
-export const createSummary = async (req, res = response) => {
+export const addToDaySummary = async (req, res = response) => {
   try {
-    // db save summary
-    const summary = new DaySummaryModel(daySummaryMapper(req.body));
-    await summary.save();
-
-    res.status(201).json({
-      ok: true,
-      summary: {
-        id: summary.id,
-        date: summary.date,
-        total: summary.total,
-        comment: summary.comment,
-        uid: summary.uid,
-        tables: summary.tables,
-      },
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      ok: false,
-      message: 'Please talk with your administrator',
-    });
-  }
-};
-
-export const updateSummary = async (req, res = response) => {
-  try {
-    const newSummary = daySummaryMapper(req.body);
-
-    // db save summary
+    // adding table to summary
     const summary = await DaySummaryModel.findByIdAndUpdate(
       req.body.id,
       { $set:
         {
-          date: newSummary.name,
-          total: newSummary.total,
-          comment: newSummary.comment,
-          uid: newSummary.uid,
-          tables: newSummary.plates,
+          tables: req.body.tables,
         }
       },
       { new: true },
     );
-
-    if (!summary) {
-      return res.status(400).json({
-        ok: false,
-        message: 'Missing field',
-      });
-    }
-
-    res.status(201).json({
-      ok: true,
-      summary: {
-        id: summary.id,
-        date: summary.name,
-        total: summary.total,
-        comment: summary.comment,
-        uid: summary.uid,
-        tables: summary.plates,
-      },
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      ok: false,
-      message: 'Please talk with your administrator',
-    });
-  }
-};
-
-export const deleteSummary = async (req, res = response) => {
-  try {
-    const summaryId = req.params.id;
-    // db save summary
-    const table = await DaySummaryModel.findByIdAndDelete(
-      summaryId,
-    );
-
-    if (!table) {
-      return res.status(400).json({
-        ok: false,
-        message: 'Missing field',
-      });
-    }
-
-    res.status(201).json({
-      ok: true,
-      summary: {
-        id: summaryId,
-      },
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      ok: false,
-      message: 'Please talk with your administrator',
-    });
-  }
-};
-
-export const addToDaySummary = async (req, res = response) => {
-  try {
-    const currentDaySummary = await getCurrentDaySummary(req.uid);
-
-    // update
-    if (currentDaySummary) {
-      // adding table to summary
-      const summary = await DaySummaryModel.findByIdAndUpdate(
-        currentDaySummary.id,
-        { $set:
-          {
-            tables: req.body.tables,
-          }
-        },
-        { new: true },
-      );
-      return res.status(201).json({
-        ok: true,
-        summary: {
-          id: summary.id,
-          date: summary.date,
-          total: summary.total,
-          comment: summary.comment,
-          uid: summary.uid,
-          tables: summary.tables,
-        },
-      });
-    }
-
-    // if it doesn't exist, create it
-    const summary = new DaySummaryModel({
-      date: new Date(),
-      comment: '',
-      uid: req.uid,
-      tables: req.body.tables,
-    });
-    await summary.save();
-
     res.status(201).json({
       ok: true,
       summary: {
@@ -243,6 +136,7 @@ export const addToDaySummary = async (req, res = response) => {
         tables: summary.tables,
       },
     });
+
   } catch (error) {
     res.status(500).json({
       ok: false,
@@ -250,3 +144,34 @@ export const addToDaySummary = async (req, res = response) => {
     });
   }
 };
+
+//? i think delete is not neccessary
+// export const deleteSummary = async (req, res = response) => {
+//   try {
+//     const summaryId = req.params.id;
+//     // db save summary
+//     const table = await DaySummaryModel.findByIdAndDelete(
+//       summaryId,
+//     );
+
+//     if (!table) {
+//       return res.status(400).json({
+//         ok: false,
+//         message: 'Missing field',
+//       });
+//     }
+
+//     res.status(201).json({
+//       ok: true,
+//       summary: {
+//         id: summaryId,
+//       },
+//     });
+
+//   } catch (error) {
+//     res.status(500).json({
+//       ok: false,
+//       message: 'Please talk with your administrator',
+//     });
+//   }
+// };
