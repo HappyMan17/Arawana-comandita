@@ -1,19 +1,19 @@
 import { DaySummaryModel } from "../models/DaySummaryModel.js";
 
-export const initFilter = new Date(new Date().getDate()-5);
-
-export const getCurrentDaySummary = async (uid, filter = initFilter) => {
+export const getCurrentDaySummary = async (uid, filter) => {
   try {
+    const date = new Date();
+    date.setDate(date.getDate() - 5);
     const daySummaries = await DaySummaryModel.find({
       uid,
-      date: { $gte: new Date(filter) },
+      date: { $gte: filter ?? date },
     }).exec();
     if (!daySummaries) {
       return null;
     }
 
     const currentDaySummary = daySummaries.find(daySummary => {
-      console.log({ daySummary, date: daySummary.date });
+      // console.log({ daySummary, date: daySummary.date });
       return getDate(daySummary.date) === getDate(new Date());
     });
 
@@ -28,9 +28,8 @@ const getDate = (date) => {
     return null;
   }
   const year = date.getFullYear();
-  const month = date.getMonth();
+  const month = date.getMonth() + 1;
   const day = date.getDay();
 
-  console.log({ dateFn: `${year}/${month}/${day}` });
   return `${year}/${month}/${day}`;
 };
