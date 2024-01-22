@@ -65,7 +65,7 @@ export const TablePlateCard: React.FC<TablePlateCardProps> = ({ plate }) => {
   };
 
   return (
-    <div className="relative max-w-sm min-w-40 max-h-[320px] bg-gray-800 border border-gray-200 rounded-lg shadow-xl dark:bg-gray-800 dark:border-gray-700">
+    <div onClick={onToggleInputDisable} className="relative max-w-sm min-w-40 max-h-[320px] bg-gray-800 border border-gray-200 rounded-lg shadow-xl dark:bg-gray-800 dark:border-gray-700">
       <div className="flex item-center justify-center">
         <img className="rounded-t-lg" src={localImage} alt="" width="150" />
       </div>
@@ -84,6 +84,7 @@ export const TablePlateCard: React.FC<TablePlateCardProps> = ({ plate }) => {
         </div>
         {/* checkbox */}
         <div className="absolute top-3 right-3 flex items-center mb-4">
+          <p className="mr-1 text-white">{ !plateState.isInputDisabled ? 'Added' : '' }</p>
           <input onChange={onToggleInputDisable} id="default-checkbox" checked={!plateState.isInputDisabled} type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
         </div>
       </div>
