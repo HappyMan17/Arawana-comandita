@@ -23,7 +23,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
 
   const onClickButton = (route: string) => {
     const activeRoute = route.slice(1);
-    console.log(activeRoute);
     setIsActive(() => ({
       ...initState,
       [activeRoute]: true,

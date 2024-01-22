@@ -61,7 +61,7 @@ export const useUser = () => {
 
     } catch (error) {
       console.log({ error });
-      dispatch(onLogout('Invalid credentials'));
+      dispatch(onLogout(null));
       setTimeout(() => {
         dispatch(clearErrorMessage());
       }, 100);

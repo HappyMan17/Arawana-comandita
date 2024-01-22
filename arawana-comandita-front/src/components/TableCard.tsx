@@ -5,13 +5,22 @@ import { ModalType, Table } from '../types';
 
 interface TableCardProps {
   table: Table;
+  onEndService: (table: Table) => void;
   showPlateModal: (tableId: string) => void;
   showFormModal: (title: string, type: ModalType, id: string | null) => void;
   removeTable: (id: string | null) => void;
 }
 
-export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, removeTable, showPlateModal }) => {
+export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, removeTable, showPlateModal, onEndService }) => {
   const { name, comment, plates, total } = table;
+
+  const onShowPlate = () => {
+    showPlateModal(table.id!);
+  };
+
+  const endService = () => {
+    onEndService(table);
+  };
 
   return (
     <div className="relative max-w-sm z-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -52,10 +61,10 @@ export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, remo
               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"/>
             </svg>
           </button>
-          <button onClick={() => showPlateModal(table.id!)} className="w-full mt-3 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            New Service
+          <button onClick={onShowPlate} className="w-full mt-3 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Add products
           </button>
-          <button onClick={() => removeTable(table.id ?? null)} className="w-full mt-3 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+          <button onClick={endService} className="w-full mt-3 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
             End Service
           </button>
         </div>

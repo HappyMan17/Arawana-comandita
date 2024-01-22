@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { TablePlateCard } from '.';
 import { useTable } from '../hooks';
 import { Plate } from '../types';
+import { deepCopy } from '../helpers';
 
 interface SelectProductProps {
   plates: Plate[];
@@ -23,7 +24,7 @@ export const SelectProduct: React.FC<SelectProductProps> = ({ plates, onClose, o
     if (plates && plates.length > 0) {
       // this function gets the previous table plates saved
       const getTablePlates = () => {
-        const dbPlates: Plate[] = JSON.parse(JSON.stringify(plates));
+        const dbPlates: Plate[] = deepCopy(plates);
         const currentPlates: Plate[] = dbPlates.map(plate => {
           const currentPlate = findTablePlate(plate.id!);
           if (currentPlate) {

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { SelectProduct, TableCard, TableForm } from "../../components";
 import { ModalType, ModalState, Table, Plate } from "../../types";
-import { usePlates, useTable, useUser } from "../../hooks";
+import { usePlates, useTable, useUser, useDaySummary } from "../../hooks";
 import Swal from "sweetalert2";
 
 export const Tables = () => {
@@ -18,6 +18,7 @@ export const Tables = () => {
     errorMessage,
   } = useTable();
   const { plates, startGetingPlates } = usePlates();
+  const { startAddingToDaySummary } = useDaySummary();
   const { user } = useUser();
 
   // TABLE MODAL
@@ -92,6 +93,11 @@ export const Tables = () => {
     closeFormModal();
   };
 
+  const onEndService = async (table: Table) => {
+    console.log({ table });
+    await startAddingToDaySummary(table);
+  };
+
   // Plate modal
   const onClosePlateModal = async () => {
     setPlateModalValues(prevState => ({
@@ -146,7 +152,7 @@ export const Tables = () => {
         {
           tables.map(table => {
             return (
-              <TableCard removeTable={removeTable} showFormModal={showFormModal} table={table} showPlateModal={onShowPlateModal} key={table.id} />
+              <TableCard onEndService={onEndService} removeTable={removeTable} showFormModal={showFormModal} table={table} showPlateModal={onShowPlateModal} key={table.id} />
             );
           })
         }
