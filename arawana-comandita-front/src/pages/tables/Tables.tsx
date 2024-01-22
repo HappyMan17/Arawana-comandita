@@ -94,8 +94,15 @@ export const Tables = () => {
   };
 
   const onEndService = async (table: Table) => {
-    console.log({ table });
+    // console.log({ table });
     await startAddingToDaySummary(table);
+    // reset table
+    const cleanTable = {
+      ...table,
+      total: 0,
+      plates: [],
+    };
+    await startUpdatingTable(cleanTable);
   };
 
   // Plate modal
