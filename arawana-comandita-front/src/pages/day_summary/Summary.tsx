@@ -21,7 +21,6 @@ export const Summary = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
     <section>
       <h1 className="w-full font-semibold text-4xl mb-10">
@@ -31,6 +30,9 @@ export const Summary = () => {
         <DatePicker date={filter} onChangeDate={onChangeDate} />
       </div>
       {/* New component, needs an id in the click and className */}
+      {(daySummaries.length === 0 || !daySummaries) && (
+        <h1 className="text-2xl mt-20 font-bold w-full text-center"> No summaries created yet. </h1>
+      )}
       <div>
         {
           daySummaries.map(summary => {
