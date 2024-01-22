@@ -5,4 +5,6 @@ export * from './ProductForm';
 export * from './TableForm';
 export * from './SelectProduct';
 export * from './TablePlateCard';
+export * from './DaySummaryCard';
+export * from './DatePicker';
 export * from './DarkMode';

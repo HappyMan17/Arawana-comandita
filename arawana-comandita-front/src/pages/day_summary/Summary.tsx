@@ -1,53 +1,44 @@
 /* eslint-disable max-len */
-import { useState } from "react";
-
-interface DropdownState {
-  [key: string]: {
-    isShown: boolean;
-  }
-}
+import { useEffect, useState } from "react";
+import { DatePicker, DaySummaryCard } from "../../components";
+import { useDaySummary } from "../../hooks";
+import { getDate } from "../../helpers";
 
 export const Summary = () => {
-  const [showDate, setShowDate] = useState<DropdownState>({});
+  const { daySummaries, startGetingDaySummary } = useDaySummary();
+  const [filter, setFilter] = useState<Date | null>(null);
 
-  const onDropdownClick = (id: string) => {
-    setShowDate((prevState) => ({
-      ...prevState,
-      [id]: {
-        isShown:!prevState[id]?.isShown && true,
-      },
-    }));
+  const onChangeDate = (date: Date) => {
+    setFilter(date);
   };
+
+  useEffect(() => {
+    const init = getDate();
+    const end = getDate(30, '+');
+    startGetingDaySummary({
+      init: init.toISOString(),
+      end: end.toISOString(),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <section>
       <h1 className="w-full font-semibold text-4xl mb-10">
         Summaries
       </h1>
+      <div className="w-full">
+        <DatePicker date={filter} onChangeDate={onChangeDate} />
+      </div>
       {/* New component, needs an id in the click and className */}
       <div>
-        <section className="my-3">
-          <button onClick={() => onDropdownClick('firstChild')} className="w-full text-left pl-5 py-5 bg-gray-500 text-white font-semibold" >
-            <h1> Dropdown </h1>
-          </button>
-          <div className={`${showDate['firstChild']?.isShown ? '' : 'hidden'} w-full bg-gray-200 p-10`} >
-            <h1> Box </h1>
-            <h1> Box </h1>
-            <h1> Box </h1>
-            <p> With more information </p>
-          </div>
-        </section>
-        <section className="my-3">
-          <button onClick={() => onDropdownClick('secondChild')} className="w-full text-left pl-5 py-5 bg-gray-500 text-white font-semibold" >
-            <h1> Dropdown </h1>
-          </button>
-          <div className={`${showDate['secondChild']?.isShown ? '' : 'hidden'} w-full bg-gray-200 p-10`} >
-            <h1> Box </h1>
-            <h1> Box </h1>
-            <h1> Box </h1>
-            <p> With more information </p>
-          </div>
-        </section>
+        {
+          daySummaries.map(summary => {
+            return (
+              <DaySummaryCard summary={summary} key={summary.id} />
+            );
+          })
+        }
       </div>
     </section>
   );

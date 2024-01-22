@@ -49,8 +49,13 @@ export const useDaySummary = () => {
 
   };
 
+  interface Filter {
+    init: string;
+    end: string;
+  }
+
   //? getting all summaries with filter
-  const startGetingDaySummary = async (dateFilter: string) => {
+  const startGetingDaySummary = async (dateFilter: Filter) => {
     dispatch(setDailyIsLoading());
     try {
       const { data } = await calendarApi.post(
