@@ -6,11 +6,16 @@
 import express from 'express';
 import { check } from 'express-validator';
 import { JWTValidation, validateFields } from '../middlewares/index.js';
+import { addToDaySummary } from '../controllers/daySummary.js';
 
 const router = express.Router();
 
 // get summary
 router.get('/:id', JWTValidation, () => null);
+
+// add table day summary
+// req.body.tables
+router.post('/add', JWTValidation, addToDaySummary);
 
 // create summary
 router.post('/create',

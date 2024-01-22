@@ -91,8 +91,8 @@ export const updateTable = async (req, res = response) => {
     const newTable = tableMapper(req.body);
 
     // db save plate
-    const table = await TableModel.findOneAndUpdate(
-      { _id: req.body.id },
+    const table = await TableModel.findByIdAndUpdate(
+      req.body.id,
       { $set:
         {
           name: newTable.name,
@@ -136,8 +136,8 @@ export const deletTable = async (req, res = response) => {
   try {
     const tableId = req.params.id;
     // db save plate
-    const table = await TableModel.findOneAndDelete(
-      { _id: tableId },
+    const table = await TableModel.findByIdAndDelete(
+      tableId,
     );
 
     if (!table) {

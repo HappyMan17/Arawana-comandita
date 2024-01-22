@@ -88,8 +88,8 @@ export const updatePlate = async (req, res = response) => {
   try {
     const newPlate = plateMapper(req.body);
     // db save plate
-    const plate = await PlateModel.findOneAndUpdate(
-      { _id: req.body.id },
+    const plate = await PlateModel.findByIdAndUpdate(
+      req.body.id,
       { $set:
         {
           name: newPlate.name,
@@ -131,8 +131,8 @@ export const deletPlate = async (req, res = response) => {
   try {
     const plateId = req.params.id;
     // db save plate
-    const plate = await PlateModel.findOneAndDelete(
-      { _id: plateId },
+    const plate = await PlateModel.findByIdAndDelete(
+      plateId,
     );
 
     if (!plate) {
