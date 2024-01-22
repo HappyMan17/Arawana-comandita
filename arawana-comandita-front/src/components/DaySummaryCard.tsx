@@ -47,15 +47,15 @@ export const DaySummaryCard: React.FC<DaySummaryCardProps> = ({ summary }) => {
           tables.map(table => {
             return (
               <section key={`${table.id}_${table.total}`}>
-                <h1 className="text-xl"> { table.name } </h1>
+                <h1 className="truncate text-xl"> { table.name.toUpperCase() } </h1>
                 {
                   table.plates.map(plate => {
                     return (
                       <section key={`${plate.id}_${table.total}`}>
-                        <h1 className="text-lg ml-5">
-                          -{ plate.name }:
+                        <h1 className="truncate text-lg ml-5">
+                          -{ plate.name.toUpperCase() }:
                         </h1>
-                        <h1 className="text-lg ml-10">
+                        <h1 className="truncate text-lg ml-10">
                           { convertToCurrency(plate.price) } x{ plate.quantity } = { convertToCurrency(plate.price * (plate.quantity ?? 1)) }
                         </h1>
                       </section>
