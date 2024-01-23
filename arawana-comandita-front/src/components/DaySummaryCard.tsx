@@ -43,10 +43,12 @@ export const DaySummaryCard: React.FC<DaySummaryCardProps> = ({ summary }) => {
         )
       }
       <div className={`${showDate[id!]?.isShown ? '' : 'hidden'} w-full bg-gray-200 p-10`} >
+        <h1 className="text-xl"> Total: { convertToCurrency(total) } </h1>
         {
           tables.map(table => {
             return (
               <section key={`${table.id}_${table.total}`}>
+                <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
                 <h1 className="truncate text-xl"> { table.name.toUpperCase() } </h1>
                 {
                   table.plates.map(plate => {
@@ -65,12 +67,10 @@ export const DaySummaryCard: React.FC<DaySummaryCardProps> = ({ summary }) => {
                 <h1 className="text-lg my-10">
                   Total Table: { convertToCurrency(table.total) }
                 </h1>
-                <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
               </section>
             );
           })
         }
-        <h1 className="text-xl"> Total: { convertToCurrency(total) } </h1>
       </div>
     </section>
   );
