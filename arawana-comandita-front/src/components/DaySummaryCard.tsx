@@ -43,7 +43,7 @@ export const DaySummaryCard: React.FC<DaySummaryCardProps> = ({ summary }) => {
         )
       }
       <div className={`${showDate[id!]?.isShown ? '' : 'hidden'} w-full bg-gray-200 p-10`} >
-        <h1 className="text-xl"> Total: { convertToCurrency(total) } </h1>
+        <h1 className="text-xl"> Total of Day: { convertToCurrency(total) } </h1>
         {
           tables.map(table => {
             return (
