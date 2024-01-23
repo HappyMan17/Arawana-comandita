@@ -26,7 +26,9 @@ export const AppRouter = () => {
         <Route path="tables" element={ <Tables /> } />
         <Route path="plates" element={ <PlateScreen /> } />
         <Route path="summaries" element={ <Summary /> } />
-        <Route path="/*" element={ <Navigate to="/home" replace={true} /> } />
+        <Route path="/*" element={
+          <Navigate to="/summaries" replace={true} />
+        } />
       </Route>
     </Routes>
   );
