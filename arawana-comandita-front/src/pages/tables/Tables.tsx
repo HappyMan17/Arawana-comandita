@@ -4,6 +4,7 @@ import { SelectProduct, TableCard, TableForm } from "../../components";
 import { ModalType, ModalState, Table, Plate } from "../../types";
 import { usePlates, useTable, useUser, useDaySummary } from "../../hooks";
 import Swal from "sweetalert2";
+import { deepCopy } from "../../helpers";
 
 export const Tables = () => {
   const {
@@ -96,7 +97,7 @@ export const Tables = () => {
   const onEndService = async (table: Table) => {
     // console.log({ table });
     if (table.plates.length > 0) {
-      await startAddingToDaySummary(table);
+      await startAddingToDaySummary(deepCopy(table));
       // reset table
       const cleanTable = {
         ...table,

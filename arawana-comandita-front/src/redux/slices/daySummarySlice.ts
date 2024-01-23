@@ -28,9 +28,9 @@ export const daySummarySlice = createSlice({
       state.isLoading = false;
       state.currentDaySummary = action.payload;
     },
-    addPlateToCurrentSummary: (state, action: PayloadAction<Table>) => {
+    addPlateToCurrentSummary: (state, action: PayloadAction<Table[]>) => {
       if (state.currentDaySummary) {
-        state.currentDaySummary.tables.push(action.payload);
+        state.currentDaySummary.tables = action.payload;
       }
     },
     clearDaySummaries: (state) => {

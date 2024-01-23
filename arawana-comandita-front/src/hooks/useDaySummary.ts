@@ -10,7 +10,7 @@ import {
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
 import { calendarApi } from "../api";
 import { DaySummary, Table } from "../types";
-import { deepCopy } from "../helpers";
+import { deepCopy, duplicateValuesSum } from "../helpers";
 
 export const useDaySummary = () => {
   const {
@@ -26,11 +26,21 @@ export const useDaySummary = () => {
     dispatch(setDailyIsLoading());
     try {
       const currentSummary = currentDaySummary ?? (await getCurrentSummary());
-      const tables = deepCopy(currentSummary?.tables);
+      let tables: Table[] = deepCopy(currentSummary?.tables);
+      let mostBeCreated = true;
 
-      // if it didn't exist, create it
-      tables?.push(table);
-      dispatch(addPlateToCurrentSummary(table));
+      tables = tables.map(currentTable => {
+        if (table.id === currentTable.id) {
+          mostBeCreated = false;
+          table.plates = duplicateValuesSum(table.plates, currentTable.plates);
+          return table;
+        }
+        return currentTable;
+      });
+
+      mostBeCreated && tables.push(table);
+
+      dispatch(addPlateToCurrentSummary(tables));
 
       await calendarApi.post(
         '/day_summary/add',

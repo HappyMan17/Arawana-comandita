@@ -1,3 +1,5 @@
+import { Plate } from "../types";
+
 export const deepCopy = (object: any) => {
   if (object) {
     return JSON.parse(JSON.stringify(object));
@@ -30,4 +32,35 @@ export const getDate = (days: number = 5, operation: Operation = '-') => {
     date.setDate(date.getDate() - days);
   }
   return date;
+};
+
+export const duplicateValuesSum = (
+  currentPlates: Plate[],
+  newPlates: Plate[]
+) => {
+  const currentPlatesIds = new Set(currentPlates.map(plate => plate.id));
+  const updatedPlates: Plate[] = [];
+
+  currentPlates.forEach(currentPlate => {
+    const matchingPlate = newPlates.find(plate => plate.id === currentPlate.id);
+
+    if (matchingPlate) {
+      const updatedPlate = {
+        ...currentPlate,
+        quantity: (currentPlate.quantity || 0) + (matchingPlate.quantity || 0),
+      };
+      updatedPlates.push(updatedPlate);
+    } else {
+      updatedPlates.push(currentPlate);
+    }
+  });
+
+  // Add new plates that are not present in the current plates
+  const newPlatesToAdd = newPlates.filter(plate =>
+    !currentPlatesIds.has(plate.id),
+  );
+  const resultPlates = updatedPlates.concat(newPlatesToAdd);
+
+  // You may want to return or use resultPlates here
+  return resultPlates;
 };
