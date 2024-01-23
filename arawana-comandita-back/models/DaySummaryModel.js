@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { TableSchema } from "./TableModel.js";
+import { TableSchemaWithId } from "./TableModel.js";
 
 const DaySummarySchema = Schema({
   date: {
@@ -18,7 +18,7 @@ const DaySummarySchema = Schema({
     type: String,
     require: true,
   },
-  tables: [TableSchema],
+  tables: [TableSchemaWithId],
 });
 
 export const DaySummaryModel = model('DaySummary', DaySummarySchema);
