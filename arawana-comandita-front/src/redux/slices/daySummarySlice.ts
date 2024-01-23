@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { DaySummary } from '../../types';
+import { DaySummary, Table } from '../../types';
 
 export interface CounterState {
   isLoading: boolean,
@@ -28,6 +28,11 @@ export const daySummarySlice = createSlice({
       state.isLoading = false;
       state.currentDaySummary = action.payload;
     },
+    addPlateToCurrentSummary: (state, action: PayloadAction<Table>) => {
+      if (state.currentDaySummary) {
+        state.currentDaySummary.tables.push(action.payload);
+      }
+    },
     clearDaySummaries: (state) => {
       state.isLoading = false;
       state.errorMessage = null;
@@ -51,6 +56,7 @@ export const daySummarySlice = createSlice({
 export const {
   addDaySummary,
   setCurrentSummary,
+  addPlateToCurrentSummary,
   clearDaySummaries,
   setErrorMessage: setDailyErrorMessage,
   setIsLoading: setDailyIsLoading,

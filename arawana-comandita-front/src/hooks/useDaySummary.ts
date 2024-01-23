@@ -1,5 +1,6 @@
 import {
   addDaySummary,
+  addPlateToCurrentSummary,
   clearDaySummaries,
   clearSummaryErrorMessage,
   setCurrentSummary,
@@ -29,6 +30,7 @@ export const useDaySummary = () => {
 
       // if it didn't exist, create it
       tables?.push(table);
+      dispatch(addPlateToCurrentSummary(table));
 
       await calendarApi.post(
         '/day_summary/add',
