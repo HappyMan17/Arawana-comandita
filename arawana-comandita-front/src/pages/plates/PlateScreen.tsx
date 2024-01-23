@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from "react";
-import { ProductCard, ProductForm } from "../../components";
+import { Loader, ProductCard, ProductForm } from "../../components";
 import { ModalState, ModalType, Plate } from "../../types";
 import { usePlates, useUser } from "../../hooks";
 import Swal from "sweetalert2";
@@ -10,6 +10,7 @@ export const PlateScreen = () => {
     plates,
     currentPlate,
     errorMessage,
+    isLoading,
     setCurrentPlate,
     startGetingPlates,
     startCreatingPlate,
@@ -112,6 +113,11 @@ export const PlateScreen = () => {
       {
         modalValues.isShown && (
           <ProductForm onClose={closeFormModal} plate={currentPlate} title={modalValues.title ?? ''} onSave={onSaveClick} />
+        )
+      }
+      {
+        isLoading && (
+          <Loader />
         )
       }
     </>

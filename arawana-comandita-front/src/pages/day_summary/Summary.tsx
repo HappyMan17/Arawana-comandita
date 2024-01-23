@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from "react";
-import { DatePicker, DaySummaryCard } from "../../components";
+import { DatePicker, DaySummaryCard, Loader } from "../../components";
 import { useDaySummary } from "../../hooks";
 import { getDate } from "../../helpers";
 
 export const Summary = () => {
-  const { daySummaries, startGetingDaySummary } = useDaySummary();
+  const { daySummaries, startGetingDaySummary, isLoading } = useDaySummary();
   const [filter, setFilter] = useState<Date | null>(null);
 
   const onChangeDate = (date: Date) => {
@@ -42,6 +42,11 @@ export const Summary = () => {
           })
         }
       </div>
+      {
+        isLoading && (
+          <Loader />
+        )
+      }
     </section>
   );
 };

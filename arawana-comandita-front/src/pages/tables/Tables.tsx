@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from "react";
-import { SelectProduct, TableCard, TableForm } from "../../components";
+import { Loader, SelectProduct, TableCard, TableForm } from "../../components";
 import { ModalType, ModalState, Table, Plate } from "../../types";
 import { usePlates, useTable, useUser, useDaySummary } from "../../hooks";
 import Swal from "sweetalert2";
@@ -14,6 +14,7 @@ export const Tables = () => {
     startGetingTables,
     currentTable,
     setCurrentTable,
+    isLoading,
     startRemovingTable,
     startUpdatingTablePlates,
     errorMessage,
@@ -182,6 +183,11 @@ export const Tables = () => {
       {
         plateModalValues.isShown && (
           <SelectProduct plates={plates ?? []} onClose={onClosePlateModal} onSave={onSavePlateModal} />
+        )
+      }
+      {
+        isLoading && (
+          <Loader />
         )
       }
     </>
