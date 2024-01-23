@@ -65,8 +65,8 @@ export const TablePlateCard: React.FC<TablePlateCardProps> = ({ plate }) => {
   };
 
   return (
-    <div onClick={onToggleInputDisable} className="relative max-w-sm min-w-40 max-h-[320px] bg-gray-800 border border-gray-200 rounded-lg shadow-xl dark:bg-gray-800 dark:border-gray-700">
-      <div className="flex item-center justify-center">
+    <div className="relative max-w-sm min-w-40 max-h-[320px] bg-gray-800 border border-gray-200 rounded-lg shadow-xl dark:bg-gray-800 dark:border-gray-700">
+      <div onClick={onToggleInputDisable} className="flex item-center justify-center">
         <img className="rounded-t-lg" src={localImage} alt="" width="150" />
       </div>
       <div className="p-5">
