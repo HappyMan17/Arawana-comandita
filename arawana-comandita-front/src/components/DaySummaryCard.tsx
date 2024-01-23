@@ -28,7 +28,9 @@ export const DaySummaryCard: React.FC<DaySummaryCardProps> = ({ summary }) => {
   };
 
   const onDownloadPdf = () => {
-    generatePDF(summary);
+    if (summary && summary.tables.length > 0) {
+      generatePDF(summary);
+    }
   };
 
   return (
