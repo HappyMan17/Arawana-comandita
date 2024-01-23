@@ -24,7 +24,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onClose, plate, title,
     const { name, value } = target;
 
     if (name === 'price') {
-      let price = parseInt(value, 10);
+      let price: number | undefined = parseInt(value, 10);
       if (isNaN(price) || price < 0) {
         price = formState.price;
         if (`${formState.price}`.length === 1) {
@@ -33,7 +33,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onClose, plate, title,
       }
       return setFormState(prevState => ({
         ...prevState,
-        price: price,
+        price: price!,
       }));
     }
 
