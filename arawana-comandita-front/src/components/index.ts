@@ -7,5 +7,6 @@ export * from './SelectProduct';
 export * from './TablePlateCard';
 export * from './DaySummaryCard';
 export * from './DatePicker';
+export * from './PdfGenerator';
 export * from './Loader';
 export * from './DarkMode';
