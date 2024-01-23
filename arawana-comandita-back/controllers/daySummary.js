@@ -116,13 +116,20 @@ export const getSummary = async (req, res) => {
 
 export const addToDaySummary = async (req, res = response) => {
   try {
+    let tables = req.body.tables;
+    tables = tables.map(table => {
+      const total = getTotal(table.plates, 'price');
+      table.total = total;
+      return table;
+    });
+
     // adding table to summary
     const summary = await DaySummaryModel.findByIdAndUpdate(
       req.body.id,
       { $set:
         {
-          tables: req.body.tables,
-          total: getTotal(req.body.tables, 'total'),
+          tables: tables,
+          total: getTotal(tables, 'total'),
         }
       },
       { new: true },
