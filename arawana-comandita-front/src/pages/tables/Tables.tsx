@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from "react";
-import { Loader, SelectProduct, TableCard, TableForm } from "../../components";
+import { Loader, SelectProduct, TableCard, TableForm, TablePlatesModal } from "../../components";
 import { ModalType, ModalState, Table, Plate } from "../../types";
 import { usePlates, useTable, useUser, useDaySummary } from "../../hooks";
 import Swal from "sweetalert2";
@@ -34,6 +34,11 @@ export const Tables = () => {
     isShown: false,
     tableId: null,
     type: 'Create'
+  });
+  // PLATE PREVIEW MODAL
+  const [previewModal, setPreviewModal] = useState<{isShown: boolean, plates: Plate[]}>({
+    isShown: false,
+    plates: [],
   });
 
   const showFormModal = async (title: string, type: ModalType, id: string | null) => {
@@ -141,12 +146,22 @@ export const Tables = () => {
     onClosePlateModal();
   };
 
+  // Preview
   const onShowPlateModalPreview = async (plates: Plate[]) => {
-    setPlateModalValues(prevState => ({
+    setPreviewModal(prevState => ({
       ...prevState,
       isShown: true,
       plates,
     }));
+  };
+
+  const onClosePreviewModal = (event: any) => {
+    if (event.target.tagName === 'SECTION') {
+      setPreviewModal(() => ({
+        isShown: false,
+        plates: [],
+      }));
+    }
   };
 
   // Error message
@@ -183,6 +198,7 @@ export const Tables = () => {
         </button>
       </section>
       {/* Modals: */}
+      <TablePlatesModal isShown={previewModal.isShown} plates={previewModal.plates} onClose={onClosePreviewModal} />
       {
         modalValues.isShown && (
           <TableForm onClose={closeFormModal} onSave={onSaveClick} table={currentTable} title={modalValues.title ?? ''} />
