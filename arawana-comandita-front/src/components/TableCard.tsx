@@ -1,21 +1,28 @@
 /* eslint-disable max-len */
 import localImage from '../assets/newTable.png';
 import { convertToCurrency } from '../helpers';
-import { ModalType, Table } from '../types';
+import { ModalType, Plate, Table } from '../types';
 
 interface TableCardProps {
   table: Table;
   onEndService: (table: Table) => void;
   showPlateModal: (tableId: string) => void;
+  onShowPreview: (plates: Plate[]) => void;
   showFormModal: (title: string, type: ModalType, id: string | null) => void;
   removeTable: (id: string | null) => void;
 }
 
-export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, removeTable, showPlateModal, onEndService }) => {
+export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, removeTable, showPlateModal, onEndService, onShowPreview }) => {
   const { name, comment, plates, total } = table;
 
   const onShowPlate = () => {
     showPlateModal(table.id!);
+  };
+
+  const onShowPlatesView = () => {
+    if (plates.length > 0) {
+      onShowPreview(plates);
+    }
   };
 
   const endService = () => {
@@ -23,8 +30,8 @@ export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, remo
   };
 
   return (
-    <div className="relative max-w-sm z-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <div className="flex item-center justify-start">
+    <div className={`relative max-w-sm z-10 m-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ${plates.length > 0 && 'ring-red-600 ring-4'}`}>
+      <div onClick={onShowPlatesView} className="flex item-center justify-start">
         <img className="rounded-t-lg" src={localImage} alt="" />
       </div>
       <div className="p-5">
@@ -33,7 +40,7 @@ export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, remo
           { comment }
         </p>
         {/* Product list */}
-        <div className="flex flex-col max-h-[100px] w-full overflow-y-scroll my-2">
+        {/* <div className="flex flex-col max-h-[100px] w-full overflow-y-scroll my-2">
           {
             plates.map(item => {
               return (
@@ -43,8 +50,8 @@ export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, remo
               );
             })
           }
-        </div>
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+        </div> */}
+        <p className="mb-3 font-normal text-white dark:text-white">
           Total: { convertToCurrency(total) }
         </p>
         {/* add product */}
@@ -61,11 +68,20 @@ export const TableCard: React.FC<TableCardProps> = ({ table, showFormModal, remo
               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"/>
             </svg>
           </button>
+        </div>
+        {/* Buttons */}
+        <div className='w-full grid grid-cols-1 sm:grid-cols-2 grid-flow-row gap-2'>
           <button onClick={onShowPlate} className="w-full mt-3 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             Add products
           </button>
           <button onClick={endService} disabled={!(table.plates.length > 0)} className="w-full mt-3 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
             End Service
+          </button>
+          <button onClick={onShowPlate} className="w-full mt-3 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Start Command
+          </button>
+          <button onClick={endService} disabled={!(table.plates.length > 0)} className="w-full mt-3 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-red-800">
+            Food Delivered
           </button>
         </div>
       </div>

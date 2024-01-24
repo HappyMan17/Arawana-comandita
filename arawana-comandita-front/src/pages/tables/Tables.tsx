@@ -29,7 +29,7 @@ export const Tables = () => {
     title: '',
     type: 'Create'
   });
-    // PLATE MODAL
+  // PLATE MODAL
   const [plateModalValues, setPlateModalValues] = useState<ModalState>({
     isShown: false,
     tableId: null,
@@ -113,7 +113,7 @@ export const Tables = () => {
   const onClosePlateModal = async () => {
     setPlateModalValues(prevState => ({
       ...prevState,
-      isShown: false
+      isShown: false,
     }));
     await setCurrentTable(null);
   };
@@ -141,6 +141,14 @@ export const Tables = () => {
     onClosePlateModal();
   };
 
+  const onShowPlateModalPreview = async (plates: Plate[]) => {
+    setPlateModalValues(prevState => ({
+      ...prevState,
+      isShown: true,
+      plates,
+    }));
+  };
+
   // Error message
   useEffect(() => {
     if (errorMessage) {
@@ -163,7 +171,7 @@ export const Tables = () => {
         {
           tables.map(table => {
             return (
-              <TableCard onEndService={onEndService} removeTable={removeTable} showFormModal={showFormModal} table={table} showPlateModal={onShowPlateModal} key={table.id} />
+              <TableCard onEndService={onEndService} removeTable={removeTable} showFormModal={showFormModal} table={table} showPlateModal={onShowPlateModal} onShowPreview={onShowPlateModalPreview} key={table.id} />
             );
           })
         }
