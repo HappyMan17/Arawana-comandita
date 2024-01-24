@@ -56,6 +56,14 @@ export const PlateSchemaId = Schema({
     type: String,
     require: true,
   },
+  plateGroup: {
+    type: String,
+    require: true,
+  },
+  initQuantity: {
+    type: Number,
+    require: true,
+  },
   quantity: {
     type: Number,
     require: true,
