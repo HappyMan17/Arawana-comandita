@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { Plate } from '../../types/plateTypes';
+import { Plate, PlateGroup } from '../../types/plateTypes';
 
 export interface PlateState {
   isLoading: boolean;
   currentPlate: Plate | null;
   plates: Plate[];
+  plateGroup: PlateGroup[];
   errorMessage: string | null;
 }
 
@@ -13,6 +14,7 @@ const initialState: PlateState = {
   isLoading: false,
   currentPlate: null,
   plates: [],
+  plateGroup: [],
   errorMessage: null,
 };
 
@@ -42,6 +44,10 @@ export const plateSlice = createSlice({
         }
         return plate;
       });
+    },
+    setPlateGroups: (state, action: PayloadAction<PlateGroup[]>) => {
+      state.isLoading = false;
+      state.plateGroup = action.payload;
     },
     removePlate: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
@@ -77,6 +83,7 @@ export const {
   setCurrentPlate,
   clearCurrentPlate,
   setIsLoading,
+  setPlateGroups,
   updatePlate,
   removePlate,
   clearPlates,

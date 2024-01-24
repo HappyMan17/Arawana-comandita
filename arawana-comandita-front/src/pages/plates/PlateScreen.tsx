@@ -9,6 +9,7 @@ export const PlateScreen = () => {
   const {
     plates,
     currentPlate,
+    plateGroup,
     errorMessage,
     isLoading,
     setCurrentPlate,
@@ -16,6 +17,7 @@ export const PlateScreen = () => {
     startCreatingPlate,
     startUpdatingPlate,
     startRemovingPlate,
+    startGetingPlateGroups,
   } = usePlates();
   const { user } = useUser();
 
@@ -87,6 +89,7 @@ export const PlateScreen = () => {
 
   useEffect(() => {
     startGetingPlates();
+    startGetingPlateGroups();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -112,7 +115,7 @@ export const PlateScreen = () => {
       </section>
       {
         modalValues.isShown && (
-          <ProductForm onClose={closeFormModal} plate={currentPlate} title={modalValues.title ?? ''} onSave={onSaveClick} />
+          <ProductForm onClose={closeFormModal} plate={currentPlate} title={modalValues.title ?? ''} onSave={onSaveClick} plateGroups={plateGroup} />
         )
       }
       {

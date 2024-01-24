@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Plate } from "../types";
+import { Plate, PlateGroup } from "../types";
+import { Dropdown } from ".";
 
 /* eslint-disable max-len */
 interface ProductFormProps {
@@ -7,6 +8,7 @@ interface ProductFormProps {
   onSave: (plate: Plate) => void;
   title: string;
   plate: Plate | null;
+  plateGroups: PlateGroup[];
 }
 
 const initForm: Plate = {
@@ -14,12 +16,12 @@ const initForm: Plate = {
   description: '',
   image: '',
   uid: '',
+  plateGroup: '',
   price: 0,
 };
 
-export const ProductForm: React.FC<ProductFormProps> = ({ onClose, plate, title, onSave }) => {
+export const ProductForm: React.FC<ProductFormProps> = ({ onClose, plate, title, onSave, plateGroups }) => {
   const [formState, setFormState] = useState(plate ?? initForm);
-
   const onChangeValue = ({ target }: any) => {
     const { name, value } = target;
 
@@ -40,6 +42,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onClose, plate, title,
     setFormState(prevState => ({
       ...prevState,
       [name]: value,
+    }));
+  };
+
+  const onDropdownClick = (value: string) => {
+    setFormState(prevState => ({
+      ...prevState,
+      plateGroup: value,
     }));
   };
 
@@ -66,10 +75,12 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onClose, plate, title,
               <input value={formState.price} autoComplete="off" onChange={onChangeValue} type="number" name="price" id="price" placeholder="" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required />
             </label>
           </div>
-          <button onClick={() => onSave(formState)} type="button" className="w-full text-white bg-blue-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+          {/* Product group */}
+          <Dropdown values={plateGroups} defaultValue={formState.plateGroup ? formState.plateGroup : plateGroups[0].name} onChange={onDropdownClick} />
+          <button onClick={() => onSave(formState)} type="button" className="z-40 w-full text-white bg-blue-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
             Save
           </button>
-          <button onClick={onClose} type="button" className="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-3">
+          <button onClick={onClose} type="button" className="z-40 w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-3">
             Cancel
           </button>
         </form>

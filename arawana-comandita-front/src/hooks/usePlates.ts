@@ -8,6 +8,7 @@ import {
   updatePlate,
   setCurrentPlate as addCurrentPlate,
   clearCurrentPlate,
+  setPlateGroups,
 } from "../redux";
 import { Plate } from "../types";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
@@ -18,6 +19,7 @@ export const usePlates = () => {
     isLoading,
     errorMessage,
     plates,
+    plateGroup,
   } = useAppSelector(state => state.plate);
 
   const dispatch = useAppDispatch();
@@ -59,6 +61,22 @@ export const usePlates = () => {
       console.log({ error });
     }
 
+  };
+
+  const startGetingPlateGroups = async () => {
+    try {
+      const { data } = await calendarApi.get('/plate/groups');
+
+      if (!data || !data.group) {
+        dispatch(setErrorMessage('Error geting plate groups'));
+        console.log('error geting plate groups');
+      }
+
+      dispatch(setPlateGroups(data.group));
+    } catch (error) {
+      dispatch(setErrorMessage('Error geting plate groups'));
+      console.log({ error });
+    }
   };
 
   const startUpdatingPlate = async (plate: Plate) => {
@@ -109,6 +127,7 @@ export const usePlates = () => {
     //? variables
     plates,
     currentPlate,
+    plateGroup,
     isLoading,
     errorMessage,
     //? methods
@@ -117,5 +136,6 @@ export const usePlates = () => {
     startUpdatingPlate,
     startRemovingPlate,
     setCurrentPlate,
+    startGetingPlateGroups,
   };
 };

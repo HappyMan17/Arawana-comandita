@@ -4,10 +4,15 @@ export interface Plate {
   name: string;
   price: number;
   description: string;
+  plateGroup: string;
   image: string | null;
   uid: string;
   isSelected?: boolean;
   quantity?: number;
+}
+
+export interface PlateGroup {
+  name: string;
 }
 
 export type ModalType = 'Modify' | 'Create';
