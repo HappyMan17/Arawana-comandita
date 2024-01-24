@@ -21,6 +21,7 @@ export const PlateScreen = () => {
   } = usePlates();
   const { user } = useUser();
 
+  const [plateSections, setPlateSections] = useState<Record<string, Plate[]>>({});
   const [modalValues, setModalValues] = useState<ModalState>({
     isShown: false,
     title: '',
@@ -93,26 +94,59 @@ export const PlateScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    plates.forEach((plate) => {
+      const group = plateGroup.find((group) => plate.plateGroup === group.name);
+
+      if (group) {
+        const prevValue = plateSections[group.name] || [];
+        const ids = new Set(prevValue.map((value) => value.id));
+        if (!ids.has(plate.id)) {
+          setPlateSections((prevState) => ({
+            ...prevState,
+            [group.name]: [plate, ...prevValue],
+          }));
+        }
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plates, plateGroup]);
+
   return (
     <>
-      <h1 className="w-full font-semibold text-4xl">
-                Plates
-      </h1>
-      <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-10">
-        {
-          plates.map(plate => {
-            return (
-              <ProductCard plate={plate} showFormModal={showFormModal} removePlate={removePlate} key={plate.id} />
-            );
-          })
-        }
-        {/* Create button */}
-        <button onClick={() => showFormModal('Create Plate', 'Create', null)} className="flex justify-center items-center min-h-80 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:hover:bg-gray-900 dark:border-gray-700">
-          <svg className="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-          </svg>
-        </button>
-      </section>
+      {
+        plateGroup.map(group => {
+          const plates = plateSections[group.name] ?? [];
+          return (
+            <div className="mb-3" key={ group.name } >
+              <h1 className="truncate w-full font-semibold text-4xl">
+                { group.name }
+              </h1>
+              <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-10">
+                {
+                  plates.map(plate => {
+                    return (
+                      <ProductCard plate={plate} showFormModal={showFormModal} removePlate={removePlate} key={plate.id} />
+                    );
+                  })
+                }
+                {/* Create button */}
+                <button onClick={() => showFormModal('Create Plate', 'Create', null)} className="flex justify-center items-center min-h-80 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:hover:bg-gray-900 dark:border-gray-700">
+                  <svg className="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
+                  </svg>
+                </button>
+              </section>
+            </div>
+          );
+        })
+      }
+      {
+        // Default message:
+        plateGroup.length === 0 && (
+          <h1> No Plate groups created yet. </h1>
+        )
+      }
       {
         modalValues.isShown && (
           <ProductForm onClose={closeFormModal} plate={currentPlate} title={modalValues.title ?? ''} onSave={onSaveClick} plateGroups={plateGroup} />

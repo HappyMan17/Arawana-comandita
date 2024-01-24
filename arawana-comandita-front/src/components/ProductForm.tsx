@@ -16,7 +16,7 @@ const initForm: Plate = {
   description: '',
   image: '',
   uid: '',
-  plateGroup: '',
+  plateGroup: 'Comida',
   price: 0,
 };
 
