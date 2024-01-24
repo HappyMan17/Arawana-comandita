@@ -7,6 +7,7 @@ import express from 'express';
 import { check } from 'express-validator';
 import { JWTValidation, validateFields } from '../middlewares/index.js';
 import {
+  createGroup,
   createPlate,
   deletPlate,
   getPlate,
@@ -41,6 +42,14 @@ router.put('/update',
   validateFields,
   JWTValidation,
 ], updatePlate);
+
+// create plate group
+router.put('/group',
+[ // middleware
+  check('name', 'plate name is required').not().isEmpty(),
+  validateFields,
+  JWTValidation,
+], createGroup);
 
 // delete plate
 router.delete('/delete/:id', JWTValidation, deletPlate);

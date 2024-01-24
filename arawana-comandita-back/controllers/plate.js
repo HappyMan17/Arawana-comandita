@@ -1,6 +1,6 @@
 import { response } from "express";
 import { plateMapper } from "../mappers/plateMapper.js";
-import { PlateModel } from "../models/PlateModel.js";
+import { PlateModel, PlateGroupModel } from "../models/PlateModel.js";
 
 export const getUserPlates = async (req, res) => {
   try {
@@ -77,6 +77,25 @@ export const createPlate = async (req, res = response) => {
     });
 
   } catch (error) {
+    res.status(500).json({
+      ok: false,
+      message: 'Please talk with your administrator',
+    });
+  }
+};
+
+export const createGroup = async (req, res) => {
+  try {
+    // db save plate
+    const group = new PlateGroupModel(req.body);
+    await group.save();
+
+    res.status(201).json({
+      ok: true,
+      group: group.name,
+    });
+
+  } catch (err) {
     res.status(500).json({
       ok: false,
       message: 'Please talk with your administrator',

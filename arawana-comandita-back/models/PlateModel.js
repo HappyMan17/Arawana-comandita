@@ -9,6 +9,14 @@ export const PlateSchema = Schema({
     type: Number,
     require: true,
   },
+  plateGroup: {
+    type: String,
+    require: true,
+  },
+  initQuantity: {
+    type: Number,
+    require: true,
+  },
   description: {
     type: String,
     require: true,
