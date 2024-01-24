@@ -18,6 +18,22 @@ export const TableSchema = Schema({
     type: String,
     require: true,
   },
+  initCommand: {
+    type: Date,
+    require: true,
+  },
+  platesServed: {
+    type: Date,
+    require: true,
+  },
+  paymentMethod: {
+    type: String,
+    require: true,
+  },
+  hasPaidService: {
+    type: Boolean,
+    require: true,
+  },
   plates: [PlateSchemaId],
 });
 
@@ -40,6 +56,22 @@ export const TableSchemaWithId = Schema({
   },
   uid: {
     type: String,
+    require: true,
+  },
+  initCommand: {
+    type: Date,
+    require: true,
+  },
+  platesServed: {
+    type: Date,
+    require: true,
+  },
+  paymentMethod: {
+    type: String,
+    require: true,
+  },
+  hasPaidService: {
+    type: Boolean,
     require: true,
   },
   plates: [PlateSchemaId],
