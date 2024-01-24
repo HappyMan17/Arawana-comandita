@@ -11,6 +11,7 @@ import {
   createPlate,
   deletPlate,
   getPlate,
+  getPlateGroups,
   getUserPlates,
   updatePlate,
 } from '../controllers/index.js';
@@ -44,12 +45,15 @@ router.put('/update',
 ], updatePlate);
 
 // create plate group
-router.put('/group',
+router.post('/group/create',
 [ // middleware
   check('name', 'plate name is required').not().isEmpty(),
   validateFields,
   JWTValidation,
 ], createGroup);
+
+// get plate groups
+router.get('/groups', JWTValidation, getPlateGroups);
 
 // delete plate
 router.delete('/delete/:id', JWTValidation, deletPlate);

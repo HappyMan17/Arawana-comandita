@@ -1,6 +1,6 @@
 import { response } from "express";
 import { plateMapper } from "../mappers/plateMapper.js";
-import { PlateModel, PlateGroupModel } from "../models/PlateModel.js";
+import { PlateModel, PlateGroupModel } from "../models/index.js";
 
 export const getUserPlates = async (req, res) => {
   try {
@@ -87,7 +87,7 @@ export const createPlate = async (req, res = response) => {
 export const createGroup = async (req, res) => {
   try {
     // db save plate
-    const group = new PlateGroupModel(req.body);
+    const group = new PlateGroupModel({ name: req.body.name, uid: req.uid });
     await group.save();
 
     res.status(201).json({
@@ -96,6 +96,28 @@ export const createGroup = async (req, res) => {
     });
 
   } catch (err) {
+    res.status(500).json({
+      ok: false,
+      message: 'Please talk with your administrator',
+    });
+  }
+};
+
+export const getPlateGroups = async (req, res) => {
+  try {
+    const groups = await PlateGroupModel.find({ uid: req.uid }).exec();
+    if (!groups) {
+      return res.status(500).json({
+        ok: false,
+        message: 'Plate groups not found',
+      });
+    }
+
+    res.status(201).json({
+      ok: true,
+      group: groups,
+    });
+  } catch (error) {
     res.status(500).json({
       ok: false,
       message: 'Please talk with your administrator',

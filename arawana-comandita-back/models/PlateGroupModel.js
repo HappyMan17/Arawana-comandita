@@ -1,10 +1,14 @@
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 
-const PlateGroupModel = Schema({
+const PlateGroupSchema = Schema({
   name: {
+    type: String,
+    require: true,
+  },
+  uid: {
     type: String,
     require: true,
   },
 });
 
-export default PlateGroupModel;
+export const PlateGroupModel = model('PlateGroup', PlateGroupSchema);
