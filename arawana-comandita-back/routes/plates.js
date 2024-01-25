@@ -10,6 +10,7 @@ import {
   createGroup,
   createPlate,
   deletPlate,
+  deletPlateGroup,
   getPlate,
   getPlateGroups,
   getUserPlates,
@@ -51,6 +52,9 @@ router.post('/group/create',
   validateFields,
   JWTValidation,
 ], createGroup);
+
+// delete plate group
+router.delete('/group/delete/:id', JWTValidation, deletPlateGroup);
 
 // get plate groups
 router.get('/groups', JWTValidation, getPlateGroups);

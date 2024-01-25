@@ -87,47 +87,6 @@ export const createPlate = async (req, res = response) => {
   }
 };
 
-export const createGroup = async (req, res) => {
-  try {
-    // db save plate
-    const group = new PlateGroupModel({ name: req.body.name, uid: req.uid });
-    await group.save();
-
-    res.status(201).json({
-      ok: true,
-      group: group.name,
-    });
-
-  } catch (err) {
-    res.status(500).json({
-      ok: false,
-      message: 'Please talk with your administrator',
-    });
-  }
-};
-
-export const getPlateGroups = async (req, res) => {
-  try {
-    const groups = await PlateGroupModel.find({ uid: req.uid }).exec();
-    if (!groups) {
-      return res.status(500).json({
-        ok: false,
-        message: 'Plate groups not found',
-      });
-    }
-
-    res.status(201).json({
-      ok: true,
-      group: groups,
-    });
-  } catch (error) {
-    res.status(500).json({
-      ok: false,
-      message: 'Please talk with your administrator',
-    });
-  }
-};
-
 export const updatePlate = async (req, res = response) => {
   try {
     const newPlate = plateMapper(req.body);
@@ -191,6 +150,84 @@ export const deletPlate = async (req, res = response) => {
       ok: true,
       plate: {
         id: plateId,
+      },
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      message: 'Please talk with your administrator',
+    });
+  }
+};
+
+export const getPlateGroups = async (req, res) => {
+  try {
+    const groups = await PlateGroupModel.find({ uid: req.uid }).exec();
+    if (!groups) {
+      return res.status(500).json({
+        ok: false,
+        message: 'Plate groups not found',
+      });
+    }
+
+    res.status(201).json({
+      ok: true,
+      group: groups.map(group => ({
+        id: group.id,
+        name: group.name,
+      })),
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      message: 'Please talk with your administrator',
+    });
+  }
+};
+
+export const createGroup = async (req, res) => {
+  try {
+    // db save plate
+    const group = new PlateGroupModel({ name: req.body.name, uid: req.uid });
+    await group.save();
+
+    res.status(201).json({
+      ok: true,
+      group: {
+        id: group.id,
+        name: group.name
+      },
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      ok: false,
+      message: 'Please talk with your administrator',
+    });
+  }
+};
+
+export const deletPlateGroup = async (req, res = response) => {
+  try {
+    const groupId = req.params.id;
+    console.log(req.params.id);
+    // db save plate
+    const plate = await PlateGroupModel.findByIdAndDelete(
+      groupId,
+    );
+
+    if (!plate) {
+      return res.status(400).json({
+        ok: false,
+        message: 'Missing field',
+      });
+    }
+
+    res.status(201).json({
+      ok: true,
+      group: {
+        id: groupId,
       },
     });
 
