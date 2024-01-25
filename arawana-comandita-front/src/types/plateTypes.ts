@@ -12,6 +12,7 @@ export interface Plate {
 }
 
 export interface PlateGroup {
+  id: string;
   name: string;
 }
 

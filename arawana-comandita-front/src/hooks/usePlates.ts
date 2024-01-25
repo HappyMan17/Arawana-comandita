@@ -9,6 +9,7 @@ import {
   setCurrentPlate as addCurrentPlate,
   clearCurrentPlate,
   setPlateGroups,
+  removePlateGroup,
 } from "../redux";
 import { Plate } from "../types";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
@@ -63,22 +64,6 @@ export const usePlates = () => {
 
   };
 
-  const startGetingPlateGroups = async () => {
-    try {
-      const { data } = await calendarApi.get('/plate/groups');
-
-      if (!data || !data.group) {
-        dispatch(setErrorMessage('Error geting plate groups'));
-        console.log('error geting plate groups');
-      }
-
-      dispatch(setPlateGroups(data.group));
-    } catch (error) {
-      dispatch(setErrorMessage('Error geting plate groups'));
-      console.log({ error });
-    }
-  };
-
   const startUpdatingPlate = async (plate: Plate) => {
     dispatch(setIsLoading());
     try {
@@ -123,6 +108,63 @@ export const usePlates = () => {
     }
   };
 
+  const startGetingPlateGroups = async () => {
+    dispatch(setIsLoading());
+    try {
+      const { data } = await calendarApi.get('/plate/groups');
+
+      if (!data || !data.group) {
+        dispatch(setErrorMessage('Error geting plate groups'));
+        console.log('error geting plate groups');
+      }
+
+      dispatch(setPlateGroups(data.group));
+    } catch (error) {
+      dispatch(setErrorMessage('Error geting plate groups'));
+      console.log({ error });
+    }
+  };
+
+  const startAddingPlateGroup = async (name: string) => {
+    dispatch(setIsLoading());
+    try {
+      const { data } = await calendarApi.post(
+        '/plate/group/create',
+        { name: name }
+      );
+
+      if (!data || !data.group) {
+        dispatch(setErrorMessage('Error creating plate group'));
+        console.log('error creating plate group');
+      }
+
+      dispatch(setPlateGroups([...plateGroup, data.group]));
+    } catch (error) {
+      dispatch(setErrorMessage('Error creating plate group'));
+      console.log({ error });
+    }
+  };
+
+  const startRemovingPlateGroup = async (groupId: string) => {
+    dispatch(setIsLoading());
+    try {
+      const { data } = await calendarApi.delete(
+        `/plate/group/delete/${groupId}`
+      );
+
+      if (!data || !data.group) {
+        console.log('error deleting plate group');
+      }
+      dispatch(removePlateGroup(groupId));
+      // console.log({ dat: data, data: data.plate }); // todo remove
+
+
+    } catch (error) {
+      dispatch(setErrorMessage('Error removing plate group'));
+    }
+
+  };
+
   return {
     //? variables
     plates,
@@ -137,5 +179,7 @@ export const usePlates = () => {
     startRemovingPlate,
     setCurrentPlate,
     startGetingPlateGroups,
+    startAddingPlateGroup,
+    startRemovingPlateGroup,
   };
 };

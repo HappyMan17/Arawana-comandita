@@ -49,6 +49,12 @@ export const plateSlice = createSlice({
       state.isLoading = false;
       state.plateGroup = action.payload;
     },
+    removePlateGroup: (state, action: PayloadAction<string>) => {
+      state.isLoading = false;
+      state.plateGroup = state.plateGroup.filter(group =>
+        group.id !== action.payload,
+      );
+    },
     removePlate: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.plates = state.plates.filter(plate =>
@@ -84,6 +90,7 @@ export const {
   clearCurrentPlate,
   setIsLoading,
   setPlateGroups,
+  removePlateGroup,
   updatePlate,
   removePlate,
   clearPlates,

@@ -11,4 +11,5 @@ export * from './Dropdown';
 export * from './PdfGenerator';
 export * from './Loader';
 export * from './TablePlatesModal';
+export * from './PlateGroupManagement';
 export * from './DarkMode';

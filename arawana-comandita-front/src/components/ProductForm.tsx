@@ -53,7 +53,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onClose, plate, title,
   };
 
   return (
-    <section className="absolute top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-zinc-600 bg-opacity-80">
+    <section className="absolute top-0 left-0 z-50 flex items-center justify-center w-full h-full min-h-[900px] bg-zinc-600 bg-opacity-80">
       <div className="bg-white w-96 h-1/2 flex flex-col justify-center items-center py-4 rounded-xl">
         <h1 className="mb-2 text-2xl font-bold tracking-tight text-black"> { title } </h1>
         <form className="p-3 w-80 bg-white" action="#" onSubmit={() => null} autoComplete="off" >
