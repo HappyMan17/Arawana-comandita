@@ -62,6 +62,11 @@ export const getPlate = async (req, res) => {
 
 export const createPlate = async (req, res = response) => {
   try {
+    if (!req.body.plateGroup) {
+      // db save plate
+      const group = new PlateGroupModel({ name: 'Other', uid: req.uid });
+      await group.save();
+    }
     // db save plate
     const plate = new PlateModel(plateMapper(req.body));
     await plate.save();
