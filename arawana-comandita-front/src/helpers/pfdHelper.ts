@@ -38,3 +38,31 @@ export const generatePDF = (summary: DaySummary) => {
   // File Name:
   doc.save(`${getDateFormat(new Date(date))}.pdf`);
 };
+
+export const commandPDF = (table: Table) => {
+  const { plates, name } = table;
+  // Default export is a4 paper, portrait, using millimeters for units
+  const doc = new jsPDF();
+  let yAxist = 50;
+
+  // Title:
+  doc.text("COMMAND", 80, 20);
+  // Date:
+  doc.text(`SUMMARY DATE: ${getDateFormat(new Date())}`, 10, 30);
+
+  doc.text(`TABLE: ${ name }`, 10, 40);
+
+  /** Plates */
+  plates.forEach(plate => {
+    yAxist += 8;
+    doc.text(`- ${ plate.name.toLowerCase() }`, 15, yAxist);
+    yAxist += 7;
+    doc.text(`${ convertToCurrency(plate.price) } x${ plate.quantity } = ${ convertToCurrency(plate.price * (plate.quantity ?? 1)) }`, 20, yAxist);
+  });
+  yAxist += 10;
+  doc.text(`Total table: ${ convertToCurrency(table.total) }`, 15, yAxist);
+  yAxist += 10;
+
+  // File Name:
+  doc.save(`command_${getDateFormat(new Date())}.pdf`);
+};
