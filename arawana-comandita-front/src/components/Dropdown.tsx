@@ -22,7 +22,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ defaultValue, values, onChan
   };
 
   return (
-    <div className="relative w-full mb-3">
+    <div className={`${values.length > 0 ? '' : 'hidden'} relative w-full mb-3`} >
       <button id="dropdownDefaultButton" onClick={onClick} data-dropdown-toggle="dropdown" className="text-white bg-blue-600 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700" type="button">
         { defaultValue }
         <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
