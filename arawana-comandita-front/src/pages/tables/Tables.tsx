@@ -4,7 +4,7 @@ import { Loader, SelectProduct, TableCard, TableForm, TablePlatesModal } from ".
 import { ModalType, ModalState, Table, Plate } from "../../types";
 import { usePlates, useTable, useUser, useDaySummary } from "../../hooks";
 import Swal from "sweetalert2";
-import { deepCopy } from "../../helpers";
+import { commandPDF, deepCopy } from "../../helpers";
 
 export const Tables = () => {
   const {
@@ -19,7 +19,7 @@ export const Tables = () => {
     startUpdatingTablePlates,
     errorMessage,
   } = useTable();
-  const { plates, startGetingPlates } = usePlates();
+  const { plates, plateGroup, startGetingPlates, startGetingPlateGroups } = usePlates();
   const { startAddingToDaySummary } = useDaySummary();
   const { user } = useUser();
 
@@ -81,14 +81,12 @@ export const Tables = () => {
 
   // TABLE MODAL
   const onSaveClick = async (table: Table) => {
-    if (user.id) {
-      table.uid = user.id;
-    } else {
-      // without uid plate mustn't be created
-      // or updated
+    if (!user.id) {
+      // without uid plate mustn't be created or updated
       console.log('no user id');
       return;
     }
+    table.uid = user.id;
 
     if (modalValues.type === 'Create') {
       // create in db
@@ -139,7 +137,6 @@ export const Tables = () => {
   const onSavePlateModal = async (tablePlates: Plate[]) => {
     // todo get table id
     if (plateModalValues.tableId) {
-      // console.log({ ms: 'id exist', plates: tablePlates }); // todo remove
       await startUpdatingTablePlates({ tableId: plateModalValues.tableId, selectedPlates: tablePlates });
     }
     startGetingTables();
@@ -164,6 +161,17 @@ export const Tables = () => {
     }
   };
 
+  const handleStartCommand = (table: Table) => {
+    if (table.plates.length > 0) {
+      commandPDF(table);
+    }
+    console.log(table);
+  };
+
+  const handleFoodDelivered = (table: Table) => {
+    console.log(table);
+  };
+
   // Error message
   useEffect(() => {
     if (errorMessage) {
@@ -174,6 +182,7 @@ export const Tables = () => {
   useEffect(() => {
     startGetingTables();
     startGetingPlates();
+    startGetingPlateGroups();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -182,11 +191,21 @@ export const Tables = () => {
       <h1 className="w-full font-semibold text-4xl">
         Tables
       </h1>
-      <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-5 overflow-hidden">
+      <section className="min-w-[700px] grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 my-5 overflow-hidden">
         {
           tables.map(table => {
             return (
-              <TableCard onEndService={onEndService} removeTable={removeTable} showFormModal={showFormModal} table={table} showPlateModal={onShowPlateModal} onShowPreview={onShowPlateModalPreview} key={table.id} />
+              <TableCard
+                onEndService={onEndService}
+                removeTable={removeTable}
+                showFormModal={showFormModal}
+                table={table}
+                showPlateModal={onShowPlateModal}
+                onShowPreview={onShowPlateModalPreview}
+                onStartCommand={handleStartCommand}
+                onFoodDelivered={handleFoodDelivered}
+                key={table.id}
+              />
             );
           })
         }
@@ -198,6 +217,7 @@ export const Tables = () => {
         </button>
       </section>
       {/* Modals: */}
+      {/* Table resume: */}
       <TablePlatesModal isShown={previewModal.isShown} plates={previewModal.plates} onClose={onClosePreviewModal} />
       {
         modalValues.isShown && (
@@ -206,7 +226,7 @@ export const Tables = () => {
       }
       {
         plateModalValues.isShown && (
-          <SelectProduct plates={plates ?? []} onClose={onClosePlateModal} onSave={onSavePlateModal} />
+          <SelectProduct plates={plates ?? []} onClose={onClosePlateModal} onSave={onSavePlateModal} plateGroups={plateGroup} />
         )
       }
       {

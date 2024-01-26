@@ -71,7 +71,7 @@ export const TablePlateCard: React.FC<TablePlateCardProps> = ({ plate }) => {
       </div>
       <div className="p-5">
         <a href="#">
-          <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{ plate.name }</h5>
+          <h5 className="truncate text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{ plate.name }</h5>
         </a>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
           { convertToCurrency(plate.price) }

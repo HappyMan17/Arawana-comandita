@@ -1,23 +1,36 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from 'react';
-import { TablePlateCard } from '.';
+import { Dropdown, TablePlateCard } from '.';
 import { useTable } from '../hooks';
-import { Plate } from '../types';
+import { Plate, PlateGroup } from '../types';
 import { deepCopy } from '../helpers';
 
 interface SelectProductProps {
   plates: Plate[];
+  plateGroups: PlateGroup[];
   onClose: () => void;
   onSave: (tablePlates: Plate[]) => void;
 }
 
-export const SelectProduct: React.FC<SelectProductProps> = ({ plates, onClose, onSave }) => {
+export const SelectProduct: React.FC<SelectProductProps> = ({
+  plates,
+  onClose,
+  onSave,
+  plateGroups,
+}) => {
   const { findTablePlate } = useTable();
   const [tablePlates, setTablePlates] = useState<Plate[]>([]);
+  const [plateGroupSelected, setPlateGroupSelected] = useState<string | null>(
+    plateGroups[0]?.name ?? null,
+  );
 
   const onSaveTablePlates = () => {
     const selectedPlates = tablePlates.filter(plate => plate.isSelected);
     onSave(selectedPlates);
+  };
+
+  const onDropdownClick = (value: string) => {
+    setPlateGroupSelected(value);
   };
 
   useEffect(() => {
@@ -36,21 +49,28 @@ export const SelectProduct: React.FC<SelectProductProps> = ({ plates, onClose, o
       };
       getTablePlates();
     }
+    // setPlateGroupSelected(plateGroups[0]?.name ?? null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plates]);
+  }, [plates, plateGroups]);
 
   return (
     <section className="absolute top-0 left-0 z-50 flex items-center justify-center w-full h-dvh bg-zinc-600 bg-opacity-80">
       {/* Card */}
-      <div className="relative w-full h-full sm:w-1/2 sm:h-4/5 min-w-[480px] flex flex-col justify-start items-center p-9 rounded-none sm:rounded-xl bg-white dark:bg-gray-100 dark:border-gray-700">
+      <div className="relative w-full h-full sm:w-1/2 sm:h-4/5 sm:max-h-[650px] min-w-[480px] flex flex-col justify-start items-center p-9 rounded-none sm:rounded-xl bg-white dark:bg-gray-100 dark:border-gray-700">
         <h1 className="mb-2 text-2xl font-bold tracking-tight text-black"> { 'Select Product' } </h1>
+        {/* Product group */}
+        <div className='w-1/2-10 mt-3'>
+          <Dropdown values={plateGroups} defaultValue={plateGroupSelected ?? plateGroups[0]?.name} onChange={onDropdownClick} />
+        </div>
         {/* Product section */}
-        <section className="max-h-[350px] grid grid-cols-1 sm:grid-cols-2 grid-flow-row gap-4 mt-10 overflow-scroll">
+        <section className="max-h-[700px] sm:max-h-[350px] grid grid-cols-1 sm:grid-cols-2 grid-flow-row gap-4 mt-10 overflow-scroll">
           {
             tablePlates.map(plate => {
-              return (
-                <TablePlateCard plate={plate} key={plate.id} />
-              );
+              if (plate.plateGroup === plateGroupSelected) {
+                return (
+                  <TablePlateCard plate={plate} key={plate.id} />
+                );
+              }
             })
           }
         </section>
