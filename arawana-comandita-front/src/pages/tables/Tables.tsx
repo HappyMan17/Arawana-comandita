@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from "react";
 import { Loader, SelectProduct, TableCard, TableForm, TablePlatesModal } from "../../components";
-import { ModalType, ModalState, Table, Plate } from "../../types";
+import { Table, Plate } from "../../types";
 import { usePlates, useTable, useUser, useDaySummary } from "../../hooks";
 import Swal from "sweetalert2";
 import { commandPDF, deepCopy } from "../../helpers";
@@ -23,49 +23,69 @@ export const Tables = () => {
   const { startAddingToDaySummary } = useDaySummary();
   const { user } = useUser();
 
+  interface TableModelState {
+    isPlateModalShown: boolean;
+    isPreviewModalShown: boolean;
+    isTableFormModalShown: boolean;
+    title: string;
+    plates: Plate[];
+  }
+
   // TABLE MODAL
-  const [modalValues, setModalValues] = useState<ModalState>({
-    isShown: false,
-    title: '',
-    type: 'Create'
-  });
-  // PLATE MODAL
-  const [plateModalValues, setPlateModalValues] = useState<ModalState>({
-    isShown: false,
-    tableId: null,
-    type: 'Create'
-  });
-  // PLATE PREVIEW MODAL
-  const [previewModal, setPreviewModal] = useState<{isShown: boolean, plates: Plate[]}>({
-    isShown: false,
+  const [modalStates, setModalStates] = useState<TableModelState>({
+    isPlateModalShown: false,
+    isPreviewModalShown: false,
+    isTableFormModalShown: false,
+    title: 'Create Table',
     plates: [],
   });
 
-  const showFormModal = async (title: string, type: ModalType, id: string | null) => {
+  /**
+   * Modal to create or update table
+   * @param title create or update
+   * @param id table id
+   */
+  const showFormModal = async (title: string, id: string | null) => {
     // set currentPlate to show info in modal
-    if (type === 'Modify') {
-      // set current
-      id && setCurrentTable(id);
-    }
-    if (type === 'Create') {
-      // reset current
-      await setCurrentTable(null);
-    }
-    setModalValues({ isShown: true, title, type });
+    // if null, create new table
+    await setCurrentTable(id);
+    setModalStates(prevState => ({
+      ...prevState,
+      isTableFormModalShown: true,
+      title,
+    }));
   };
 
-  // TABLE MODAL
+  // TABLE MODAL Create or update
+  const onSaveClick = async (table: Table) => {
+    if (!user.id) {
+      // without uid plate mustn't be created or updated
+      console.log('no user id');
+      return;
+    }
+
+    if (currentTable) {
+      // update
+      await startUpdatingTable(table);
+    } else {
+      // create
+      table.uid = user.id;
+      await startCreatingTable(table);
+    }
+    closeFormModal();
+  };
+
+  // Close TABLE MODAL
   const closeFormModal = async () => {
-    setModalValues(prevState => ({
+    setModalStates(prevState => ({
       ...prevState,
-      isShown: false
+      isTableFormModalShown: false,
     }));
     await setCurrentTable(null);
   };
 
   // TABLE MODAL
   const removeTable = async (tableId: string | null) => {
-    //todo remove plate alert
     const result = await Swal.fire({
       title: 'Delete',
       html: 'Do you really want to delete this table? This process can not be undone',
@@ -79,25 +99,6 @@ export const Tables = () => {
     }
   };
 
-  // TABLE MODAL
-  const onSaveClick = async (table: Table) => {
-    if (!user.id) {
-      // without uid plate mustn't be created or updated
-      console.log('no user id');
-      return;
-    }
-    table.uid = user.id;
-
-    if (modalValues.type === 'Create') {
-      // create in db
-      await startCreatingTable(table);
-    } else if (modalValues.type === 'Modify') {
-      // update in db
-      await startUpdatingTable(table);
-    }
-    closeFormModal();
-  };
-
   const onEndService = async (table: Table) => {
     // console.log({ table });
     if (table.plates.length > 0) {
@@ -109,14 +110,15 @@ export const Tables = () => {
         plates: [],
       };
       await startUpdatingTable(cleanTable);
+      await setCurrentTable(null);
     }
   };
 
   // Plate modal
   const onClosePlateModal = async () => {
-    setPlateModalValues(prevState => ({
+    setModalStates(prevState => ({
       ...prevState,
-      isShown: false,
+      isPlateModalShown: false,
     }));
     await setCurrentTable(null);
   };
@@ -125,49 +127,66 @@ export const Tables = () => {
     if (!tableId) {
       console.log('no table id'); // todo remove
     }
-    setPlateModalValues(prevState => ({
+    setModalStates(prevState => ({
       ...prevState,
-      isShown: true,
-      tableId,
+      isPlateModalShown: true,
     }));
 
     await setCurrentTable(tableId);
   };
 
+  /**
+   * Saves the plates selected in its table
+   * @param tablePlates Plates selected
+   */
   const onSavePlateModal = async (tablePlates: Plate[]) => {
-    // todo get table id
-    if (plateModalValues.tableId) {
-      await startUpdatingTablePlates({ tableId: plateModalValues.tableId, selectedPlates: tablePlates });
+    if (currentTable) {
+      await startUpdatingTablePlates({
+        tableId: currentTable.id!,
+        selectedPlates: tablePlates
+      });
+      // todo update command
     }
     startGetingTables();
     onClosePlateModal();
+    await setCurrentTable(null);
   };
 
   // Preview
   const onShowPlateModalPreview = async (plates: Plate[]) => {
-    setPreviewModal(prevState => ({
+    setModalStates(prevState => ({
       ...prevState,
-      isShown: true,
+      isPreviewModalShown: true,
       plates,
     }));
   };
 
-  const onClosePreviewModal = (event: any) => {
+  const onClosePreviewModal = async (event: any) => {
     if (event.target.tagName === 'SECTION') {
-      setPreviewModal(() => ({
-        isShown: false,
-        plates: [],
+      setModalStates(prevState => ({
+        ...prevState,
+        isPreviewModalShown: false,
+        plates,
       }));
     }
   };
 
+  /**
+   * Creates a pdf with the command
+   * And starts the timer
+   */
   const handleStartCommand = (table: Table) => {
     if (table.plates.length > 0) {
       commandPDF(table);
+      // todo clear command list
     }
     console.log(table);
   };
 
+  /**
+   * Food delivered and timer ends
+   * @param table
+   */
   const handleFoodDelivered = (table: Table) => {
     console.log(table);
   };
@@ -196,12 +215,12 @@ export const Tables = () => {
           tables.map(table => {
             return (
               <TableCard
-                onEndService={onEndService}
-                removeTable={removeTable}
-                showFormModal={showFormModal}
                 table={table}
-                showPlateModal={onShowPlateModal}
+                showFormModal={showFormModal}
                 onShowPreview={onShowPlateModalPreview}
+                removeTable={removeTable}
+                showPlateModal={onShowPlateModal}
+                onEndService={onEndService}
                 onStartCommand={handleStartCommand}
                 onFoodDelivered={handleFoodDelivered}
                 key={table.id}
@@ -210,22 +229,22 @@ export const Tables = () => {
           })
         }
         {/* Create new table card */}
-        <button onClick={() => showFormModal('Create Table', 'Create', null)} className="flex justify-center items-center min-h-80 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:hover:bg-gray-900 dark:border-gray-700">
+        <button onClick={() => showFormModal('Create Table', null)} className="flex justify-center items-center min-h-80 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:hover:bg-gray-900 dark:border-gray-700">
           <svg className="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
           </svg>
         </button>
       </section>
       {/* Modals: */}
-      {/* Table resume: */}
-      <TablePlatesModal isShown={previewModal.isShown} plates={previewModal.plates} onClose={onClosePreviewModal} />
+      {/* Table preview: */}
+      <TablePlatesModal isShown={modalStates.isPreviewModalShown} plates={modalStates.plates} onClose={onClosePreviewModal} />
       {
-        modalValues.isShown && (
-          <TableForm onClose={closeFormModal} onSave={onSaveClick} table={currentTable} title={modalValues.title ?? ''} />
+        modalStates.isTableFormModalShown && (
+          <TableForm onClose={closeFormModal} onSave={onSaveClick} table={currentTable} title={modalStates.title ?? ''} />
         )
       }
       {
-        plateModalValues.isShown && (
+        modalStates.isPlateModalShown && (
           <SelectProduct plates={plates ?? []} onClose={onClosePlateModal} onSave={onSavePlateModal} plateGroups={plateGroup} />
         )
       }

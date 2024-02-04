@@ -1,14 +1,14 @@
 /* eslint-disable max-len */
 import localImage from '../assets/newTable.png';
 import { convertToCurrency } from '../helpers';
-import { ModalType, Plate, Table } from '../types';
+import { Plate, Table } from '../types';
 
 interface TableCardProps {
   table: Table;
   onEndService: (table: Table) => void;
   showPlateModal: (tableId: string) => void;
   onShowPreview: (plates: Plate[]) => void;
-  showFormModal: (title: string, type: ModalType, id: string | null) => void;
+  showFormModal: (title: string, id: string | null) => void;
   removeTable: (id: string | null) => void;
   onStartCommand: (table: Table) => void;
   onFoodDelivered: (table: Table) => void;
@@ -64,7 +64,7 @@ export const TableCard: React.FC<TableCardProps> = ({
         {/* add product */}
         <div className="flex flex-wrap justify-between mt-2">
           {/* modify table */}
-          <button onClick={() => showFormModal('Modify Table', 'Modify', table.id ?? null)} className="absolute top-3 left-3 w-auto inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-400 rounded-lg hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-transparent dark:hover:bg-blue-400 dark:focus:ring-blue-800">
+          <button onClick={() => showFormModal('Modify Table', table.id ?? null)} className="absolute top-3 left-3 w-auto inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-400 rounded-lg hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-transparent dark:hover:bg-blue-400 dark:focus:ring-blue-800">
             <svg className="w-6 h-6 text-gray-800 hover:text-white dark:text-dark dark:hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 21">
               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7.418 17.861 1 20l2.139-6.418m4.279 4.279 10.7-10.7a3.027 3.027 0 0 0-2.14-5.165c-.802 0-1.571.319-2.139.886l-10.7 10.7m4.279 4.279-4.279-4.279m2.139 2.14 7.844-7.844m-1.426-2.853 4.279 4.279"/>
             </svg>
