@@ -20,8 +20,5 @@ export type ModalType = 'Modify' | 'Create';
 
 export interface ModalState {
   isShown: boolean;
-  type: ModalType;
   title?: string;
-  // plateModal
-  tableId?: string | null;
 }

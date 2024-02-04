@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from "react";
 import { Loader, PlateGroupManagement, ProductCard, ProductForm } from "../../components";
-import { ModalState, ModalType, Plate } from "../../types";
+import { ModalState, Plate } from "../../types";
 import { usePlates, useUser } from "../../hooks";
 import Swal from "sweetalert2";
 import { capitalizeFirstLetter } from "../../helpers";
@@ -29,25 +29,21 @@ export const PlateScreen = () => {
   const [modalValues, setModalValues] = useState<ModalState>({
     isShown: false,
     title: '',
-    type: 'Create'
   });
 
-  const showFormModal = (title: string, type: ModalType, id: string | null) => {
+  const showFormModal = async (title: string, id: string | null) => {
     // set currentPlate to show info in modal
-    if (type === 'Modify') {
-      id && setCurrentPlate(id);
-    }
-    if (type === 'Create') {
-      setCurrentPlate(null);
-    }
-    setModalValues({ isShown: true, title, type });
+    await setCurrentPlate(id);
+
+    setModalValues({ isShown: true, title });
   };
 
-  const closeFormModal = () => {
+  const closeFormModal = async () => {
     setModalValues(prevState => ({
       ...prevState,
       isShown: false
     }));
+    await setCurrentPlate(null);
   };
 
   const removePlate = async (plateId: string | null) => {
@@ -63,6 +59,7 @@ export const PlateScreen = () => {
     if (result && result.isConfirmed) {
       plateId && (await startRemovingPlate(plateId));
     }
+    await setCurrentPlate(null);
   };
 
   const onSaveClick = async (plate: Plate) => {
@@ -75,12 +72,12 @@ export const PlateScreen = () => {
       return;
     }
 
-    if (modalValues.type === 'Create') {
-      // create in db
-      await startCreatingPlate(plate);
-    } else if (modalValues.type === 'Modify') {
+    if (currentPlate) {
       // update in db
       await startUpdatingPlate(plate);
+    } else {
+      // create in db
+      await startCreatingPlate(plate);
     }
     closeFormModal();
   };
@@ -170,7 +167,7 @@ export const PlateScreen = () => {
                       })
                     }
                     {/* Create button */}
-                    <button onClick={() => showFormModal('Create Plate', 'Create', null)} className="flex justify-center items-center min-h-80 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:hover:bg-gray-900 dark:border-gray-700">
+                    <button onClick={() => showFormModal('Create Plate', null)} className="flex justify-center items-center min-h-80 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:hover:bg-gray-900 dark:border-gray-700">
                       <svg className="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
                       </svg>
