@@ -94,7 +94,7 @@ export const PlateScreen = () => {
   const onRemovePlateGroup = async () => {
     const currentPlateGroup = plateGroup.find(group => group.name === groupInputValue);
     if (currentPlateGroup) {
-      if (plateSections[groupInputValue].length > 0) {
+      if (plateSections[groupInputValue]?.length > 0) {
         return await Swal.fire({
           title: 'Delete',
           html: 'You can not delete this group because it has plates',
@@ -144,7 +144,9 @@ export const PlateScreen = () => {
         {
           // Default message:
           plateGroup.length === 0 ? (
-            <h1> No Plate groups created yet. </h1>
+            <h1 className="text-2xl mt-20 font-bold w-full text-start">
+              To start, create a menu group <br /> <span className="text-gray-500">(soups, drinks, etc):</span>
+            </h1>
           ) : (
             plateGroup.map(group => {
               const plates = plateSections[group.name] ?? [];
