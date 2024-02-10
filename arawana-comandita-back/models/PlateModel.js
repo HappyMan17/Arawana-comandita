@@ -31,31 +31,21 @@ export const PlateSchema = Schema({
   },
 });
 
-export const PlateSchemaId = Schema({
-  id: {
-    type: String,
-    require: true,
-  },
-  name: {
-    type: String,
-    require: true,
-  },
-  price: {
-    type: Number,
-    require: true,
-  },
-  description: {
-    type: String,
-    require: true,
-  },
-  image: {
-    type: String,
-    require: true,
-  },
-  uid: {
-    type: String,
-    require: true,
-  },
+PlateSchema.virtual('id').get(function() {
+  return this._id.toHexString();
+});
+
+// Ensure virtual fields are included when converting to JSON
+PlateSchema.set('toJSON', {
+  virtuals: true
+});
+
+export const PlateSchemaId = PlateSchema.clone();
+
+// Add new attributes to the copied schema
+// based on table needs
+PlateSchemaId.add({
+  id: String,
   plateGroup: {
     type: String,
     require: true,
