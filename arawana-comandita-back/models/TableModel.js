@@ -35,46 +35,24 @@ export const TableSchema = Schema({
     require: true,
   },
   plates: [PlateSchemaId],
+  command: [PlateSchemaId],
 });
 
-export const TableSchemaWithId = Schema({
-  id: {
-    type: String,
-    require: true,
-  },
-  name: {
-    type: String,
-    require: true,
-  },
-  total: {
-    type: Number,
-    require: true,
-  },
-  comment: {
-    type: String,
-    require: true,
-  },
-  uid: {
-    type: String,
-    require: true,
-  },
-  initCommand: {
-    type: Date,
-    require: true,
-  },
-  platesServed: {
-    type: Date,
-    require: true,
-  },
-  paymentMethod: {
-    type: String,
-    require: true,
-  },
-  hasPaidService: {
-    type: Boolean,
-    require: true,
-  },
-  plates: [PlateSchemaId],
+TableSchema.virtual('id').get(function() {
+  return this._id.toHexString();
+});
+
+// Ensure virtual fields are included when converting to JSON
+TableSchema.set('toJSON', {
+  virtuals: true
+});
+
+export const TableSchemaWithId = TableSchema.clone();
+
+// Add new attributes to the copied schema
+TableSchemaWithId.add({
+  // Define new attributes
+  id: String,
 });
 
 export const TableModel = model('Table', TableSchema);

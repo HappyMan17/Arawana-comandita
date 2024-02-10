@@ -9,6 +9,7 @@ export const tableMapper = (object) => {
     initCommand,
     platesServed,
     hasPaidService,
+    command,
   } = object;
 
   // plates list and price key
@@ -23,5 +24,6 @@ export const tableMapper = (object) => {
     platesServed,
     hasPaidService,
     plates,
+    command: command ?? [],
   };
 };
