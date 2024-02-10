@@ -223,13 +223,13 @@ export const Tables = () => {
                 onEndService={onEndService}
                 onStartCommand={handleStartCommand}
                 onFoodDelivered={handleFoodDelivered}
-                key={table.id}
+                key={`${table.id}-${table.name}`}
               />
             );
           })
         }
         {/* Create new table card */}
-        <button onClick={() => showFormModal('Create Table', null)} className="flex justify-center items-center min-h-80 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:hover:bg-gray-900 dark:border-gray-700">
+        <button onClick={() => showFormModal('Create Table', null)} className="flex justify-center items-center min-h-80 max-w-[320px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:hover:bg-gray-900 dark:border-gray-700">
           <svg className="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
           </svg>

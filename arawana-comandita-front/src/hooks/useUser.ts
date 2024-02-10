@@ -60,7 +60,7 @@ export const useUser = () => {
       dispatch(onLogin({ name: data.user.name, id: data.user.uid }));
 
     } catch (error) {
-      console.log({ error });
+      // console.log({ error });
       dispatch(onLogout(null));
       setTimeout(() => {
         dispatch(clearErrorMessage());
