@@ -16,7 +16,7 @@ const initForm: Plate = {
   description: '',
   image: '',
   uid: '',
-  plateGroup: 'Comida',
+  plateGroup: '',
   price: 0,
 };
 
@@ -52,9 +52,20 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onClose, plate, title,
     }));
   };
 
+  const onFormSave = () => {
+    if (!formState.plateGroup) {
+      onSave({
+        ...formState,
+        plateGroup: plateGroups[0].name,
+      });
+    } else {
+      onSave(formState);
+    }
+  };
+
   return (
-    <section className="absolute top-0 left-0 z-50 flex items-center justify-center w-full h-full min-h-[900px] bg-zinc-600 bg-opacity-80">
-      <div className="bg-white w-96 h-1/2 flex flex-col justify-center items-center py-4 rounded-xl">
+    <section className="absolute top-0 left-0 z-50 flex items-center justify-center w-full h-full min-h-[450px] bg-zinc-600 bg-opacity-80">
+      <div className="bg-white w-96 h-[450px] flex flex-col justify-center items-center py-4 rounded-xl">
         <h1 className="mb-2 text-2xl font-bold tracking-tight text-black"> { title } </h1>
         <form className="p-3 w-80 bg-white" action="#" onSubmit={() => null} autoComplete="off" >
           <div>
@@ -77,7 +88,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onClose, plate, title,
           </div>
           {/* Product group */}
           <Dropdown values={plateGroups} defaultValue={formState.plateGroup ? formState.plateGroup : plateGroups[0].name} onChange={onDropdownClick} />
-          <button onClick={() => onSave(formState)} type="button" className="z-40 w-full text-white bg-blue-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+          <button onClick={onFormSave} type="button" className="z-40 w-full text-white bg-blue-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
             Save
           </button>
           <button onClick={onClose} type="button" className="z-40 w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-3">
