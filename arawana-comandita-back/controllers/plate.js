@@ -2,6 +2,18 @@ import { response } from "express";
 import { plateMapper } from "../mappers/plateMapper.js";
 import { PlateModel, PlateGroupModel } from "../models/index.js";
 
+export const checkPlateGroupExist = async (name) => {
+  try {
+    const plateGroup = await PlateGroupModel.findOne({ name });
+
+    return plateGroup ? true : false;
+
+  } catch (error) {
+    console.log('db connection error');
+    return false;
+  }
+};
+
 export const getUserPlates = async (req, res) => {
   try {
     const plates = await PlateModel.find({ uid: req.uid }).exec();
@@ -62,7 +74,7 @@ export const getPlate = async (req, res) => {
 
 export const createPlate = async (req, res = response) => {
   try {
-    if (!req.body.plateGroup) {
+    if (!checkPlateGroupExist(req.body.plateGroup ?? 'Other')) {
       // db save plate
       const group = new PlateGroupModel({ name: 'Other', uid: req.uid });
       await group.save();
@@ -193,6 +205,15 @@ export const getPlateGroups = async (req, res) => {
 
 export const createGroup = async (req, res) => {
   try {
+    const plateGroup = await PlateGroupModel.findOne({ name: req.body.name });
+
+    if (plateGroup) {
+      return res.status(200).json({
+        ok: true,
+        message: 'Group already exists',
+      });
+    }
+
     // db save plate
     const group = new PlateGroupModel({ name: req.body.name, uid: req.uid });
     await group.save();
