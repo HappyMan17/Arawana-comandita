@@ -1,7 +1,9 @@
 /* eslint-disable max-len */
+import { useState } from 'react';
+import { Chronometer } from '.';
 import localImage from '../assets/newTable.png';
 import { convertToCurrency } from '../helpers';
-import { Plate, Table } from '../types';
+import { Plate, State, Table } from '../types';
 
 interface TableCardProps {
   table: Table;
@@ -25,6 +27,7 @@ export const TableCard: React.FC<TableCardProps> = ({
   onFoodDelivered,
 }) => {
   const { name, comment, plates, total } = table;
+  const [chronometerState, setChronometerState] = useState<State>('stop');
 
   const onShowPlate = () => {
     showPlateModal(table.id!);
@@ -42,16 +45,19 @@ export const TableCard: React.FC<TableCardProps> = ({
 
   const onStartCommandButtonClick = () => {
     onStartCommand(table);
+    setChronometerState('start');
   };
 
   const onFoodDeliveredButtonClick = () => {
     onFoodDelivered(table);
+    setChronometerState('reset');
   };
 
   return (
     <div className={`relative min-w-[200px] max-w-[320px] z-10 m-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ${plates.length > 0 && 'ring-red-600 ring-4'}`}>
-      <div onClick={onShowPlatesView} className="flex item-center justify-start">
+      <div onClick={onShowPlatesView} className="relative flex item-center justify-start">
         <img className="rounded-t-lg" src={localImage} alt="" />
+        <Chronometer state={chronometerState} />
       </div>
       <div className="p-5">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{ name }</h5>

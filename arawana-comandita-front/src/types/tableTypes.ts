@@ -10,6 +10,8 @@ export interface Table {
   command: Plate[];
 }
 
+export type State = "start" | "stop" | "reset";
+
 export interface TablePlateObject {
   tableId: string;
   selectedPlates: Plate[];
