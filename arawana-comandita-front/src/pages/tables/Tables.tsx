@@ -183,6 +183,7 @@ export const Tables = () => {
    * And starts the timer
    */
   const handleStartCommand = async (table: Table) => {
+    await setCurrentTable(table.id!);
     if (table.plates.length > 0) {
       commandPDF(table);
     }
@@ -217,7 +218,7 @@ export const Tables = () => {
       <h1 className="w-full font-semibold text-4xl">
         Tables
       </h1>
-      <section className="min-w-[700px] grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 my-5 overflow-hidden">
+      <section className="min-w-[700px] grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 grid-flow-row gap-4 my-5 overflow-hidden">
         {
           tables.map(table => {
             return (
