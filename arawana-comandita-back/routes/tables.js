@@ -6,7 +6,14 @@
 import express from 'express';
 import { check } from 'express-validator';
 import { JWTValidation, validateFields } from '../middlewares/index.js';
-import { createTable, deletTable, getTables, getUserTable, updateTable } from '../controllers/table.js';
+import {
+  createTable,
+  deletTable,
+  getTables,
+  getUserTable,
+  updateTable,
+  updateTableCommand
+} from '../controllers/table.js';
 
 const router = express.Router();
 
@@ -23,6 +30,14 @@ router.post('/create',
   validateFields,
   JWTValidation,
 ], createTable);
+
+router.put('/command/update',
+[
+  check('id', 'Table id is required').not().isEmpty(),
+  check('command', 'Command list is required').not().isEmpty(),
+  validateFields,
+  JWTValidation,
+], updateTableCommand);
 
 // update table
 router.put('/update',
