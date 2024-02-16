@@ -10,9 +10,8 @@ import {
   clearCurrentTable,
   clearTableErrorMessage,
 } from "../redux";
-import { Table, TablePlateObject } from "../types";
+import { Plate, Table, TablePlateObject } from "../types";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
-import _ from 'lodash';
 
 export const useTable = () => {
   const {
@@ -127,29 +126,59 @@ export const useTable = () => {
   const startUpdatingTablePlates = async (object: TablePlateObject) => {
     dispatch(setIsTableLoading());
     try {
-      let table = tables.find(table => table.id === object.tableId);
-
-      table = JSON.parse(JSON.stringify(table ?? ''));
-
-      if (!table) {
+      if (!currentTable) {
         dispatch(setTableErrorMessage('Error geting table to update'));
-        return;
+        throw new Error('No current table to update');
       }
-      //? setting the new plates
-      // table.plates = object.selectedPlates;
-      _.set(table, 'plates', object.selectedPlates);
 
-      const { data } = await calendarApi.put('/table/update', table );
+      const modifyTable = {
+        ...currentTable,
+        plates: object.selectedPlates,
+        command: object.command,
+      };
+
+      const { data } = await calendarApi.put('/table/update', modifyTable );
 
       if (!data || !data.table) {
         dispatch(setTableErrorMessage('Data error, updating table'));
         console.log('error updating tables');
       }
 
-      dispatch(updateTable(table));
+      dispatch(updateTable(modifyTable));
 
     } catch (error) {
       dispatch(setTableErrorMessage('Error updating table'));
+    } finally {
+      setTimeout(() => {
+        dispatch(clearTableErrorMessage());
+      }, 100);
+    }
+  };
+
+  const startUpdatingTableCommand = async (command: Plate[]) => {
+    dispatch(setIsTableLoading());
+    try {
+      if (!currentTable) {
+        dispatch(setTableErrorMessage('Error geting table to update'));
+        return [];
+      }
+
+      const { data } = await calendarApi.put(
+        '/table/command/update',
+        { id: currentTable.id, command },
+      );
+
+      if (!data || !data.table) {
+        dispatch(setTableErrorMessage('Data error, updating table command'));
+        console.log('error updating table command');
+        return [];
+      }
+
+      return [ ...data.table.command ];
+
+    } catch (error) {
+      dispatch(setTableErrorMessage('Error updating table command'));
+      return [];
     } finally {
       setTimeout(() => {
         dispatch(clearTableErrorMessage());
@@ -184,6 +213,7 @@ export const useTable = () => {
     startUpdatingTable,
     startRemovingTable,
     startUpdatingTablePlates,
+    startUpdatingTableCommand,
     findTablePlate,
     setCurrentTable,
   };

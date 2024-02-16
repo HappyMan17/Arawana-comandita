@@ -17,6 +17,7 @@ export const Tables = () => {
     isLoading,
     startRemovingTable,
     startUpdatingTablePlates,
+    startUpdatingTableCommand,
     errorMessage,
   } = useTable();
   const { plates, plateGroup, startGetingPlates, startGetingPlateGroups } = usePlates();
@@ -141,9 +142,15 @@ export const Tables = () => {
    */
   const onSavePlateModal = async (tablePlates: Plate[]) => {
     if (currentTable) {
+      // update command
+      const command = await startUpdatingTableCommand(
+        tablePlates,
+      );
+      // update plates
       await startUpdatingTablePlates({
         tableId: currentTable.id!,
-        selectedPlates: tablePlates
+        selectedPlates: tablePlates,
+        command: command,
       });
       // todo update command
     }
@@ -175,12 +182,12 @@ export const Tables = () => {
    * Creates a pdf with the command
    * And starts the timer
    */
-  const handleStartCommand = (table: Table) => {
+  const handleStartCommand = async (table: Table) => {
     if (table.plates.length > 0) {
       commandPDF(table);
-      // todo clear command list
     }
-    console.log(table);
+    // this should clear the commands:
+    await startUpdatingTableCommand([]);
   };
 
   /**

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { Table } from '../../types';
+import { deepCopy } from '../../helpers';
 
 export interface TableState {
   isLoading: boolean
@@ -26,9 +27,10 @@ export const tableSlice = createSlice({
     },
     setCurrentTable: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
-      state.currentTable = state.tables.find(table =>
+      const table = state.tables.find(table =>
         table.id === action.payload,
       ) ?? null;
+      state.currentTable = table ? deepCopy(table) : null;
     },
     clearCurrentTable: (state) => {
       state.isLoading = false;
