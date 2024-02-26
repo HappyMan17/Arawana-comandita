@@ -57,12 +57,14 @@ export const PlateScreen = () => {
       cancelButtonColor: 'red',
     });
     if (result && result.isConfirmed) {
+      setPlateSections({});
       plateId && (await startRemovingPlate(plateId));
     }
     await setCurrentPlate(null);
   };
 
   const onSaveClick = async (plate: Plate) => {
+    setPlateSections({});
     if (user.id) {
       plate.uid = user.id;
     } else {
@@ -121,6 +123,10 @@ export const PlateScreen = () => {
   }, []);
 
   useEffect(() => {
+    if (plates.length === 0) {
+      setPlateSections({});
+      return;
+    }
     plates.forEach((plate) => {
       const group = plateGroup.find((group) => plate.plateGroup === group.name);
 
