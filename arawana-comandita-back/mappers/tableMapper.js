@@ -6,9 +6,6 @@ export const tableMapper = (object) => {
     comment,
     uid,
     plates,
-    initCommand,
-    platesServed,
-    hasPaidService,
     command,
   } = object;
 
@@ -16,7 +13,7 @@ export const tableMapper = (object) => {
   const total = getTotal(plates, 'price');
 
   let finalCommand = command ?? [];
-  if (command.length === 0) {
+  if (command?.length === 0) {
     finalCommand = plates;
   }
 
@@ -25,9 +22,9 @@ export const tableMapper = (object) => {
     comment,
     total,
     uid,
-    initCommand,
-    platesServed,
-    hasPaidService,
+    initCommand: object.initCommand ?? null,
+    platesServed: object.platesServed ?? null,
+    hasPaidService: object.hasPaidService ?? false,
     plates,
     command: finalCommand,
   };

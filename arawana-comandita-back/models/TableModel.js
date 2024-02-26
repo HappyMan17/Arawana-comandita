@@ -20,11 +20,9 @@ export const TableSchema = Schema({
   },
   initCommand: {
     type: Date,
-    require: true,
   },
   platesServed: {
     type: Date,
-    require: true,
   },
   paymentMethod: {
     type: String,
