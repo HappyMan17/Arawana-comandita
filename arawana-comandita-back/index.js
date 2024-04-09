@@ -3,6 +3,7 @@ import { envs } from './config/env.js';
 import {
   authRouter,
   daySummaryRouter,
+  plateGroupRouter,
   plateRouter,
   tableRouter,
 } from './routes/index.js';
@@ -39,6 +40,7 @@ app.use(cors({
 // Rutes
 app.use('/api/auth', authRouter);
 app.use('/api/plate', plateRouter);
+app.use('/api/plate_group', plateGroupRouter);
 app.use('/api/table', tableRouter);
 app.use('/api/day_summary', daySummaryRouter);
 
