@@ -1,6 +1,6 @@
 import { response } from "express";
 import { plateMapper } from "../mappers/plateMapper.js";
-import { PlateModel } from "../models/index.js";
+import { PlateGroupModel, PlateModel } from "../models/index.js";
 
 export const getUserPlates = async (req, res) => {
   try {
@@ -48,14 +48,17 @@ export const getPlate = async (req, res) => {
 
 export const createPlate = async (req, res = response) => {
   try {
-    //let plateGroup = null;
-    //if (!checkPlateGroupExist(req.body.plateGroup ?? 'Other')) {
-      // Create plate group if it doesn't exist
-      //plateGroup = new PlateGroupModel({ name: 'Other', uid: req.uid });
-      //await plateGroup.save();
-    //}
+    // plate group
+    const group = await PlateGroupModel.findById(req.body.plateGroup.id).exec();
+    // console.log({ group, id: req.body.plateGroup });
     // db save plate
-    const plate = new PlateModel(plateMapper(req.body));
+    const plate = new PlateModel(plateMapper({
+      ...req.body,
+      plateGroup: {
+        id: group.id,
+        name: group.name,
+      },
+    }));
     await plate.save();
 
     res.status(201).json({

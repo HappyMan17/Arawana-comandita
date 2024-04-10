@@ -17,7 +17,7 @@ export const plateMapper = (object, option) => {
         id,
         name,
         price,
-        plateGroup,
+        plateGroup: plateGroupMapper(plateGroup),
         uid,
         description,
         image,
@@ -28,10 +28,21 @@ export const plateMapper = (object, option) => {
         name,
         price,
         description,
-        plateGroup,
+        plateGroup: plateGroupMapper(plateGroup) ?? null,
         initQuantity: initQuantity ?? 0,
         uid,
         image,
       };
+  }
+};
+
+const plateGroupMapper = (object) => {
+  try {
+    return {
+      id: object.id,
+      name: object.name,
+    };
+  } catch (error) {
+    return null;
   }
 };

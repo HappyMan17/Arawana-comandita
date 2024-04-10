@@ -53,4 +53,6 @@ TableSchemaWithId.add({
   id: String,
 });
 
+TableSchemaWithId.set('_id', false);
+
 export const TableModel = model('Table', TableSchema);
