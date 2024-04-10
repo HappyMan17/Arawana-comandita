@@ -135,11 +135,11 @@ export const PlateScreen = () => {
             plateGroups.map(group => {
               //const plates = plateSections[group.name] ?? [];
               return (
-                <div className="mb-3" key={ group.name } >
+                <div className="mb-9" key={ group.name } >
                   <h1 className="truncate w-full font-semibold text-4xl">
                     { group.name }
                   </h1>
-                  <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-10">
+                  <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-10 mb-10">
                     {
                       group.plates?.map(plate => {
                         return (
@@ -182,7 +182,7 @@ export const PlateScreen = () => {
             plate={currentPlate}
             title={modalValues.title ?? ''}
             onSave={onSaveClick}
-            plateGroups={plateGroups}
+            plateGroups={plateGroups.filter(group => group.id)}
           />
         )
       }

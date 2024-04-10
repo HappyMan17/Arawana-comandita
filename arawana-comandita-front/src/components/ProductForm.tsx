@@ -55,14 +55,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onClose, plate, title,
   };
 
   const onFormSave = () => {
-    if (!formState.plateGroup) {
-      onSave({
-        ...formState,
-        plateGroup: plateGroups[0],
-      });
-    } else {
-      onSave(formState);
-    }
+    onSave({ ...formState });
   };
 
   return (
@@ -89,7 +82,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onClose, plate, title,
             </label>
           </div>
           {/* Product group */}
-          <Dropdown values={plateGroups} defaultValue={formState.plateGroup ? formState.plateGroup.name : plateGroups[0].name} onChange={onDropdownClick} />
+          <Dropdown values={plateGroups} defaultValue={formState.plateGroup ? formState.plateGroup.name : 'Choose group'} onChange={onDropdownClick} />
           <button onClick={onFormSave} type="button" className="z-40 w-full text-white bg-blue-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
             Save
           </button>
