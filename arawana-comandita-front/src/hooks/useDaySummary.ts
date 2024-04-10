@@ -8,7 +8,7 @@ import {
   setDailyIsLoading,
 } from "../redux";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
-import { calendarApi } from "../api";
+import { restaurantApi } from "../api";
 import { DaySummary, Table } from "../types";
 import { deepCopy, duplicateValuesSum } from "../helpers";
 
@@ -42,7 +42,7 @@ export const useDaySummary = () => {
 
       dispatch(addPlateToCurrentSummary(tables));
 
-      await calendarApi.post(
+      await restaurantApi.post(
         '/day_summary/add',
         {
           id: currentSummary?.id,
@@ -70,7 +70,7 @@ export const useDaySummary = () => {
   const startGetingDaySummary = async (dateFilter: Filter) => {
     dispatch(setDailyIsLoading());
     try {
-      const { data } = await calendarApi.post(
+      const { data } = await restaurantApi.post(
         '/day_summary/all',
         { filter: dateFilter },
       );
@@ -99,7 +99,7 @@ export const useDaySummary = () => {
   const getCurrentSummary = async () => {
     dispatch(setDailyIsLoading());
     try {
-      const { data } = await calendarApi.get('/day_summary/current');
+      const { data } = await restaurantApi.get('/day_summary/current');
 
       // console.log({ data }); // todo remove
 
@@ -125,7 +125,7 @@ export const useDaySummary = () => {
   // const startRemovingTable = async (tableId: string) => {
   //   dispatch(setDailyIsLoading());
   //   try {
-  //     const { data } = await calendarApi.delete(`/table/delete/${tableId}`);
+  //     const { data } = await restaurantApi.delete(`/table/delete/${tableId}`);
 
   //     if (!data || !data.table) {
   //       dispatch(setDailyErrorMessage('Error removing table'));

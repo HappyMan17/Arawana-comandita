@@ -1,4 +1,4 @@
-import { calendarApi } from "../api";
+import { restaurantApi } from "../api";
 import {
   RootState,
   clearErrorMessage,
@@ -27,7 +27,7 @@ export const useUser = () => {
   const startLogin = async ({ email, password }: LoginObject) => {
     dispatch(onChecking());
     try {
-      const { data } = await calendarApi.post('/auth/login', {
+      const { data } = await restaurantApi.post('/auth/login', {
         email,
         password,
       });
@@ -53,7 +53,7 @@ export const useUser = () => {
   const startChecking = async () => {
     dispatch(onChecking());
     try {
-      const { data } = await calendarApi.get('/auth/verify');
+      const { data } = await restaurantApi.get('/auth/verify');
       // console.log({ data });
       localStorage.setItem('token', data.token);
       localStorage.setItem('token-init-date', `${new Date().getTime()}`);

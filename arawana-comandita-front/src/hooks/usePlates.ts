@@ -1,4 +1,4 @@
-import { calendarApi } from "../api";
+import { restaurantApi } from "../api";
 import {
   addPlate,
   clearPlates,
@@ -8,8 +8,6 @@ import {
   updatePlate,
   setCurrentPlate as addCurrentPlate,
   clearCurrentPlate,
-  setPlateGroups,
-  removePlateGroup,
 } from "../redux";
 import { Plate } from "../types";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
@@ -20,7 +18,6 @@ export const usePlates = () => {
     isLoading,
     errorMessage,
     plates,
-    plateGroup,
   } = useAppSelector(state => state.plate);
 
   const dispatch = useAppDispatch();
@@ -28,16 +25,18 @@ export const usePlates = () => {
   const startCreatingPlate = async (plate: Plate) => {
     dispatch(setIsLoading());
     try {
-      const { data } = await calendarApi.post('/plate/create', plate);
+      console.log({ plate });
+      const { data } = await restaurantApi.post('/plate/create', plate);
 
       if (!data || !data.plate) {
         dispatch(setErrorMessage('Error creating plate'));
         console.log('error creating plate');
+        return;
       }
 
       dispatch(addPlate(data.plate));
     } catch (error) {
-      dispatch(setErrorMessage('Error creating plate'));
+      dispatch(setErrorMessage('Error creating plate catch'));
       console.log({ error });
     }
 
@@ -46,11 +45,12 @@ export const usePlates = () => {
   const startGetingPlates = async () => {
     dispatch(setIsLoading());
     try {
-      const { data } = await calendarApi.get('/plate/all');
+      const { data } = await restaurantApi.get('/plate/all');
 
       if (!data || !data.plates) {
         dispatch(setErrorMessage('Error geting plate'));
         console.log('error geting plates');
+        return;
       }
       dispatch(clearPlates());
 
@@ -67,10 +67,11 @@ export const usePlates = () => {
   const startUpdatingPlate = async (plate: Plate) => {
     dispatch(setIsLoading());
     try {
-      const { data } = await calendarApi.put('/plate/update', plate );
+      const { data } = await restaurantApi.put('/plate/update', plate );
 
       if (!data || !data.plate) {
         console.log('error updating plates');
+        return;
       }
 
       dispatch(updatePlate(plate));
@@ -84,10 +85,11 @@ export const usePlates = () => {
   const startRemovingPlate = async (plateId: string) => {
     dispatch(setIsLoading());
     try {
-      const { data } = await calendarApi.delete(`/plate/delete/${plateId}`);
+      const { data } = await restaurantApi.delete(`/plate/delete/${plateId}`);
 
       if (!data || !data.plate) {
         console.log('error updating plates');
+        return;
       }
       // dispatch(clearPlates());
       // console.log({ dat: data, data: data.plate }); // todo remove
@@ -108,68 +110,10 @@ export const usePlates = () => {
     }
   };
 
-  const startGetingPlateGroups = async () => {
-    dispatch(setIsLoading());
-    try {
-      const { data } = await calendarApi.get('/plate/groups');
-
-      if (!data || !data.group) {
-        dispatch(setErrorMessage('Error geting plate groups'));
-        console.log('error geting plate groups');
-      }
-
-      dispatch(setPlateGroups(data.group));
-    } catch (error) {
-      dispatch(setErrorMessage('Error geting plate groups'));
-      console.log({ error });
-    }
-  };
-
-  const startAddingPlateGroup = async (name: string) => {
-    dispatch(setIsLoading());
-    try {
-      const { data } = await calendarApi.post(
-        '/plate/group/create',
-        { name: name }
-      );
-
-      if (!data || !data.group) {
-        dispatch(setErrorMessage('Error creating plate group'));
-        console.log('error creating plate group');
-      }
-
-      dispatch(setPlateGroups([...plateGroup, data.group]));
-    } catch (error) {
-      dispatch(setErrorMessage('Error creating plate group'));
-      console.log({ error });
-    }
-  };
-
-  const startRemovingPlateGroup = async (groupId: string) => {
-    dispatch(setIsLoading());
-    try {
-      const { data } = await calendarApi.delete(
-        `/plate/group/delete/${groupId}`
-      );
-
-      if (!data || !data.group) {
-        console.log('error deleting plate group');
-      }
-      dispatch(removePlateGroup(groupId));
-      // console.log({ dat: data, data: data.plate }); // todo remove
-
-
-    } catch (error) {
-      dispatch(setErrorMessage('Error removing plate group'));
-    }
-
-  };
-
   return {
     //? variables
     plates,
     currentPlate,
-    plateGroup,
     isLoading,
     errorMessage,
     //? methods
@@ -178,8 +122,5 @@ export const usePlates = () => {
     startUpdatingPlate,
     startRemovingPlate,
     setCurrentPlate,
-    startGetingPlateGroups,
-    startAddingPlateGroup,
-    startRemovingPlateGroup,
   };
 };
