@@ -36,19 +36,19 @@ export const getPlateGroups = async (req, res) => {
     const compliteGroupList = [];
     const platesWithoutGroup = await PlateModel.find({ 'plateGroup.name': null }).exec();
 
-    if (platesWithoutGroup && platesWithoutGroup.length > 0) {
-      compliteGroupList.push({
-        id: '',
-        name: 'Without Group',
-        plates: platesWithoutGroup,
-      });
-    }
-
     for (let group of groups) {
       compliteGroupList.push({
         id: group.id,
         name: group.name,
         plates: await getGroupPlates(group.name),
+      });
+    }
+
+    if (platesWithoutGroup && platesWithoutGroup.length > 0) {
+      compliteGroupList.push({
+        id: '',
+        name: 'Without Group',
+        plates: platesWithoutGroup,
       });
     }
 

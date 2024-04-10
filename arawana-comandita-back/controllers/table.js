@@ -94,7 +94,7 @@ export const updateTableCommand = async (req, res = response) => {
   try {
     const { id, command } = req.body;
 
-    const currentTable = await TableModel.findOne({ _id: id }).exec();
+    const currentTable = await TableModel.findById(id).exec();
 
     if (!currentTable) {
       return res.status(400).json({
@@ -107,7 +107,8 @@ export const updateTableCommand = async (req, res = response) => {
     // db save plate
     const table = await TableModel.findByIdAndUpdate(
       id,
-      { $set:
+      {
+        $set:
         {
           command: currentCommand,
         }

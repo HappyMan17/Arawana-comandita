@@ -80,10 +80,12 @@ export const updatePlate = async (req, res = response) => {
     // db save plate
     const plate = await PlateModel.findByIdAndUpdate(
       req.body.id,
-      { $set:
+      {
+        $set:
         {
           name: newPlate.name,
           price: newPlate.price,
+          plateGroup: newPlate.plateGroup,
           description: newPlate.description,
           image: newPlate.image,
         }

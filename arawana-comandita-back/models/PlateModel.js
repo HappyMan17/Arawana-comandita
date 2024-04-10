@@ -47,10 +47,6 @@ export const PlateSchemaId = PlateSchema.clone();
 // based on table needs
 PlateSchemaId.add({
   id: String,
-  plateGroup: {
-    type: String,
-    require: true,
-  },
   initQuantity: {
     type: Number,
     require: true,
