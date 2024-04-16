@@ -101,7 +101,7 @@ export const deletPlateGroup = async (req, res = response) => {
     const groupId = req.params.id;
 
     const group = await PlateGroupModel.findById(groupId).exec();
-    console.log({ group });
+    // console.log({ group });
     if (!group || !group.name) {
       return res.status(500).json({
         ok: true,
