@@ -6,6 +6,8 @@ import {
   plateGroupRouter,
   plateRouter,
   tableRouter,
+  cvsRouter,
+  commandRouter,
 } from './routes/index.js';
 import cors from 'cors';
 import { dbConection } from "./database/config.js";
@@ -43,6 +45,8 @@ app.use('/api/plate', plateRouter);
 app.use('/api/plate_group', plateGroupRouter);
 app.use('/api/table', tableRouter);
 app.use('/api/day_summary', daySummaryRouter);
+app.use('/api/command', commandRouter);
+app.use('/api/cvs', cvsRouter);
 
 app.listen(PORT, () => {
   console.log('Server running on port ' + PORT);
