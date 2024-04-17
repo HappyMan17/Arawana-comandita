@@ -3,41 +3,55 @@
   host + /api/cvs/
 */
 
-import fs from 'fs/promises';
-import XLSX from 'xlsx';
+import {
+  checkFileExists,
+  convertToCurrency,
+  createWorkbook,
+} from '../helpers/cvsHelper.js';
 import { DaySummaryModel } from '../models/DaySummaryModel.js';
 
-export const getCvs = async (req, res) => {
+const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+export const createCvs = async (req, res) => {
   try {
     // const plates = await PlateModel.find({ uid: req.uid }).exec();
     // const plates = await PlateModel.find({ uid: '65a697d3cbfe2674c725a3aa' }).exec();
     const bookName = './assets/files/test.xlsx';
     // workbook:
     let workbook = null;
+    // const initDate = '2021-01-01';
 
     if (await checkFileExists(bookName)) {
-      workbook = XLSX.readFile(bookName);
-    } else {
-      workbook = createWorkbook([], 'Plates', bookName);
-    }
-
-    if (!workbook) {
       return res.status(200).json({
         ok: true,
-        message: 'workingbook not found',
+        message: 'File already exists',
       });
     }
-    const initDate = '2021-01-01';
-
     const daySummaries = await DaySummaryModel.find({
       uid: req.uid,
-      date: { $gte: new Date(initDate) },
+      // date: { $gte: new Date(initDate) },
     }).exec();
 
     if (!daySummaries || daySummaries.length === 0) {
       return res.status(200).json({
         ok: true,
-        message: 'No data created yet',
+        message: 'Day summaries not found',
+      });
+    }
+
+    const rows = [];
+    daySummaries.forEach((daySummary) => {
+      createSummaryRow(daySummary, rows);
+    });
+    console.log({ rows });
+
+    workbook = createWorkbook(rows, 'Plates', bookName);
+
+    // add the final summary to the sheet
+    if (!workbook) {
+      return res.status(200).json({
+        ok: true,
+        message: 'workingbook not created',
       });
     }
 
@@ -50,7 +64,7 @@ export const getCvs = async (req, res) => {
     // https://builtin.com/software-engineering-perspectives/exceljs
     res.status(200).json({
       ok: true,
-      message: 'route working',
+      message: 'File created',
     });
   } catch (error) {
     res.status(500).json({
@@ -60,40 +74,25 @@ export const getCvs = async (req, res) => {
   }
 };
 
-const readWorkbook = (workbook) => {
-  let workSheets = {};
+/**
+ * Void function to convert summaries into excel rows
+ * @param {*} daySummary
+ * @param {*} rows An array to store the rows
+ */
+const createSummaryRow = (daySummary, rows) => {
+  const { tables, date } = daySummary;
+  const day = date.getDay(); // number of the day
 
-  for (const sheetName of workbook.SheetNames) {
-    const sheet = workbook.Sheets[sheetName];
-    const sheetData = XLSX.utils.sheet_to_json(sheet);
-    workSheets[sheetName] = sheetData;
-  }
-  return {
-    sheetsNames: workbook.SheetNames,
-    workSheets
-  };
-};
-
-const addRow = (sheet, row) => {
-  sheet.push(row);
-  return sheet;
-};
-
-const createWorkbook = (sheet, sheetName, bookName) => {
-  const workbook = XLSX.utils.book_new();
-  const newSheet = XLSX.utils.json_to_sheet(sheet);
-  XLSX.utils.book_append_sheet(workbook, newSheet, sheetName);
-  XLSX.writeFile(workbook, bookName);
-  return workbook;
-};
-
-const checkFileExists = async(filePath) => {
-  try {
-    await fs.access(filePath, fs.constants.F_OK);
-    console.log('File exists');
-    return true;
-  } catch (err) {
-    console.error('File does not exist');
-    return false;
+  for (const table of tables) {
+    for (const plate of table.plates) {
+      console.log({ plate, quantity: plate['quantity'] });
+      rows.push({
+        fecha: date,
+        item: plate.name,
+        quantity: plate.quantity,
+        valor: convertToCurrency(plate.price ?? 0),
+        dia: daysOfWeek[day],
+      });
+    }
   }
 };

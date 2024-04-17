@@ -4,12 +4,11 @@
 */
 
 import express from 'express';
-// import { JWTValidation } from '../middlewares';
-import { getCvs } from '../controllers/cvs.js';
+import { JWTValidation } from '../middlewares/jwtValidation.js';
+import { createCvs } from '../controllers/cvs.js';
 
 const router = express.Router();
 
-// router.get('/', JWTValidation, );
-router.get('/', getCvs);
+router.get('/', JWTValidation, createCvs);
 
 export default router;
