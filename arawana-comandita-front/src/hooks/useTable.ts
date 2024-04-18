@@ -10,7 +10,7 @@ import {
   clearCurrentTable,
   clearTableErrorMessage,
 } from "../redux";
-import { Plate, Table, TablePlateObject } from "../types";
+import { Table, TablePlateObject } from "../types";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
 
 export const useTable = () => {
@@ -61,37 +61,6 @@ export const useTable = () => {
     } catch (error) {
       dispatch(setTableErrorMessage('Error geting tables'));
       console.log({ error });
-    } finally {
-      setTimeout(() => {
-        dispatch(clearTableErrorMessage());
-      }, 100);
-    }
-
-  };
-
-  const startUpdatingTableTime = async (table: Partial<Table>) => {
-    dispatch(setIsTableLoading());
-    try {
-      const tableFound = tables.find(t => table.id === t.id);
-      console.log({ currentTable });
-      const completeTable = {
-        ...tableFound,
-        ...table,
-      };
-
-      console.log(completeTable);
-
-      // const { data } = await restaurantApi.put('/table/update', table );
-
-      // if (!data || !data.table) {
-      //   dispatch(setTableErrorMessage('Error updating table'));
-      //   console.log('error updating tables');
-      // }
-
-      // dispatch(updateTable(table));
-
-    } catch (error) {
-      dispatch(setTableErrorMessage('Error updating table'));
     } finally {
       setTimeout(() => {
         dispatch(clearTableErrorMessage());
@@ -165,7 +134,6 @@ export const useTable = () => {
       const modifyTable = {
         ...currentTable,
         plates: object.selectedPlates,
-        command: object.command,
       };
 
       const { data } = await restaurantApi.put('/table/update', modifyTable );
@@ -179,37 +147,6 @@ export const useTable = () => {
 
     } catch (error) {
       dispatch(setTableErrorMessage('Error updating table'));
-    } finally {
-      setTimeout(() => {
-        dispatch(clearTableErrorMessage());
-      }, 100);
-    }
-  };
-
-  const startUpdatingTableCommand = async (command: Plate[]) => {
-    dispatch(setIsTableLoading());
-    try {
-      if (!currentTable) {
-        dispatch(setTableErrorMessage('Error geting table to update'));
-        return [];
-      }
-
-      const { data } = await restaurantApi.put(
-        '/table/command/update',
-        { id: currentTable.id, command },
-      );
-
-      if (!data || !data.table) {
-        dispatch(setTableErrorMessage('Data error, updating table command'));
-        console.log('error updating table command');
-        return [];
-      }
-
-      return [ ...data.table.command ];
-
-    } catch (error) {
-      dispatch(setTableErrorMessage('Error updating table command'));
-      return [];
     } finally {
       setTimeout(() => {
         dispatch(clearTableErrorMessage());
@@ -244,9 +181,7 @@ export const useTable = () => {
     startUpdatingTable,
     startRemovingTable,
     startUpdatingTablePlates,
-    startUpdatingTableCommand,
     findTablePlate,
     setCurrentTable,
-    startUpdatingTableTime,
   };
 };

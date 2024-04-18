@@ -18,8 +18,6 @@ export const Tables = () => {
     isLoading,
     startRemovingTable,
     startUpdatingTablePlates,
-    startUpdatingTableCommand,
-    startUpdatingTableTime,
     errorMessage,
   } = useTable();
   const { plateGroups, startGettingPlateGroups } = usePlateGroup();
@@ -145,15 +143,10 @@ export const Tables = () => {
    */
   const onSavePlateModal = async (tablePlates: Plate[]) => {
     if (currentTable) {
-      // update command
-      const command = await startUpdatingTableCommand(
-        tablePlates,
-      );
       // update plates
       await startUpdatingTablePlates({
         tableId: currentTable.id!,
         selectedPlates: tablePlates,
-        command: command,
       });
       // todo update command
     }
@@ -190,14 +183,15 @@ export const Tables = () => {
     if (table.plates.length > 0) {
       commandPDF(table);
     }
+
     // this should clear the commands:
-    await startUpdatingTableCommand([]);
+    // await startUpdatingTableCommand([]);
     // set start time
-    const partialTable: Partial<Table> = {
-      id: table.id,
-      initCommand: new Date().toISOString(),
-    };
-    await startUpdatingTableTime(partialTable);
+    // const partialTable: Partial<Table> = {
+    //   id: table.id,
+    //   initCommand: new Date().toISOString(),
+    // };
+    // await startUpdatingTableTime(partialTable);
   };
 
   /**
@@ -254,10 +248,17 @@ export const Tables = () => {
       </section>
       {/* Modals: */}
       {/* Table preview: */}
-      <TablePlatesModal isShown={modalStates.isPreviewModalShown} plates={modalStates.plates} onClose={onClosePreviewModal} />
+      <TablePlatesModal
+        isShown={modalStates.isPreviewModalShown}
+        plates={modalStates.plates}
+        onClose={onClosePreviewModal} />
       {
         modalStates.isTableFormModalShown && (
-          <TableForm onClose={closeFormModal} onSave={onSaveClick} table={currentTable} title={modalStates.title ?? ''} />
+          <TableForm
+            onClose={closeFormModal}
+            onSave={onSaveClick}
+            table={currentTable}
+            title={modalStates.title ?? ''} />
         )
       }
       {
