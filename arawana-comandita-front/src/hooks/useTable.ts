@@ -1,4 +1,4 @@
-import { calendarApi } from "../api";
+import { restaurantApi } from "../api";
 import {
   addTable,
   clearTables,
@@ -25,7 +25,7 @@ export const useTable = () => {
   const startCreatingTable = async (table: Table) => {
     dispatch(setIsTableLoading());
     try {
-      const { data } = await calendarApi.post('/table/create', table);
+      const { data } = await restaurantApi.post('/table/create', table);
 
       if (!data || !data.table) {
         dispatch(setTableErrorMessage('Error creating table'));
@@ -47,7 +47,7 @@ export const useTable = () => {
   const startGetingTables = async () => {
     dispatch(setIsTableLoading());
     try {
-      const { data } = await calendarApi.get('/table/all');
+      const { data } = await restaurantApi.get('/table/all');
 
       if (!data || !data.tables) {
         dispatch(setTableErrorMessage('Error geting table'));
@@ -69,10 +69,41 @@ export const useTable = () => {
 
   };
 
+  const startUpdatingTableTime = async (table: Partial<Table>) => {
+    dispatch(setIsTableLoading());
+    try {
+      const tableFound = tables.find(t => table.id === t.id);
+      console.log({ currentTable });
+      const completeTable = {
+        ...tableFound,
+        ...table,
+      };
+
+      console.log(completeTable);
+
+      // const { data } = await restaurantApi.put('/table/update', table );
+
+      // if (!data || !data.table) {
+      //   dispatch(setTableErrorMessage('Error updating table'));
+      //   console.log('error updating tables');
+      // }
+
+      // dispatch(updateTable(table));
+
+    } catch (error) {
+      dispatch(setTableErrorMessage('Error updating table'));
+    } finally {
+      setTimeout(() => {
+        dispatch(clearTableErrorMessage());
+      }, 100);
+    }
+
+  };
+
   const startUpdatingTable = async (table: Table) => {
     dispatch(setIsTableLoading());
     try {
-      const { data } = await calendarApi.put('/table/update', table );
+      const { data } = await restaurantApi.put('/table/update', table );
 
       if (!data || !data.table) {
         dispatch(setTableErrorMessage('Error updating table'));
@@ -94,7 +125,7 @@ export const useTable = () => {
   const startRemovingTable = async (tableId: string) => {
     dispatch(setIsTableLoading());
     try {
-      const { data } = await calendarApi.delete(`/table/delete/${tableId}`);
+      const { data } = await restaurantApi.delete(`/table/delete/${tableId}`);
 
       if (!data || !data.table) {
         dispatch(setTableErrorMessage('Error removing table'));
@@ -137,7 +168,7 @@ export const useTable = () => {
         command: object.command,
       };
 
-      const { data } = await calendarApi.put('/table/update', modifyTable );
+      const { data } = await restaurantApi.put('/table/update', modifyTable );
 
       if (!data || !data.table) {
         dispatch(setTableErrorMessage('Data error, updating table'));
@@ -163,7 +194,7 @@ export const useTable = () => {
         return [];
       }
 
-      const { data } = await calendarApi.put(
+      const { data } = await restaurantApi.put(
         '/table/command/update',
         { id: currentTable.id, command },
       );
@@ -216,5 +247,6 @@ export const useTable = () => {
     startUpdatingTableCommand,
     findTablePlate,
     setCurrentTable,
+    startUpdatingTableTime,
   };
 };

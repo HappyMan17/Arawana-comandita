@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { PlateGroupSchemaId } from './PlateGroupModel.js';
 
 export const PlateSchema = Schema({
   name: {
@@ -10,8 +11,8 @@ export const PlateSchema = Schema({
     require: true,
   },
   plateGroup: {
-    type: String,
-    require: true,
+    type: PlateGroupSchemaId,
+    require: false,
   },
   initQuantity: {
     type: Number,
@@ -46,10 +47,6 @@ export const PlateSchemaId = PlateSchema.clone();
 // based on table needs
 PlateSchemaId.add({
   id: String,
-  plateGroup: {
-    type: String,
-    require: true,
-  },
   initQuantity: {
     type: Number,
     require: true,
@@ -65,5 +62,7 @@ PlateSchemaId.add({
     default: false,
   },
 });
+
+PlateSchemaId.set('_id', false);
 
 export const PlateModel = model('Plate', PlateSchema);

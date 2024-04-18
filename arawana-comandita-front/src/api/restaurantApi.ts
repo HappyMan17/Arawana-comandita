@@ -3,11 +3,11 @@ import { getEnvVariables } from '../helpers';
 
 const { VITE_API_URL } = getEnvVariables();
 
-const calendarApi = axios.create({
+const restaurantApi = axios.create({
   baseURL: VITE_API_URL,
 });
 
-calendarApi.interceptors.request.use(config => {
+restaurantApi.interceptors.request.use(config => {
   const authToken = localStorage.getItem('token');
   if (authToken) {
     config.headers.Authorization = `Bearer ${authToken}`;
@@ -16,4 +16,4 @@ calendarApi.interceptors.request.use(config => {
   return config;
 });
 
-export default calendarApi;
+export default restaurantApi;

@@ -1,7 +1,7 @@
 import { response } from "express";
 import { TableModel } from "../models/TableModel.js";
 import { tableMapper } from "../mappers/tableMapper.js";
-import { checkCurrentCommand } from "../helpers/commandHelper.js";
+import { CommandModel } from "../models/Command.js";
 
 export const getUserTable = async (req, res) => {
   try {
@@ -22,7 +22,6 @@ export const getUserTable = async (req, res) => {
         comment: table.comment,
         uid: table.uid,
         plates: table.plates,
-        command: table.command,
       }))
     });
   } catch (error) {
@@ -43,6 +42,9 @@ export const getTables = async (req, res) => {
       });
     }
 
+    // commands
+    const commands = await CommandModel.find({ table_id: req.params.id });
+
     res.status(201).json({
       ok: true,
       table: {
@@ -52,7 +54,7 @@ export const getTables = async (req, res) => {
         comment: table.comment,
         uid: table.uid,
         plates: table.plates,
-        command: table.command,
+        commands: commands ?? [],
       },
     });
   } catch (error) {
@@ -78,60 +80,6 @@ export const createTable = async (req, res = response) => {
         comment: table.comment,
         uid: req.uid,
         plates: table.plates,
-        command: table.command,
-      },
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      ok: false,
-      message: 'Please talk with your administrator',
-    });
-  }
-};
-
-export const updateTableCommand = async (req, res = response) => {
-  try {
-    const { id, command } = req.body;
-
-    const currentTable = await TableModel.findOne({ _id: id }).exec();
-
-    if (!currentTable) {
-      return res.status(400).json({
-        ok: false,
-        message: 'Table not found',
-      });
-    }
-    const currentCommand = checkCurrentCommand(currentTable, command);
-
-    // db save plate
-    const table = await TableModel.findByIdAndUpdate(
-      id,
-      { $set:
-        {
-          command: currentCommand,
-        }
-      },
-      { new: true },
-    );
-
-    if (!table) {
-      return res.status(400).json({
-        ok: false,
-        message: 'Missing field',
-      });
-    }
-
-    res.status(201).json({
-      ok: true,
-      table: {
-        id: table.id,
-        name: table.name,
-        total: table.total,
-        comment: table.comment,
-        uid: table.uid,
-        plates: table.plates,
-        command: table.command,
       },
     });
 
@@ -157,7 +105,6 @@ export const updateTable = async (req, res = response) => {
           comment: newTable.comment,
           uid: newTable.uid,
           plates: newTable.plates,
-          command: newTable.command,
         }
       },
       { new: true },
@@ -179,7 +126,6 @@ export const updateTable = async (req, res = response) => {
         comment: table.comment,
         uid: table.uid,
         plates: table.plates,
-        command: table.command,
       },
     });
 

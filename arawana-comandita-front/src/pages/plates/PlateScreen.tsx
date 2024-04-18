@@ -5,12 +5,12 @@ import { ModalState, Plate } from "../../types";
 import { usePlates, useUser } from "../../hooks";
 import Swal from "sweetalert2";
 import { capitalizeFirstLetter } from "../../helpers";
+import { usePlateGroup } from "../../hooks/usePlateGroup";
 
 export const PlateScreen = () => {
   const {
     plates,
     currentPlate,
-    plateGroup,
     errorMessage,
     isLoading,
     setCurrentPlate,
@@ -18,13 +18,16 @@ export const PlateScreen = () => {
     startCreatingPlate,
     startUpdatingPlate,
     startRemovingPlate,
-    startGetingPlateGroups,
-    startAddingPlateGroup,
-    startRemovingPlateGroup,
   } = usePlates();
+  const {
+    plateGroups,
+    startGettingPlateGroups,
+    startCreatingPlateGroup,
+    startRemovingPlateGroups,
+  } = usePlateGroup();
   const { user } = useUser();
 
-  const [plateSections, setPlateSections] = useState<Record<string, Plate[]>>({});
+  // const [plateSections, setPlateSections] = useState<Record<string, Plate[]>>({});
   const [groupInputValue, setGroupInputValue] = useState('');
   const [modalValues, setModalValues] = useState<ModalState>({
     isShown: false,
@@ -57,14 +60,14 @@ export const PlateScreen = () => {
       cancelButtonColor: 'red',
     });
     if (result && result.isConfirmed) {
-      setPlateSections({});
+      // setPlateSections({});
       plateId && (await startRemovingPlate(plateId));
     }
     await setCurrentPlate(null);
   };
 
   const onSaveClick = async (plate: Plate) => {
-    setPlateSections({});
+    // setPlateSections({});
     if (user.id) {
       plate.uid = user.id;
     } else {
@@ -85,26 +88,18 @@ export const PlateScreen = () => {
   };
 
   const onAddPlateGroup = async () => {
-    const currentPlateGroup = plateGroup.find(group => group.name === groupInputValue);
+    const currentPlateGroup = plateGroups.find(group => group.name === groupInputValue);
     if (!currentPlateGroup) {
-      //logic
-      await startAddingPlateGroup(capitalizeFirstLetter(groupInputValue));
+      await startCreatingPlateGroup(capitalizeFirstLetter(groupInputValue));
       setGroupInputValue('');
     }
   };
 
   const onRemovePlateGroup = async () => {
-    const currentPlateGroup = plateGroup.find(group => group.name === groupInputValue);
+    const currentPlateGroup = plateGroups.find(group => group.name === groupInputValue);
     if (currentPlateGroup) {
-      if (plateSections[groupInputValue]?.length > 0) {
-        return await Swal.fire({
-          title: 'Delete',
-          html: 'You can not delete this group because it has plates',
-          icon: 'info',
-        });
-      }
       //logic
-      await startRemovingPlateGroup(currentPlateGroup.id);
+      await startRemovingPlateGroups(currentPlateGroup.id);
       setGroupInputValue('');
     }
   };
@@ -118,52 +113,35 @@ export const PlateScreen = () => {
 
   useEffect(() => {
     startGetingPlates();
-    startGetingPlateGroups();
+    startGettingPlateGroups();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (plates.length === 0) {
-      setPlateSections({});
-      return;
-    }
-    plates.forEach((plate) => {
-      const group = plateGroup.find((group) => plate.plateGroup === group.name);
-
-      if (group) {
-        const prevValue = plateSections[group.name] || [];
-        const ids = new Set(prevValue.map((value) => value.id));
-        if (!ids.has(plate.id)) {
-          setPlateSections((prevState) => ({
-            ...prevState,
-            [group.name]: [plate, ...prevValue],
-          }));
-        }
-      }
-    });
+    startGettingPlateGroups();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plates, plateGroup]);
+  }, [plates]);
 
   return (
     <main>
       <section className="relative">
         {
           // Default message:
-          plateGroup.length === 0 ? (
+          plateGroups.length === 0 ? (
             <h1 className="text-2xl mt-20 font-bold w-full text-start">
               To start, create a menu group <br /> <span className="text-gray-500">(soups, drinks, etc):</span>
             </h1>
           ) : (
-            plateGroup.map(group => {
-              const plates = plateSections[group.name] ?? [];
+            plateGroups.map(group => {
+              //const plates = plateSections[group.name] ?? [];
               return (
-                <div className="mb-3" key={ group.name } >
+                <div className="mb-9" key={ group.name } >
                   <h1 className="truncate w-full font-semibold text-4xl">
                     { group.name }
                   </h1>
-                  <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-10">
+                  <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-10 mb-10">
                     {
-                      plates.map(plate => {
+                      group.plates?.map(plate => {
                         return (
                           <ProductCard
                             plate={plate}
@@ -192,14 +170,20 @@ export const PlateScreen = () => {
           onChangeInput={(value) => {
             setGroupInputValue(value);
           }}
-          plateGroup={plateGroup}
+          plateGroup={plateGroups.filter(group => group.id)}
           onSavePlateGroup={onAddPlateGroup}
           onDeletePlateGroup={onRemovePlateGroup}
         />
       </section>
       {
         modalValues.isShown && (
-          <ProductForm onClose={closeFormModal} plate={currentPlate} title={modalValues.title ?? ''} onSave={onSaveClick} plateGroups={plateGroup} />
+          <ProductForm
+            onClose={closeFormModal}
+            plate={currentPlate}
+            title={modalValues.title ?? ''}
+            onSave={onSaveClick}
+            plateGroups={plateGroups.filter(group => group.id)}
+          />
         )
       }
       {

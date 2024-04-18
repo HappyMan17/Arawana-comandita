@@ -6,16 +6,10 @@ export const tableMapper = (object) => {
     comment,
     uid,
     plates,
-    command,
   } = object;
 
   // plates list and price key
   const total = getTotal(plates, 'price');
-
-  let finalCommand = command ?? [];
-  if (command?.length === 0) {
-    finalCommand = plates;
-  }
 
   return {
     name,
@@ -26,6 +20,5 @@ export const tableMapper = (object) => {
     platesServed: object.platesServed ?? null,
     hasPaidService: object.hasPaidService ?? false,
     plates,
-    command: finalCommand,
   };
 };

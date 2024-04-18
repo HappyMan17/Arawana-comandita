@@ -1,13 +1,48 @@
-export const plateMapper = (object) => {
-  const { name, plateGroup, initQuantity, price, description, image, uid } = object;
+export const plateMapper = (object, option) => {
 
-  return {
+  const {
     name,
+    plateGroup,
+    initQuantity,
     price,
     description,
-    plateGroup,
-    initQuantity: initQuantity ?? 0,
-    uid,
     image,
-  };
+    uid,
+    id
+  } = object;
+
+  switch (option) {
+    case 'response':
+      return {
+        id,
+        name,
+        price,
+        plateGroup: plateGroupMapper(plateGroup),
+        uid,
+        description,
+        image,
+      };
+
+    default:
+      return {
+        name,
+        price,
+        description,
+        plateGroup: plateGroupMapper(plateGroup) ?? null,
+        initQuantity: initQuantity ?? 0,
+        uid,
+        image,
+      };
+  }
+};
+
+const plateGroupMapper = (object) => {
+  try {
+    return {
+      id: object.id,
+      name: object.name,
+    };
+  } catch (error) {
+    return null;
+  }
 };

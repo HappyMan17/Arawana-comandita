@@ -18,12 +18,6 @@ export const TableSchema = Schema({
     type: String,
     require: true,
   },
-  initCommand: {
-    type: Date,
-  },
-  platesServed: {
-    type: Date,
-  },
   paymentMethod: {
     type: String,
     require: true,
@@ -33,7 +27,6 @@ export const TableSchema = Schema({
     require: true,
   },
   plates: [PlateSchemaId],
-  command: [PlateSchemaId],
 });
 
 TableSchema.virtual('id').get(function() {
@@ -52,5 +45,7 @@ TableSchemaWithId.add({
   // Define new attributes
   id: String,
 });
+
+TableSchemaWithId.set('_id', false);
 
 export const TableModel = model('Table', TableSchema);

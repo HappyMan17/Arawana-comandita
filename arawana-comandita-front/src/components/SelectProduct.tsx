@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Dropdown, TablePlateCard } from '.';
 import { useTable } from '../hooks';
 import { Plate, PlateGroup } from '../types';
-import { deepCopy } from '../helpers';
+import { deepCopy, k } from '../helpers';
 
 interface SelectProductProps {
   plates: Plate[];
@@ -67,7 +67,12 @@ export const SelectProduct: React.FC<SelectProductProps> = ({
         <section className="max-h-[700px] sm:max-h-[350px] grid grid-cols-1 sm:grid-cols-2 grid-flow-row gap-4 overflow-scroll">
           {
             tablePlates.map(plate => {
-              if (plate.plateGroup === plateGroupSelected) {
+              if (plate.plateGroup?.name === plateGroupSelected) {
+                return (
+                  <TablePlateCard plate={plate} key={plate.id} />
+                );
+              }
+              if (plateGroupSelected === k.noGroup && !plate.plateGroup) {
                 return (
                   <TablePlateCard plate={plate} key={plate.id} />
                 );

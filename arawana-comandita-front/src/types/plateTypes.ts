@@ -4,7 +4,7 @@ export interface Plate {
   name: string;
   price: number;
   description: string;
-  plateGroup: string;
+  plateGroup: PlateGroup | null;
   image: string | null;
   uid: string;
   isSelected?: boolean;
@@ -14,6 +14,7 @@ export interface Plate {
 export interface PlateGroup {
   id: string;
   name: string;
+  plates: Plate[]
 }
 
 export type ModalType = 'Modify' | 'Create';

@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import {
   daySummarySlice,
+  plateGroupSlice,
   plateSlice,
   tableSlice,
   userReducer,
@@ -9,6 +10,7 @@ import {
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    plateGroup: plateGroupSlice.reducer,
     plate: plateSlice.reducer,
     table: tableSlice.reducer,
     summary: daySummarySlice.reducer,

@@ -1,18 +1,6 @@
 import { response } from "express";
 import { plateMapper } from "../mappers/plateMapper.js";
-import { PlateModel, PlateGroupModel } from "../models/index.js";
-
-export const checkPlateGroupExist = async (name) => {
-  try {
-    const plateGroup = await PlateGroupModel.findOne({ name });
-
-    return plateGroup ? true : false;
-
-  } catch (error) {
-    console.log('db connection error');
-    return false;
-  }
-};
+import { PlateGroupModel, PlateModel } from "../models/index.js";
 
 export const getUserPlates = async (req, res) => {
   try {
@@ -26,14 +14,7 @@ export const getUserPlates = async (req, res) => {
 
     res.status(201).json({
       ok: true,
-      plates: plates.map(plate => ({
-        id: plate.id,
-        name: plate.name,
-        price: plate.price,
-        plateGroup: plate.plateGroup,
-        description: plate.description,
-        image: plate.image,
-      }))
+      plates: plates.map(plate => plateMapper(plate, 'response')),
     });
   } catch (error) {
     res.status(500).json({
@@ -55,14 +36,7 @@ export const getPlate = async (req, res) => {
 
     res.status(201).json({
       ok: true,
-      plate: {
-        id: plate.id,
-        name: plate.name,
-        price: plate.price,
-        plateGroup: plate.plateGroup,
-        description: plate.description,
-        image: plate.image,
-      },
+      plate: plateMapper(plate, 'response'),
     });
   } catch (error) {
     res.status(500).json({
@@ -74,26 +48,22 @@ export const getPlate = async (req, res) => {
 
 export const createPlate = async (req, res = response) => {
   try {
-    if (!checkPlateGroupExist(req.body.plateGroup ?? 'Other')) {
-      // db save plate
-      const group = new PlateGroupModel({ name: 'Other', uid: req.uid });
-      await group.save();
-    }
+    // plate group
+    const group = await PlateGroupModel.findById(req.body.plateGroup.id).exec();
+    // console.log({ group, id: req.body.plateGroup });
     // db save plate
-    const plate = new PlateModel(plateMapper(req.body));
+    const plate = new PlateModel(plateMapper({
+      ...req.body,
+      plateGroup: {
+        id: group.id,
+        name: group.name,
+      },
+    }));
     await plate.save();
 
     res.status(201).json({
       ok: true,
-      plate: {
-        id: plate.id,
-        name: plate.name,
-        price: plate.price,
-        uid: req.uid,
-        plateGroup: plate.plateGroup,
-        description: plate.description,
-        image: plate.image,
-      },
+      plate: plateMapper(plate, 'response'),
     });
 
   } catch (error) {
@@ -110,10 +80,12 @@ export const updatePlate = async (req, res = response) => {
     // db save plate
     const plate = await PlateModel.findByIdAndUpdate(
       req.body.id,
-      { $set:
+      {
+        $set:
         {
           name: newPlate.name,
           price: newPlate.price,
+          plateGroup: newPlate.plateGroup,
           description: newPlate.description,
           image: newPlate.image,
         }
@@ -130,14 +102,7 @@ export const updatePlate = async (req, res = response) => {
 
     res.status(201).json({
       ok: true,
-      plate: {
-        id: plate.id,
-        name: plate.name,
-        price: plate.price,
-        plateGroup: plate.plateGroup,
-        description: plate.description,
-        image: plate.image,
-      },
+      plate: plateMapper(plate, 'response'),
     });
 
   } catch (error) {
@@ -167,93 +132,6 @@ export const deletPlate = async (req, res = response) => {
       ok: true,
       plate: {
         id: plateId,
-      },
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      ok: false,
-      message: 'Please talk with your administrator',
-    });
-  }
-};
-
-export const getPlateGroups = async (req, res) => {
-  try {
-    const groups = await PlateGroupModel.find({ uid: req.uid }).exec();
-    if (!groups) {
-      return res.status(500).json({
-        ok: false,
-        message: 'Plate groups not found',
-      });
-    }
-
-    res.status(201).json({
-      ok: true,
-      group: groups.map(group => ({
-        id: group.id,
-        name: group.name,
-      })),
-    });
-  } catch (error) {
-    res.status(500).json({
-      ok: false,
-      message: 'Please talk with your administrator',
-    });
-  }
-};
-
-export const createGroup = async (req, res) => {
-  try {
-    const plateGroup = await PlateGroupModel.findOne({ name: req.body.name });
-
-    if (plateGroup) {
-      return res.status(200).json({
-        ok: true,
-        message: 'Group already exists',
-      });
-    }
-
-    // db save plate
-    const group = new PlateGroupModel({ name: req.body.name, uid: req.uid });
-    await group.save();
-
-    res.status(201).json({
-      ok: true,
-      group: {
-        id: group.id,
-        name: group.name
-      },
-    });
-
-  } catch (err) {
-    res.status(500).json({
-      ok: false,
-      message: 'Please talk with your administrator',
-    });
-  }
-};
-
-export const deletPlateGroup = async (req, res = response) => {
-  try {
-    const groupId = req.params.id;
-    console.log(req.params.id);
-    // db save plate
-    const plate = await PlateGroupModel.findByIdAndDelete(
-      groupId,
-    );
-
-    if (!plate) {
-      return res.status(400).json({
-        ok: false,
-        message: 'Missing field',
-      });
-    }
-
-    res.status(201).json({
-      ok: true,
-      group: {
-        id: groupId,
       },
     });
 

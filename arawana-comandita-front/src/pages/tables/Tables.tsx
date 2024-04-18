@@ -5,6 +5,7 @@ import { Table, Plate } from "../../types";
 import { usePlates, useTable, useUser, useDaySummary } from "../../hooks";
 import Swal from "sweetalert2";
 import { commandPDF, deepCopy } from "../../helpers";
+import { usePlateGroup } from "../../hooks/usePlateGroup";
 
 export const Tables = () => {
   const {
@@ -18,9 +19,11 @@ export const Tables = () => {
     startRemovingTable,
     startUpdatingTablePlates,
     startUpdatingTableCommand,
+    startUpdatingTableTime,
     errorMessage,
   } = useTable();
-  const { plates, plateGroup, startGetingPlates, startGetingPlateGroups } = usePlates();
+  const { plateGroups, startGettingPlateGroups } = usePlateGroup();
+  const { plates, startGetingPlates } = usePlates();
   const { startAddingToDaySummary } = useDaySummary();
   const { user } = useUser();
 
@@ -189,6 +192,12 @@ export const Tables = () => {
     }
     // this should clear the commands:
     await startUpdatingTableCommand([]);
+    // set start time
+    const partialTable: Partial<Table> = {
+      id: table.id,
+      initCommand: new Date().toISOString(),
+    };
+    await startUpdatingTableTime(partialTable);
   };
 
   /**
@@ -209,7 +218,7 @@ export const Tables = () => {
   useEffect(() => {
     startGetingTables();
     startGetingPlates();
-    startGetingPlateGroups();
+    startGettingPlateGroups();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -253,7 +262,7 @@ export const Tables = () => {
       }
       {
         modalStates.isPlateModalShown && (
-          <SelectProduct plates={plates ?? []} onClose={onClosePlateModal} onSave={onSavePlateModal} plateGroups={plateGroup} />
+          <SelectProduct plates={plates ?? []} onClose={onClosePlateModal} onSave={onSavePlateModal} plateGroups={plateGroups} />
         )
       }
       {
