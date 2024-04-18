@@ -121,6 +121,54 @@ export const useDaySummary = () => {
     }
   };
 
+  //? getting current summary
+  const getSummaryFile = async () => {
+    dispatch(setDailyIsLoading());
+    try {
+      const { data } = await restaurantApi.get('/cvs/update');
+
+      // if an error occurs, create the file
+      if (!data.ok) {
+        const { data: creationData } = await restaurantApi.get('/cvs/create');
+        if (!creationData.ok) {
+          dispatch(setDailyErrorMessage('No data created to download yet'));
+          return;
+        }
+      }
+
+      const response = await restaurantApi.get('/cvs', {
+        responseType: 'blob'
+      });
+      await downloadFile(response);
+
+      dispatch(setDailyIsLoading(false));
+
+    } catch (error) {
+      dispatch(setDailyErrorMessage('Error adding to day summary'));
+    } finally {
+      setTimeout(() => {
+        dispatch(clearSummaryErrorMessage());
+      }, 100);
+    }
+  };
+
+  const downloadFile = async (response: any) => {
+    try {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'summaryData.xlsx'; // Specify the filename here
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      dispatch(setDailyErrorMessage(
+        'Something went wrong downloading the file'
+      ));
+    }
+  };
+
   // todo guess it is not necessary
   // const startRemovingTable = async (tableId: string) => {
   //   dispatch(setDailyIsLoading());
@@ -153,5 +201,6 @@ export const useDaySummary = () => {
     //? methods
     startAddingToDaySummary,
     startGetingDaySummary,
+    getSummaryFile,
   };
 };

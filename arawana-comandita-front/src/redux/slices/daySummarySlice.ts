@@ -42,8 +42,8 @@ export const daySummarySlice = createSlice({
       state.isLoading = false;
       state.errorMessage = action.payload;
     },
-    setIsLoading: (state) => {
-      state.isLoading = true;
+    setIsLoading: (state, action: PayloadAction<boolean | undefined>) => {
+      state.isLoading =  action.payload ?? true;
     },
     clearSummaryErrorMessage: (state) => {
       state.isLoading = false;

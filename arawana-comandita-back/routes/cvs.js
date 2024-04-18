@@ -9,10 +9,10 @@ import { createCvs, updateCvsFile, getSummaryFile } from '../controllers/cvs.js'
 
 const router = express.Router();
 
-router.get('/', JWTValidation, createCvs);
+router.get('/create', JWTValidation, createCvs);
 
 router.get('/update', JWTValidation, updateCvsFile);
 
-router.get('/file', getSummaryFile);
+router.get('/', getSummaryFile);
 
 export default router;

@@ -38,7 +38,6 @@ export const createWorkbook = (sheet, sheetName, bookName) => {
 export const checkFileExists = async(filePath) => {
   try {
     await fs.access(filePath, fs.constants.F_OK);
-    console.log('File exists');
     return true;
   } catch (err) {
     console.error('File does not exist');
