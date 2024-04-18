@@ -5,7 +5,8 @@ export const readWorkbookFile = async (filePath) => {
   return XLSX.readFile(filePath);
 };
 
-export const readWorkbook = (workbook) => {
+export const readWorkbook = async (filePath) => {
+  const workbook = await readWorkbookFile(filePath);
   let workSheets = {};
 
   for (const sheetName of workbook.SheetNames) {
@@ -15,12 +16,14 @@ export const readWorkbook = (workbook) => {
   }
   return {
     sheetsNames: workbook.SheetNames,
-    workSheets
+    workSheets,
+    workbook,
   };
 };
 
-export const addRow = (sheet, row) => {
-  sheet.push(row);
+export const addRow = (workbook, sheet, sheetName, workbookName) => {
+  XLSX.utils.sheet_add_json(workbook.Sheets[sheetName], sheet);
+  XLSX.writeFile(workbook, workbookName);
   return sheet;
 };
 
@@ -54,4 +57,15 @@ export const convertToCurrency = (value) => {
   }
 
   return COP.format(value);
+};
+
+export const excelSerialDateToJSDate = (serial) => {
+  var utcDays = Math.floor(serial - 25569);
+  var utcValue = utcDays * 86400; // Seconds per day
+  var date = new Date(utcValue * 1000);
+
+  // Adjust for timezone offset
+  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+
+  return date;
 };
