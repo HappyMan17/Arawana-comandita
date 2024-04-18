@@ -26,7 +26,7 @@ export const createCvs = async (req, res) => {
 
     if (await checkFileExists(bookName)) {
       return res.status(200).json({
-        ok: true,
+        ok: false,
         message: 'File already exists',
       });
     }
@@ -36,7 +36,7 @@ export const createCvs = async (req, res) => {
 
     if (!daySummaries || daySummaries.length === 0) {
       return res.status(200).json({
-        ok: true,
+        ok: false,
         message: 'Day summaries not found',
       });
     }
@@ -51,7 +51,7 @@ export const createCvs = async (req, res) => {
     // add the final summary to the sheet
     if (!workbook) {
       return res.status(200).json({
-        ok: true,
+        ok: false,
         message: 'workingbook not created',
       });
     }
@@ -71,7 +71,7 @@ export const createCvs = async (req, res) => {
 export const updateCvsFile = async (req, res) => {
   if (!await checkFileExists(bookName)) {
     return res.status(200).json({
-      ok: true,
+      ok: false,
       message: 'File does not exists',
     });
   }
@@ -109,6 +109,16 @@ export const updateCvsFile = async (req, res) => {
   });
 };
 
+export const getSummaryFile = async (req, res) => {
+  const filePath = constants.ABSOLUTE_FILE_PATH;
+
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      res.status(err.status).end();
+    }
+  });
+};
+
 /**
  * Void function to convert summaries into excel rows
  * @param {*} daySummary
@@ -130,17 +140,4 @@ const createSummaryRow = (daySummary, rows) => {
       });
     }
   }
-};
-
-export const getSummaryFile = async (req, res) => {
-  const filePath = constants.ABSOLUTE_FILE_PATH;
-
-  res.sendFile(filePath, (err) => {
-    if (err) {
-      console.error('Error sending file:', err);
-      res.status(err.status).end();
-    } else {
-      console.log('File sent successfully:', 'absolute');
-    }
-  });
 };
