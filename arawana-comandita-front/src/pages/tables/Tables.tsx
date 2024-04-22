@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from "react";
 import { Loader, SelectProduct, TableCard, TableForm, TablePlatesModal } from "../../components";
-import { Table, Plate } from "../../types";
+import { Table, Plate, Command } from "../../types";
 import { usePlates, useTable, useUser, useDaySummary } from "../../hooks";
 import Swal from "sweetalert2";
 import { commandPDF, deepCopy } from "../../helpers";
@@ -18,6 +18,8 @@ export const Tables = () => {
     isLoading,
     startRemovingTable,
     startUpdatingTablePlates,
+    startCreatingTableCommand,
+    startUpdatingTableCommand,
     errorMessage,
   } = useTable();
   const { plateGroups, startGettingPlateGroups } = usePlateGroup();
@@ -184,22 +186,25 @@ export const Tables = () => {
       commandPDF(table);
     }
 
-    // this should clear the commands:
-    // await startUpdatingTableCommand([]);
-    // set start time
-    // const partialTable: Partial<Table> = {
-    //   id: table.id,
-    //   initCommand: new Date().toISOString(),
-    // };
-    // await startUpdatingTableTime(partialTable);
+
+    const command: Command = {
+      table_id: table.id!,
+      initCommand: new Date(),
+      endCommand: null,
+      platesServed: false,
+      plates: table.plates,
+    };
+    await startCreatingTableCommand(command, table);
   };
 
   /**
    * Food delivered and timer ends
    * @param table
    */
-  const handleFoodDelivered = (table: Table) => {
-    console.log(table);
+  const handleFoodDelivered = async (table: Table) => {
+    if (table.commands && table.commands.length > 0) {
+      await startUpdatingTableCommand(deepCopy(table));
+    }
   };
 
   // Error message

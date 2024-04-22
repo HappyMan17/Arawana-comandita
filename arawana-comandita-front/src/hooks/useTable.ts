@@ -10,7 +10,7 @@ import {
   clearCurrentTable,
   clearTableErrorMessage,
 } from "../redux";
-import { Table, TablePlateObject } from "../types";
+import { Command, Table, TablePlateObject } from "../types";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
 
 export const useTable = () => {
@@ -169,6 +169,73 @@ export const useTable = () => {
     return JSON.parse(JSON.stringify(plate)) ?? null;
   };
 
+  const startCreatingTableCommand = async (command: Command, table: Table) => {
+    dispatch(setIsTableLoading());
+    try {
+      let data: Command[] | null = null;
+      const { data: commandsData } = await restaurantApi.post('/command/', {
+        table_id: command.table_id,
+      });
+
+      if (!commandsData || !commandsData.commands) {
+        dispatch(setTableErrorMessage('Error, getting table command'));
+        console.log('error getting table command');
+      }
+      data = commandsData.commands;
+
+      if (!data || data.length === 0) {
+        const { data: commandData } = await restaurantApi.post(
+          '/command/create', command
+        );
+        data = [commandData.command];
+      }
+
+      dispatch(updateTable({
+        ...table,
+        commands: data ?? [],
+      }));
+
+    } catch (error) {
+      dispatch(setTableErrorMessage('Error creating command'));
+    } finally {
+      setTimeout(() => {
+        dispatch(clearTableErrorMessage());
+      }, 100);
+    }
+  };
+
+  const startUpdatingTableCommand = async (table: Table) => {
+    dispatch(setIsTableLoading());
+    try {
+      const command = table.commands[0];
+      command.endCommand = new Date();
+      command.platesServed = true;
+      command.plates = [];
+
+      const { data } = await restaurantApi.post(
+        '/command/update', command
+      );
+
+      if (!data) {
+        dispatch(setTableErrorMessage('Data error, updating table'));
+        console.log('error updating tables');
+      }
+
+      dispatch(updateTable({
+        ...table,
+        commands: data ? [data] : [],
+      }));
+
+    } catch (error) {
+      console.log({ error });
+      dispatch(setTableErrorMessage('Error updating command'));
+    } finally {
+      setTimeout(() => {
+        dispatch(clearTableErrorMessage());
+      }, 100);
+    }
+  };
+
   return {
     //? variables
     currentTable,
@@ -183,5 +250,7 @@ export const useTable = () => {
     startUpdatingTablePlates,
     findTablePlate,
     setCurrentTable,
+    startCreatingTableCommand,
+    startUpdatingTableCommand,
   };
 };

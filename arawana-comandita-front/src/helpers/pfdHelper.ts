@@ -40,7 +40,7 @@ export const generatePDF = (summary: DaySummary) => {
 };
 
 export const commandPDF = (table: Table) => {
-  const { command: plates, name } = table;
+  const { plates, name } = table;
   // Default export is a4 paper, portrait, using millimeters for units
   const doc = new jsPDF();
   let yAxist = 50;
