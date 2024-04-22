@@ -9,10 +9,19 @@ export interface Table {
   initCommand: string;
   platesServed: string;
   plates: Plate[];
-  command: Plate[];
+  commands: Command[];
 }
 
 export type State = "start" | "stop" | "reset";
+
+export interface Command {
+  id?: string;
+  table_id: string;
+  initCommand: Date;
+  endCommand: Date | null;
+  platesServed: boolean;
+  plates: Plate[];
+}
 
 export interface TablePlateObject {
   tableId: string;
