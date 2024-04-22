@@ -13,6 +13,12 @@ export const getUserTable = async (req, res) => {
       });
     }
 
+    for (const table of tables) {
+      // commands
+      const commands = await CommandModel.find({ table_id: table.id }).exec();
+      table.commands = commands;
+    }
+
     res.status(201).json({
       ok: true,
       tables: tables.map(table => ({
@@ -22,6 +28,7 @@ export const getUserTable = async (req, res) => {
         comment: table.comment,
         uid: table.uid,
         plates: table.plates,
+        commands: table.commands ?? [],
       }))
     });
   } catch (error) {
