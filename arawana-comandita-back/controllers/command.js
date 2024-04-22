@@ -56,12 +56,11 @@ export const createCommand = async (req, res) => {
     const newCommand = commandMapper(req.body);
 
     if (!newCommand) {
-      return res.status(200).json({
+      return res.status(400).json({
         ok: false,
         message: 'Some data is missing or incorrect',
       });
     }
-
     const command = new CommandModel({ ...newCommand, uid: req.uid });
     await command.save();
 

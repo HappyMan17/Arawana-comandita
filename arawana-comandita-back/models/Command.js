@@ -22,4 +22,13 @@ export const CommandSchema = Schema({
   plates: [PlateSchemaId],
 });
 
+CommandSchema.virtual('id').get(function() {
+  return this._id.toHexString();
+});
+
+// Ensure virtual fields are included when converting to JSON
+CommandSchema.set('toJSON', {
+  virtuals: true
+});
+
 export const CommandModel = model('Command', CommandSchema);
