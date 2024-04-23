@@ -57,7 +57,7 @@ export const TableCard: React.FC<TableCardProps> = ({
     <div className={`relative min-w-[200px] max-w-[320px] z-10 m-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ${plates.length > 0 && 'ring-red-600 ring-4'}`}>
       <div onClick={onShowPlatesView} className="relative flex item-center justify-start">
         <img className="rounded-t-lg" src={localImage} alt="" />
-        <Chronometer state={chronometerState} />
+        <Chronometer state={chronometerState} command={table.commands[0]} />
       </div>
       <div className="p-5">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{ name }</h5>

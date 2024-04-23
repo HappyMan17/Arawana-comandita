@@ -19,7 +19,8 @@ export const Tables = () => {
     startRemovingTable,
     startUpdatingTablePlates,
     startCreatingTableCommand,
-    startUpdatingTableCommand,
+    startDeletingCommand,
+    // startUpdatingTableCommand,
     errorMessage,
   } = useTable();
   const { plateGroups, startGettingPlateGroups } = usePlateGroup();
@@ -203,7 +204,8 @@ export const Tables = () => {
    */
   const handleFoodDelivered = async (table: Table) => {
     if (table.commands && table.commands.length > 0) {
-      await startUpdatingTableCommand(deepCopy(table));
+      // await startUpdatingTableCommand(deepCopy(table));
+      await startDeletingCommand(table);
     }
   };
 

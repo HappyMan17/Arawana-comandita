@@ -173,12 +173,12 @@ export const useTable = () => {
     dispatch(setIsTableLoading());
     try {
       let data: Command[] | null = null;
-      const { data: commandsData } = await restaurantApi.post('/command/', {
-        table_id: command.table_id,
-      });
+      const { data: commandsData } = await restaurantApi.get(
+        `/command/${command.table_id}`
+      );
 
       if (!commandsData || !commandsData.commands) {
-        dispatch(setTableErrorMessage('Error, getting table command'));
+        // dispatch(setTableErrorMessage('Error, getting table command'));
         console.log('error getting table command');
       }
       data = commandsData.commands;
@@ -236,6 +236,39 @@ export const useTable = () => {
     }
   };
 
+  const startDeletingCommand = async (table: Table) => {
+    dispatch(setIsTableLoading());
+    try {
+      const commandId = table.commands[0]?.id;
+
+      if (!commandId) {
+        return;
+      }
+
+      const { data } = await restaurantApi.delete(
+        `/command/delete/${commandId}`
+      );
+
+      if (!data) {
+        dispatch(setTableErrorMessage('Data error, deleting command'));
+        console.log('error deleting command');
+      }
+
+      dispatch(updateTable({
+        ...table,
+        commands: [],
+      }));
+
+    } catch (error) {
+      console.log({ error });
+      dispatch(setTableErrorMessage('Error deleting command'));
+    } finally {
+      setTimeout(() => {
+        dispatch(clearTableErrorMessage());
+      }, 100);
+    }
+  };
+
   return {
     //? variables
     currentTable,
@@ -252,5 +285,6 @@ export const useTable = () => {
     setCurrentTable,
     startCreatingTableCommand,
     startUpdatingTableCommand,
+    startDeletingCommand,
   };
 };
