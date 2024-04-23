@@ -28,7 +28,7 @@ export const getCommands = async (req, res) => {
 
 export const getTableCommands = async (req, res) => {
   try {
-    const commands = await CommandModel.find({ table_id: req.params.table_id });
+    const commands = await CommandModel.find({ table_id: req.params.table_id }).exec();
 
     if (!commands || commands.length === 0) {
       return res.status(200).json({

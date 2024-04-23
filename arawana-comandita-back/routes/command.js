@@ -16,9 +16,10 @@ import { check } from 'express-validator';
 
 const router = express.Router();
 
-router.post('/', JWTValidation, getTableCommands);
 
 router.get('/all', JWTValidation, getCommands);
+
+router.get('/:table_id', JWTValidation, getTableCommands);
 
 router.post('/create',
 [
