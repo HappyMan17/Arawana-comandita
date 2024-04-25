@@ -58,6 +58,11 @@ export const TablePlateCard: React.FC<TablePlateCardProps> = ({ plate }) => {
     //? if is disabled, the plate is not selected
     _.set(plate, 'isSelected', !currentDisabledValue);
 
+    if (!currentDisabledValue && quantity === 0) {
+      plate.quantity = 1;
+      quantity = 1;
+    }
+
     setPlateState(() => ({
       isInputDisabled: currentDisabledValue,
       quantity: quantity,

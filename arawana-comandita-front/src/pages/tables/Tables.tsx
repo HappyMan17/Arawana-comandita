@@ -128,8 +128,8 @@ export const Tables = () => {
     if (method === null) {
       return;
     }
-
-    await startAddingToDaySummary(deepCopy(currentTable!));
+    const table = { ...deepCopy(currentTable!), paymentMethod: method, hasPaidService: true };
+    await startAddingToDaySummary(table);
     const cleanTable = {
       ...currentTable!,
       paymentMethod: method,
@@ -168,6 +168,9 @@ export const Tables = () => {
   const onSavePlateModal = async (tablePlates: Plate[]) => {
     if (currentTable) {
       // update plates
+      tablePlates.forEach(plate => {
+        console.log({ plate });
+      });
       await startUpdatingTablePlates({
         tableId: currentTable.id!,
         selectedPlates: tablePlates,
