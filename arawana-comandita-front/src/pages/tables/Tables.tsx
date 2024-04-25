@@ -1,11 +1,20 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from "react";
-import { Loader, SelectProduct, TableCard, TableForm, TablePlatesModal } from "../../components";
+import { Loader, PaymentMethodModal, SelectProduct, TableCard, TableForm, TablePlatesModal } from "../../components";
 import { Table, Plate, Command } from "../../types";
 import { usePlates, useTable, useUser, useDaySummary } from "../../hooks";
 import Swal from "sweetalert2";
 import { commandPDF, deepCopy } from "../../helpers";
 import { usePlateGroup } from "../../hooks/usePlateGroup";
+
+interface TableModelState {
+  isPlateModalShown: boolean;
+  isPreviewModalShown: boolean;
+  isTableFormModalShown: boolean;
+  isPaymentModalShown: boolean;
+  title: string;
+  plates: Plate[];
+}
 
 export const Tables = () => {
   const {
@@ -28,19 +37,12 @@ export const Tables = () => {
   const { startAddingToDaySummary } = useDaySummary();
   const { user } = useUser();
 
-  interface TableModelState {
-    isPlateModalShown: boolean;
-    isPreviewModalShown: boolean;
-    isTableFormModalShown: boolean;
-    title: string;
-    plates: Plate[];
-  }
-
   // TABLE MODAL
   const [modalStates, setModalStates] = useState<TableModelState>({
     isPlateModalShown: false,
     isPreviewModalShown: false,
     isTableFormModalShown: false,
+    isPaymentModalShown: false,
     title: 'Create Table',
     plates: [],
   });
@@ -107,16 +109,35 @@ export const Tables = () => {
   const onEndService = async (table: Table) => {
     // console.log({ table });
     if (table.plates.length > 0) {
-      await startAddingToDaySummary(deepCopy(table));
-      // reset table
-      const cleanTable = {
-        ...table,
-        total: 0,
-        plates: [],
-      };
-      await startUpdatingTable(cleanTable);
-      await setCurrentTable(null);
+      // show modal
+      setModalStates(prevState => ({
+        ...prevState,
+        isPaymentModalShown: true,
+      }));
+      setCurrentTable(table.id!);
     }
+  };
+
+  const onClosePaymentModal = async (method: string | null) => {
+    // console.log({ currentTable });
+    setModalStates(prevState => ({
+      ...prevState,
+      isPaymentModalShown: false,
+    }));
+
+    if (method === null) {
+      return;
+    }
+
+    await startAddingToDaySummary(deepCopy(currentTable!));
+    const cleanTable = {
+      ...currentTable!,
+      paymentMethod: method,
+      total: 0,
+      plates: [],
+    };
+    await startUpdatingTable(cleanTable);
+    await setCurrentTable(null);
   };
 
   // Plate modal
@@ -278,6 +299,10 @@ export const Tables = () => {
           <Loader />
         )
       }
+      <PaymentMethodModal
+        isShown={modalStates.isPaymentModalShown}
+        onClose={onClosePaymentModal}
+      />
     </>
   );
 };

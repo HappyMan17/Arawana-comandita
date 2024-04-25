@@ -14,3 +14,4 @@ export * from './TablePlatesModal';
 export * from './PlateGroupManagement';
 export * from './Chronometer';
 export * from './DarkMode';
+export * from './PaymentMethodModal';

@@ -15,7 +15,10 @@ const initForm: Table = {
   total: 0,
   comment: "",
   uid: "",
-  plates: []
+  plates: [],
+  initCommand: "",
+  platesServed: "",
+  commands: []
 };
 
 export const TableForm: React.FC<TableFormProps> = ({ onClose, table, title, onSave }) => {

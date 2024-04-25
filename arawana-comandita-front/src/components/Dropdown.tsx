@@ -1,10 +1,9 @@
 /* eslint-disable max-len */
 import { useState } from "react";
-import { PlateGroup } from "../types";
 
 interface DropdownProps {
   defaultValue: string,
-  values: PlateGroup[],
+  values: {name: string}[],
   onChange: (value: string) => void,
 }
 
