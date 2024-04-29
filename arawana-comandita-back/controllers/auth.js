@@ -102,16 +102,23 @@ export const loginUser = async (req, res = response) => {
 };
 
 export const checkUserToken = async (req, res = response) => {
-  const { uid, name } = req;
+  try {
+    const { uid, name } = req;
 
-  const token = await generateJWT(uid, name);
+    const token = await generateJWT(uid, name);
 
-  res.json({
-    ok: true,
-    user: {
-      uid,
-      name,
-    },
-    token,
-  });
+    res.status(200).json({
+      ok: true,
+      user: {
+        uid,
+        name,
+      },
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      message: 'Please talk with your administrator',
+    });
+  }
 };
