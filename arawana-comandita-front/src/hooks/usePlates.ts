@@ -11,8 +11,10 @@ import {
 } from "../redux";
 import { Plate } from "../types";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
+import { useUser } from "./useUser";
 
 export const usePlates = () => {
+  const { sessionExpired } = useUser();
   const {
     currentPlate,
     isLoading,
@@ -57,7 +59,11 @@ export const usePlates = () => {
       data.plates.map((plate: Plate) => {
         dispatch(addPlate(plate));
       });
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response.status === 403) {
+        sessionExpired();
+        return;
+      }
       dispatch(setErrorMessage('Error geting plate'));
       console.log({ error });
     }

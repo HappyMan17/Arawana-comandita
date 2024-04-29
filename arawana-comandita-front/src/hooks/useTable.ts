@@ -12,8 +12,10 @@ import {
 } from "../redux";
 import { Command, Table, TablePlateObject } from "../types";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
+import { useUser } from "./useUser";
 
 export const useTable = () => {
+  const { sessionExpired } = useUser();
   const {
     currentTable,
     errorMessage,
@@ -58,7 +60,11 @@ export const useTable = () => {
       data.tables.map((table: Table) => {
         dispatch(addTable(table));
       });
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response.status === 403) {
+        sessionExpired();
+        return;
+      }
       dispatch(setTableErrorMessage('Error geting tables'));
       console.log({ error });
     } finally {

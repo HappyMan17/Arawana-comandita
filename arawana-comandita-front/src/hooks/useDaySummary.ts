@@ -11,8 +11,10 @@ import { useAppDispatch, useAppSelector } from "./reduxHooks";
 import { restaurantApi } from "../api";
 import { DaySummary, Table } from "../types";
 import { deepCopy, duplicateValuesSum } from "../helpers";
+import { useUser } from "./useUser";
 
 export const useDaySummary = () => {
+  const { sessionExpired } = useUser();
   const {
     currentDaySummary,
     daySummaries,
@@ -84,9 +86,12 @@ export const useDaySummary = () => {
       data.daySummaries.map((summary: DaySummary) => {
         dispatch(addDaySummary(summary));
       });
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response.status === 403) {
+        sessionExpired();
+        return;
+      }
       dispatch(setDailyErrorMessage('Error geting day sumamries'));
-      console.log({ error });
     } finally {
       setTimeout(() => {
         dispatch(clearSummaryErrorMessage());

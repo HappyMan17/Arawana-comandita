@@ -5,7 +5,7 @@ import {
   onChecking,
   onLogin,
   onLogout,
-  setDarkMode
+  setDarkMode,
 } from "../redux";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
 
@@ -60,12 +60,18 @@ export const useUser = () => {
       dispatch(onLogin({ name: data.user.name, id: data.user.uid }));
 
     } catch (error) {
-      // console.log({ error });
       dispatch(onLogout(null));
       setTimeout(() => {
         dispatch(clearErrorMessage());
       }, 100);
     }
+  };
+
+  const sessionExpired = () => {
+    dispatch(onLogout('Session expired'));
+    setTimeout(() => {
+      dispatch(clearErrorMessage());
+    }, 100);
   };
 
   const changeDarkMode = async () => {
@@ -89,5 +95,6 @@ export const useUser = () => {
     startLogout,
     changeDarkMode,
     startChecking,
+    sessionExpired,
   };
 };
