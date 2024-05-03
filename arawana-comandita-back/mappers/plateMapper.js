@@ -8,7 +8,8 @@ export const plateMapper = (object, option) => {
     description,
     image,
     uid,
-    id
+    id,
+    expireAt,
   } = object;
 
   switch (option) {
@@ -32,6 +33,7 @@ export const plateMapper = (object, option) => {
         initQuantity: initQuantity ?? 0,
         uid,
         image,
+        expireAt,
       };
   }
 };

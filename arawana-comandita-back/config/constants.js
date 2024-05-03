@@ -10,6 +10,7 @@ const constants = {
   ],
   BOOKNAME: './public/files/test.xlsx',
   ABSOLUTE_FILE_PATH: path.join(process.cwd(), './public/files/test.xlsx'),
+  TIME_TO_DELETE: 2 * 60 * 60 * 1000,
 };
 
 export default constants;

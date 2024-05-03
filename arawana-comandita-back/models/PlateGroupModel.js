@@ -9,6 +9,10 @@ const PlateGroupSchema = Schema({
     type: String,
     require: true,
   },
+  expireAt: {
+    type: Date,
+    expires: 0,
+  },
 });
 
 export const PlateGroupSchemaId = PlateGroupSchema.clone();

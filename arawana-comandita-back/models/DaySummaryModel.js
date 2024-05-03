@@ -19,6 +19,10 @@ const DaySummarySchema = Schema({
     require: true,
   },
   tables: [TableSchemaWithId],
+  expireAt: {
+    type: Date,
+    expires: 0,
+  },
 });
 
 export const DaySummaryModel = model('DaySummary', DaySummarySchema);

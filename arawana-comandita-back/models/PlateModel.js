@@ -30,6 +30,10 @@ export const PlateSchema = Schema({
     type: String,
     require: true,
   },
+  expireAt: {
+    type: Date,
+    expires: 0,
+  },
 });
 
 PlateSchema.virtual('id').get(function() {

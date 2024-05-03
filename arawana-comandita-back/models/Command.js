@@ -20,6 +20,10 @@ export const CommandSchema = Schema({
     type: Boolean,
   },
   plates: [PlateSchemaId],
+  expireAt: {
+    type: Date,
+    expires: 0,
+  },
 });
 
 CommandSchema.virtual('id').get(function() {

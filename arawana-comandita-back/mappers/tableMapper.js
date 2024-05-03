@@ -1,3 +1,4 @@
+import constants from "../config/constants.js";
 import { getTotal } from "../helpers/getTotal.js";
 
 export const tableMapper = (object) => {
@@ -19,6 +20,7 @@ export const tableMapper = (object) => {
     initCommand: object.initCommand ?? null,
     platesServed: object.platesServed ?? null,
     hasPaidService: object.hasPaidService ?? false,
+    expireAt: new Date(Date.now() + constants.TIME_TO_DELETE),
     plates,
   };
 };

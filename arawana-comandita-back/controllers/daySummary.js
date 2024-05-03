@@ -2,6 +2,7 @@ import { response } from "express";
 import { DaySummaryModel } from "../models/DaySummaryModel.js";
 import { getCurrentDaySummary } from "../helpers/summaryHelper.js";
 import { getTotal } from "../helpers/getTotal.js";
+import constants from "../config/constants.js";
 
 //? all filtered
 export const getUserSummary = async (req, res) => {
@@ -62,6 +63,7 @@ export const getCurrentSummary = async (req, res) => {
       total: 0,
       comment: '',
       uid: req.uid,
+      expireAt: new Date(Date.now() + constants.TIME_TO_DELETE),
       tables: [],
     });
     await summary.save();

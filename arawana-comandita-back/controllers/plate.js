@@ -1,6 +1,7 @@
 import { response } from "express";
 import { plateMapper } from "../mappers/plateMapper.js";
 import { PlateGroupModel, PlateModel } from "../models/index.js";
+import constants from "../config/constants.js";
 
 export const getUserPlates = async (req, res) => {
   try {
@@ -58,6 +59,7 @@ export const createPlate = async (req, res = response) => {
         id: group.id,
         name: group.name,
       },
+      expireAt: new Date(Date.now() + constants.TIME_TO_DELETE),
     }));
     await plate.save();
 

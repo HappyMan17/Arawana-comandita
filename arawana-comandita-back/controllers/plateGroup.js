@@ -1,6 +1,7 @@
 import { response } from "express";
 import { PlateGroupModel, PlateModel } from "../models/index.js";
 import { plateMapper } from "../mappers/plateMapper.js";
+import constants from "../config/constants.js";
 
 const getGroupPlates = async (groupName) => {
   const plates = await PlateModel.find({ 'plateGroup.name': groupName }).exec();
@@ -77,7 +78,11 @@ export const createGroup = async (req, res) => {
     }
 
     // db save plate group
-    const group = new PlateGroupModel({ name: req.body.name, uid: req.uid });
+    const group = new PlateGroupModel({
+      name: req.body.name,
+      uid: req.uid,
+      expireAt: new Date(Date.now() + constants.TIME_TO_DELETE),
+    });
     await group.save();
 
     res.status(201).json({

@@ -1,3 +1,4 @@
+import constants from '../config/constants.js';
 import { commandMapper } from '../mappers/commandMapper.js';
 import { CommandModel } from '../models/Command.js';
 
@@ -61,7 +62,11 @@ export const createCommand = async (req, res) => {
         message: 'Some data is missing or incorrect',
       });
     }
-    const command = new CommandModel({ ...newCommand, uid: req.uid });
+    const command = new CommandModel({
+      ...newCommand,
+      uid: req.uid,
+      expireAt: new Date(Date.now() + constants.TIME_TO_DELETE),
+    });
     await command.save();
 
     res.status(201).json({
