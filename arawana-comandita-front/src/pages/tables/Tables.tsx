@@ -248,7 +248,7 @@ export const Tables = () => {
   }, []);
 
   return (
-    <section className="">
+    <section>
       <h1 className="w-full font-semibold text-4xl text-dark dark:text-white">
         Tables
       </h1>

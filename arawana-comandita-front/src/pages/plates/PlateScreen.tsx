@@ -123,7 +123,7 @@ export const PlateScreen = () => {
   }, [plates]);
 
   return (
-    <section className="relative">
+    <section>
       {
         // Default message:
         plateGroups.length === 0 ? (
