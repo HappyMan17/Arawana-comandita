@@ -34,7 +34,7 @@ export const Summary = () => {
   }, [filter]);
   return (
     <section>
-      <h1 className="w-full font-semibold text-4xl mb-10">
+      <h1 className="w-full font-semibold text-4xl mb-10 text-black dark:text-white">
         Summaries
       </h1>
       <div onClick={downloadSummary} className="w-full flex flex-row justify-between ">
@@ -51,7 +51,7 @@ export const Summary = () => {
       </div>
       {/* New component, needs an id in the click and className */}
       {(daySummaries.length === 0 || !daySummaries) && (
-        <h1 className="text-2xl mt-20 font-bold w-full text-center"> No summaries created yet. </h1>
+        <h1 className="text-2xl mt-20 font-bold w-full text-center text-black dark:text-white"> No summaries created yet. </h1>
       )}
       <div>
         {

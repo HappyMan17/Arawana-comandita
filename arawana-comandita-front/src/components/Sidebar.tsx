@@ -31,7 +31,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
   };
 
   return (
-    <section className={ `${darkMode} max-h-dvh overflow-y-scroll` }>
+    <section className={ `${darkMode} max-h-dvh h-screen overflow-y-scroll ${darkMode ? 'bg-gray-900' : 'bg-gray-100'}` }>
       <nav className="fixed top-0 z-50 left-0 w-full border-gray-700 bg-gray-800 dark:bg-gray-800 dark:border-gray-700">
         <div className="max-w-screen-xl flex flex-wrap items-center mx-auto p-5 justify-between sm:justify-end">
           <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" className="inline-flex items-center ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
@@ -89,9 +89,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
       </aside>
 
       {/* Children */}
-      <div className="max-h-dvh p-4 mt-16 mb-20 sm:ml-64">
+      <main className="max-h-dvh p-4 mt-16 mb-20 sm:ml-64">
         {children}
-      </div>
+      </main>
     </section>
 
   );
