@@ -248,8 +248,8 @@ export const Tables = () => {
   }, []);
 
   return (
-    <>
-      <h1 className="w-full font-semibold text-4xl">
+    <section>
+      <h1 className="w-full font-semibold text-4xl text-dark dark:text-white">
         Tables
       </h1>
       <section className="min-w-[700px] grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 grid-flow-row gap-4 my-5 overflow-hidden">
@@ -306,6 +306,6 @@ export const Tables = () => {
         isShown={modalStates.isPaymentModalShown}
         onClose={onClosePaymentModal}
       />
-    </>
+    </section>
   );
 };

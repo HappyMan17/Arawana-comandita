@@ -37,7 +37,7 @@ export const PlateGroupManagement: React.FC<PlateGroupManagementProp> = ({
   };
 
   return (
-    <section className="absolute top-1 right-6 flex flex-row items-center min-w-[100px]">
+    <section className="absolute top-20 right-6 flex flex-row items-center min-w-[100px]">
       <div className="relative mt-2">
         <Dropdown defaultValue={ dropdownValue ? dropdownValue : plateGroup[0]?.name } onChange={onChangeDropdown} values={plateGroup} />
       </div>

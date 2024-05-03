@@ -123,58 +123,56 @@ export const PlateScreen = () => {
   }, [plates]);
 
   return (
-    <main>
-      <section className="relative">
-        {
-          // Default message:
-          plateGroups.length === 0 ? (
-            <h1 className="text-2xl mt-20 font-bold w-full text-start">
-              To start, create a menu group <br /> <span className="text-gray-500">(soups, drinks, etc):</span>
-            </h1>
-          ) : (
-            plateGroups.map(group => {
-              //const plates = plateSections[group.name] ?? [];
-              return (
-                <div className="mb-9" key={ group.name } >
-                  <h1 className="truncate w-full font-semibold text-4xl">
-                    { group.name }
-                  </h1>
-                  <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-10 mb-10">
-                    {
-                      group.plates?.map(plate => {
-                        return (
-                          <ProductCard
-                            plate={plate}
-                            showFormModal={showFormModal}
-                            removePlate={removePlate}
-                            key={plate.id}
-                          />
-                        );
-                      })
-                    }
-                    {/* Create button */}
-                    <button onClick={() => showFormModal('Create Plate', null)} className="flex justify-center items-center min-h-80 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:hover:bg-gray-900 dark:border-gray-700">
-                      <svg className="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
-                      </svg>
-                    </button>
-                  </section>
-                </div>
-              );
-            })
-          )
-        }
-        {/* Plate group */}
-        <PlateGroupManagement
-          groupInputValue={groupInputValue}
-          onChangeInput={(value) => {
-            setGroupInputValue(value);
-          }}
-          plateGroup={plateGroups.filter(group => group.id)}
-          onSavePlateGroup={onAddPlateGroup}
-          onDeletePlateGroup={onRemovePlateGroup}
-        />
-      </section>
+    <section>
+      {
+        // Default message:
+        plateGroups.length === 0 ? (
+          <h1 className="text-2xl mt-20 font-bold w-full text-start text-black dark:text-white">
+            To start, create a menu group <br /> <span className="text-gray-500">(soups, drinks, etc):</span>
+          </h1>
+        ) : (
+          plateGroups.map(group => {
+            //const plates = plateSections[group.name] ?? [];
+            return (
+              <div className="mb-9" key={ group.name } >
+                <h1 className="truncate w-full font-semibold text-4xl text-black dark:text-white">
+                  { group.name }
+                </h1>
+                <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-10 mb-10">
+                  {
+                    group.plates?.map(plate => {
+                      return (
+                        <ProductCard
+                          plate={plate}
+                          showFormModal={showFormModal}
+                          removePlate={removePlate}
+                          key={plate.id}
+                        />
+                      );
+                    })
+                  }
+                  {/* Create button */}
+                  <button onClick={() => showFormModal('Create Plate', null)} className="flex justify-center items-center min-h-80 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:hover:bg-gray-900 dark:border-gray-700">
+                    <svg className="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
+                    </svg>
+                  </button>
+                </section>
+              </div>
+            );
+          })
+        )
+      }
+      {/* Plate group */}
+      <PlateGroupManagement
+        groupInputValue={groupInputValue}
+        onChangeInput={(value) => {
+          setGroupInputValue(value);
+        }}
+        plateGroup={plateGroups.filter(group => group.id)}
+        onSavePlateGroup={onAddPlateGroup}
+        onDeletePlateGroup={onRemovePlateGroup}
+      />
       {
         modalValues.isShown && (
           <ProductForm
@@ -191,6 +189,6 @@ export const PlateScreen = () => {
           <Loader />
         )
       }
-    </main>
+    </section>
   );
 };
