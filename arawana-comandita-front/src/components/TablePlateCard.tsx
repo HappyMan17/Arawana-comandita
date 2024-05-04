@@ -75,7 +75,7 @@ export const TablePlateCard: React.FC<TablePlateCardProps> = ({ plate }) => {
         <img className="rounded-t-lg" src={localImage} alt="" width="150" />
       </div>
       <div className="p-5">
-        <a href="#">
+        <a>
           <h5 className="truncate text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{ plate.name }</h5>
         </a>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">

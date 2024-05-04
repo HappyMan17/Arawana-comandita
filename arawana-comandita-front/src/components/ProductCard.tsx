@@ -17,7 +17,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ plate, showFormModal, 
         <img className="rounded-t-lg" src={image ? image : localImage} alt="" width="200" />
       </div>
       <div className="p-5">
-        <a href="#">
+        <a>
           <h5 className="truncate mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{ name }</h5>
         </a>
         <p className="truncate mb-3 font-normal text-gray-700 dark:text-gray-400">

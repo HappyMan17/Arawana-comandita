@@ -36,7 +36,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ defaultValue, values, onChan
             values.map((item: any) => {
               return (
                 <li onClick={onChangeDropdownValue} key={item.name} >
-                  <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                  <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                     { item.name }
                   </a>
                 </li>
