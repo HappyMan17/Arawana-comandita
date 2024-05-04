@@ -5,7 +5,7 @@ import process from 'process';
 const constants = {
   ACCEPTED_ORIGINS: [
     `http://localhost:${envs.PORT}`,
-    'https://restaurant-front-eight.vercel.app/', // front origin
+    'https://restaurant-front-eight.vercel.app', // front origin
     'http://localhost:5173', // front origin
     'http://localhost:8080', // front origin
   ],
