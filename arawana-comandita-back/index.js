@@ -40,6 +40,7 @@ app.use(cors({
 }));
 
 // Rutes
+app.get("/api", (req, res) => res.send("Server is running!"));
 app.use('/api/auth', authRouter);
 app.use('/api/plate', plateRouter);
 app.use('/api/plate_group', plateGroupRouter);
@@ -51,4 +52,3 @@ app.use('/api/cvs', cvsRouter);
 app.listen(PORT, () => {
   console.log('Server running on port ' + PORT);
 });
-
