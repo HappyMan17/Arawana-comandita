@@ -5,7 +5,7 @@ import { Command, State } from "../types";
 
 interface ChronometerProps {
   state: State;
-  command: Command;
+  command: Command | null;
 }
 
 export const Chronometer: React.FC<ChronometerProps> = ({ state, command }) => {
