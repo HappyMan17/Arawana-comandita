@@ -23,7 +23,7 @@ export const Login = () => {
   }, [errorMessage]);
 
   useEffect(() => {
-    // startLogin({ email: 'test@gmail.com', password: 'restaurantTest' });
+    startLogin({ email: 'test@gmail.com', password: 'restaurantTest' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
