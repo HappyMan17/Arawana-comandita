@@ -10,7 +10,7 @@ export const generatePDF = (summary: DaySummary) => {
   let yAxist = 50;
 
   // Title:
-  doc.text("Arawana Summary!", 80, 20);
+  doc.text("Restaurant Summary!", 80, 20);
   // Date:
   doc.text(`Summary Date: ${getDateFormat(new Date(date))}`, 10, 30);
 
