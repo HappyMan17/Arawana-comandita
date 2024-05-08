@@ -57,8 +57,8 @@ export const SelectProduct: React.FC<SelectProductProps> = ({
   return (
     <section className="absolute top-0 left-0 z-50 flex items-center justify-center w-full h-dvh bg-zinc-600 bg-opacity-80">
       {/* Card */}
-      <div className="relative w-full h-full sm:w-1/2 sm:h-4/5 sm:min-h-[650px] min-w-[480px] flex flex-col justify-start items-center p-9 rounded-none sm:rounded-xl bg-white dark:bg-gray-100 dark:border-gray-700">
-        <h1 className="mb-2 text-2xl font-bold tracking-tight text-black"> { 'Select Product' } </h1>
+      <div className="relative w-full h-full sm:w-1/2 sm:h-4/5 sm:min-h-[650px] min-w-[480px] flex flex-col justify-start items-center p-9 rounded-none sm:rounded-xl bg-white dark:bg-gray-900 dark:border-gray-700">
+        <h1 className="mb-2 text-2xl font-bold tracking-tight text-black dark:text-white"> { 'Select Product' } </h1>
         {/* Product group */}
         <div className='w-1/2-10 mt-3'>
           <Dropdown values={plateGroups} defaultValue={plateGroupSelected ?? plateGroups[0]?.name} onChange={onDropdownClick} />

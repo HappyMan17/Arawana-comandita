@@ -138,7 +138,7 @@ export const PlateScreen = () => {
                 <h1 className="truncate w-full font-semibold text-4xl text-black dark:text-white">
                   { group.name }
                 </h1>
-                <section className="grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 mt-10 mb-10">
+                <section className="grid grid-cols-1 md:grid-cols-3 grid-flow-row gap-4 mt-10 mb-10">
                   {
                     group.plates?.map(plate => {
                       return (

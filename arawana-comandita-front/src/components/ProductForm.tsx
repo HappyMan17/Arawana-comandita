@@ -60,25 +60,25 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onClose, plate, title,
 
   return (
     <section className="absolute top-0 left-0 z-50 flex items-center justify-center w-full h-dvh min-h-[450px] bg-zinc-600 bg-opacity-80">
-      <div className="bg-white w-96 h-[450px] flex flex-col justify-center items-center py-4 rounded-xl">
-        <h1 className="mb-2 text-2xl font-bold tracking-tight text-black"> { title } </h1>
-        <form className="p-3 w-80 bg-white" action="#" onSubmit={() => null} autoComplete="off" >
+      <div className="w-96 h-[450px] flex flex-col justify-center items-center py-4 rounded-xl bg-white dark:bg-gray-800">
+        <h1 className="mb-2 text-2xl font-bold tracking-tight text-black dark:text-white"> { title } </h1>
+        <form className="p-3 w-80 bg-white dark:bg-gray-800" action="#" onSubmit={() => null} autoComplete="off" >
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-900">
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Product Name:
-              <input value={formState.name} onChange={onChangeValue} type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Soup" required />
+              <input value={formState.name} onChange={onChangeValue} type="text" name="name" id="name" className="bg-gray-50 dark:bg-gray-300 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Soup" required />
             </label>
           </div>
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-900">
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Description:
-              <input value={formState.description} onChange={onChangeValue} type="text" name="description" id="description" placeholder="" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required />
+              <input value={formState.description} onChange={onChangeValue} type="text" name="description" id="description" placeholder="" className="bg-gray-50 dark:bg-gray-300 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required />
             </label>
           </div>
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-900">
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Price:
-              <input value={formState.price} autoComplete="off" onChange={onChangeValue} type="number" name="price" id="price" placeholder="" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required />
+              <input value={formState.price} autoComplete="off" onChange={onChangeValue} type="number" name="price" id="price" placeholder="" className="bg-gray-50 dark:bg-gray-300 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required />
             </label>
           </div>
           {/* Product group */}
