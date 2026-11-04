@@ -122,3 +122,30 @@ export const checkUserToken = async (req, res = response) => {
     });
   }
 };
+
+export const updatePassword = async (req, res = response) => {
+  try {
+    const { email, password } = req.body;
+    const { emailExist, user } = await checkUserEmailAlreadyExist(email);
+
+    if (!emailExist) {
+      return res.status(404).json({
+        ok: false,
+        message: 'User email does not exist',
+      });
+    }
+
+    user.password = hashPassword(password);
+    await user.save();
+
+    res.status(200).json({
+      ok: true,
+      message: 'Password updated successfully',
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      message: 'Please talk with your administrator',
+    });
+  }
+};

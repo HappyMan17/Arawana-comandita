@@ -4,7 +4,7 @@
 */
 
 import express from "express";
-import { createUser, loginUser, checkUserToken } from "../controllers/auth.js";
+import { createUser, loginUser, checkUserToken, updatePassword } from "../controllers/auth.js";
 import { check } from "express-validator";
 import { JWTValidation, validateFields } from "../middlewares/index.js";
 
@@ -33,5 +33,15 @@ authRouter.post('/login',
 
 // renew user token
 authRouter.get('/verify', JWTValidation, checkUserToken);
+
+// update password by email
+// authRouter.put('/update-password',
+//   [ // middleware
+//     check('email', 'email is required').not().isEmpty().isEmail(),
+//     check('password', 'password is required').not().isEmpty(),
+//     check('password', 'password most have more that 5 characteres').isLength({ min: 8 }),
+//     validateFields,
+//   ],
+//   updatePassword);
 
 export default authRouter;
