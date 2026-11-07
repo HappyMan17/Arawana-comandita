@@ -23,7 +23,9 @@ export const tableSlice = createSlice({
   reducers: {
     addTable: (state, action: PayloadAction<Table>) => {
       state.isLoading = false;
-      state.tables.push(action.payload);
+      if(action.payload){
+        state.tables.push(action.payload);
+      }
     },
     setCurrentTable: (state, action: PayloadAction<string>) => {
       state.isLoading = false;

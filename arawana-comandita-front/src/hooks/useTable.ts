@@ -1,4 +1,5 @@
 import { restaurantApi } from "../api";
+import { normalizeTable } from "../helpers";
 import {
   addTable,
   clearTables,
@@ -32,9 +33,10 @@ export const useTable = () => {
       if (!data || !data.table) {
         dispatch(setTableErrorMessage('Error creating table'));
         console.log('error creating table');
+        return;
       }
 
-      dispatch(addTable(data.table));
+      dispatch(addTable(normalizeTable(data.table)));
     } catch (error) {
       dispatch(setTableErrorMessage('Error creating table'));
       console.log({ error });
@@ -54,11 +56,12 @@ export const useTable = () => {
       if (!data || !data.tables) {
         dispatch(setTableErrorMessage('Error geting table'));
         console.log('error geting tables');
+        return;
       }
       dispatch(clearTables());
 
       data.tables.map((table: Table) => {
-        dispatch(addTable(table));
+        dispatch(addTable(normalizeTable(table)));
       });
     } catch (error: any) {
       if (error.response.status === 403) {
@@ -83,6 +86,7 @@ export const useTable = () => {
       if (!data || !data.table) {
         dispatch(setTableErrorMessage('Error updating table'));
         console.log('error updating tables');
+        return;
       }
 
       dispatch(updateTable(table));
@@ -105,6 +109,7 @@ export const useTable = () => {
       if (!data || !data.table) {
         dispatch(setTableErrorMessage('Error removing table'));
         console.log('error removing table');
+        return;
       }
       // dispatch(clearPlates());
       // console.log({ dat: data, data: data.plate }); // todo remove
