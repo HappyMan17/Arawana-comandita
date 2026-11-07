@@ -64,8 +64,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
       <DarkMode changeDarkMode={changeDarkMode} />
 
       {/* Sidebar */}
-      <aside id="default-sidebar" className={`fixed left-0 z-40 w-64 h-screen transition-transform sm:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full hidden'} sm:flex`} aria-label="Sidebar">
-        <div className="h-full px-3 py-4 overflow-y-auto bg-blue-950 dark:bg-gray-800 w-[250px] mt-16">
+      <aside id="default-sidebar" className={`fixed top-16 left-0 z-40 w-64 h-[calc(100vh-4rem)] transition-transform sm:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full hidden'} sm:flex`} aria-label="Sidebar">
+        <div className="h-full px-3 py-4 overflow-y-auto bg-blue-950 dark:bg-gray-800 w-[250px] flex flex-col justify-between">
           <ul className="space-y-2 font-medium">
             <li>
               <button onClick={() => onSelectPage('/summaries')} className={`flex items-center p-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 ${isActive.summaries && 'enabled:bg-blue-700 enabled:dark:bg-gray-700'} group w-full`} >
@@ -91,6 +91,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
                 <span className="flex-1 ms-3 whitespace-nowrap text-left text-white">Products</span>
               </button>
             </li>
+          </ul>
+          <ul className="space-y-2 font-medium">
             <li>
               <button className="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-blue-700 dark:hover:bg-gray-700 group w-full" onClick={logout}>
                 <svg className="flex-shrink-0 w-5 h-5 text-white transition duration-75 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
