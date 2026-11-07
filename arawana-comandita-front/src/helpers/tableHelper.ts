@@ -18,3 +18,14 @@ export const getInitTimer = (time: string): number | null => {
   }
   return null;
 };
+
+export const normalizeTable = (table: any) => {
+  return {
+    ...table,
+    commands: table.commands || [],
+    plates: table.plates || [],
+    total: table.total || 0,
+    comments: table.comments || '',
+    name: table.name || '',
+  }
+}

@@ -59,7 +59,7 @@ export const TableCard: React.FC<TableCardProps> = ({
         <img className="rounded-t-lg" src={localImage} alt="" />
         {
           table?.commands && table?.commands.length > 0 && (
-            <Chronometer state={chronometerState} command={table.commands[0]} />
+            <Chronometer state={chronometerState} command={table.commands?.[0]} />
           )
         }
       </div>
