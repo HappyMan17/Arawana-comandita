@@ -1,4 +1,5 @@
 import { restaurantApi } from "../api";
+import { normalizePlate } from "../helpers";
 import {
   addPlate,
   clearPlates,
@@ -36,7 +37,7 @@ export const usePlates = () => {
         return;
       }
 
-      dispatch(addPlate(data.plate));
+      dispatch(addPlate(normalizePlate(data.plate)));
     } catch (error) {
       dispatch(setErrorMessage('Error creating plate catch'));
       console.log({ error });
@@ -57,7 +58,7 @@ export const usePlates = () => {
       dispatch(clearPlates());
 
       data.plates.map((plate: Plate) => {
-        dispatch(addPlate(plate));
+        dispatch(addPlate(normalizePlate(plate)));
       });
     } catch (error: any) {
       if (error.response.status === 403) {
