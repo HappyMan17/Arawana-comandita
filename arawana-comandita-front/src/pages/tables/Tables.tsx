@@ -66,7 +66,7 @@ export const Tables = () => {
   // TABLE MODAL Create or update
   const onSaveClick = async (table: Table) => {
     if (!user.id) {
-      // without uid plate mustn't be created or updated
+      // without uid Table shouldn't be created or updated
       console.log('no user id');
       return;
     }
@@ -252,7 +252,7 @@ export const Tables = () => {
       <h1 className="w-full font-semibold text-4xl text-dark dark:text-white">
         Tables
       </h1>
-      <section className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 grid-flow-row gap-4 my-5 overflow-hidden">
+      <section className="min-w-[700px] grid grid-cols-1 sm:grid-cols-3 2xl:grid-cols-5 grid-flow-row gap-4 my-5">
         {
           tables.map(table => {
             return (
@@ -271,7 +271,7 @@ export const Tables = () => {
           })
         }
         {/* Create new table card */}
-        <button onClick={() => showFormModal('Create Table', null)} className="flex justify-center items-center min-h-80 max-w-[320px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:hover:bg-gray-900 dark:border-gray-700">
+        <button onClick={() => showFormModal('Create Table', null)} className="flex justify-center items-center min-h-80 min-w-[200px] m-1 w-full max-w-[320px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:hover:bg-gray-900 dark:border-gray-700">
           <svg className="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
           </svg>
