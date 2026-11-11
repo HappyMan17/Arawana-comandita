@@ -34,7 +34,7 @@ export const TableSchema = Schema({
 });
 
 TableSchema.virtual('id').get(function() {
-  return this._id.toHexString();
+  return this._id ? this._id.toHexString() : this.id;
 });
 
 // Ensure virtual fields are included when converting to JSON
