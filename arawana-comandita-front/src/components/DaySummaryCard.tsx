@@ -53,15 +53,16 @@ export const DaySummaryCard: React.FC<DaySummaryCardProps> = ({ summary }) => {
       <div className={`${showDate[id!]?.isShown ? '' : 'hidden'} w-full bg-gray-200 p-10`} >
         <h1 className="text-xl"> Total of Day: { convertToCurrency(total) } </h1>
         {
-          tables.map(table => {
+          tables.map((table, index) => {
             return (
-              <section key={`${table.id}_${table.total}`}>
+              <section key={`${table.id}_${index}`}>
                 <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
                 <h1 className="truncate text-xl"> { table.name.toUpperCase() } </h1>
                 {
-                  table.plates.map(plate => {
+                  // index in key: older summaries stored plates with id null, and this list is read-only
+                  table.plates.map((plate, index) => {
                     return (
-                      <section key={`${plate.id}_${table.total}`}>
+                      <section key={`${plate.id}_${index}`}>
                         <h1 className="truncate text-lg ml-5">
                           -{ plate.name.toUpperCase() }:
                         </h1>

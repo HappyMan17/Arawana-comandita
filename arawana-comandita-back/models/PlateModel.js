@@ -32,15 +32,6 @@ export const PlateSchema = Schema({
   },
 });
 
-PlateSchema.virtual('id').get(function() {
-  return this._id ? this._id.toHexString() : this.id;
-});
-
-// Ensure virtual fields are included when converting to JSON
-PlateSchema.set('toJSON', {
-  virtuals: true
-});
-
 export const PlateSchemaId = PlateSchema.clone();
 
 // Add new attributes to the copied schema
@@ -64,5 +55,15 @@ PlateSchemaId.add({
 });
 
 PlateSchemaId.set('_id', false);
+
+// Defined after cloning on purpose: PlateSchemaId must not inherit this virtual,
+// otherwise toJSON overwrites its stored `id` with null (subdocs have no _id).
+PlateSchema.virtual('id').get(function() {
+  return this._id.toHexString();
+});
+
+PlateSchema.set('toJSON', {
+  virtuals: true
+});
 
 export const PlateModel = model('Plate', PlateSchema);

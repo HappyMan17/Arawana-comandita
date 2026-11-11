@@ -123,7 +123,7 @@ export const PlateScreen = () => {
   }, [plates]);
 
   return (
-    <section>
+    <section className="w-full h-full px-4 sm:px-10 py-10">
       {
         // Default message:
         plateGroups.length === 0 ? (
