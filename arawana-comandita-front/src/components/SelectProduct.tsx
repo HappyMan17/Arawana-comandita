@@ -1,12 +1,13 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from 'react';
 import { Dropdown, TablePlateCard } from '.';
-import { useTable } from '../hooks';
+// import { useTable } from '../hooks';
 import { Plate, PlateGroup } from '../types';
-import { deepCopy, k } from '../helpers';
+import { k } from '../helpers';
 
 interface SelectProductProps {
   plates: Plate[];
+  tablePlates: Plate[];
   plateGroups: PlateGroup[];
   onClose: () => void;
   onSave: (tablePlates: Plate[]) => void;
@@ -14,18 +15,19 @@ interface SelectProductProps {
 
 export const SelectProduct: React.FC<SelectProductProps> = ({
   plates,
+  tablePlates,
   onClose,
   onSave,
   plateGroups,
 }) => {
-  const { findTablePlate } = useTable();
-  const [tablePlates, setTablePlates] = useState<Plate[]>([]);
+  // const { findTablePlate } = useTable();
+  const [allPlates, setTablePlates] = useState<Plate[]>([]);
   const [plateGroupSelected, setPlateGroupSelected] = useState<string | null>(
     plateGroups[0]?.name ?? null,
   );
 
   const onSaveTablePlates = () => {
-    const selectedPlates = tablePlates.filter(plate => plate.isSelected);
+    const selectedPlates = allPlates.filter(plate => plate.isSelected);
     // Add command to save selectedPlates
     onSave(selectedPlates);
   };
@@ -38,13 +40,16 @@ export const SelectProduct: React.FC<SelectProductProps> = ({
     if (plates && plates.length > 0) {
       // this function gets the previous table plates saved
       const getTablePlates = () => {
-        const dbPlates: Plate[] = deepCopy(plates);
-        const currentPlates: Plate[] = dbPlates.map(plate => {
-          const currentPlate = findTablePlate(plate.id!);
+        const currentPlates: Plate[] = plates.map(plate => {
+          // const currentPlate = findTablePlate(plate.id!);
+          // console.log({ tablePlates });
+          const currentPlate = tablePlates.find(p => {
+            return p.id === plate.id;
+          });
           if (currentPlate) {
-            return currentPlate;
+            return { ...currentPlate, isSelected: true };
           }
-          return plate;
+          return { ...plate, isSelected: false };
         });
         setTablePlates(currentPlates);
       };
@@ -52,7 +57,7 @@ export const SelectProduct: React.FC<SelectProductProps> = ({
     }
     // setPlateGroupSelected(plateGroups[0]?.name ?? null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plates, plateGroups]);
+  }, [plates, plateGroups, tablePlates]);
 
   return (
     <section className="absolute top-0 left-0 z-50 flex items-center justify-center w-full h-dvh bg-zinc-600 bg-opacity-80">
@@ -66,7 +71,7 @@ export const SelectProduct: React.FC<SelectProductProps> = ({
         {/* Product section */}
         <section className="max-h-[700px] sm:max-h-[350px] grid grid-cols-1 sm:grid-cols-2 grid-flow-row gap-4 overflow-scroll">
           {
-            tablePlates.map(plate => {
+            allPlates.map(plate => {
               if (plate.plateGroup?.name === plateGroupSelected) {
                 return (
                   <TablePlateCard plate={plate} key={plate.id} />

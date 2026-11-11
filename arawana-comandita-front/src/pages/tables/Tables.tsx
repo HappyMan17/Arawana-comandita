@@ -167,10 +167,7 @@ export const Tables = () => {
    */
   const onSavePlateModal = async (tablePlates: Plate[]) => {
     if (currentTable) {
-      // update plates
-      tablePlates.forEach(plate => {
-        console.log({ plate });
-      });
+      // SelectProduct already returns the full selection (previous plates included)
       await startUpdatingTablePlates({
         tableId: currentTable.id!,
         selectedPlates: tablePlates,
@@ -196,7 +193,7 @@ export const Tables = () => {
       setModalStates(prevState => ({
         ...prevState,
         isPreviewModalShown: false,
-        plates,
+        plates: [],
       }));
     }
   };
@@ -294,7 +291,7 @@ export const Tables = () => {
       }
       {
         modalStates.isPlateModalShown && (
-          <SelectProduct plates={plates ?? []} onClose={onClosePlateModal} onSave={onSavePlateModal} plateGroups={plateGroups} />
+          <SelectProduct plates={plates ?? []} tablePlates={currentTable?.plates ?? []} onClose={onClosePlateModal} onSave={onSavePlateModal} plateGroups={plateGroups} />
         )
       }
       {

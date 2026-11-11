@@ -33,15 +33,6 @@ export const TableSchema = Schema({
   },
 });
 
-TableSchema.virtual('id').get(function() {
-  return this._id ? this._id.toHexString() : this.id;
-});
-
-// Ensure virtual fields are included when converting to JSON
-TableSchema.set('toJSON', {
-  virtuals: true
-});
-
 export const TableSchemaWithId = TableSchema.clone();
 
 // Add new attributes to the copied schema
@@ -51,5 +42,15 @@ TableSchemaWithId.add({
 });
 
 TableSchemaWithId.set('_id', false);
+
+// Defined after cloning on purpose: TableSchemaWithId must not inherit this virtual,
+// otherwise toJSON overwrites its stored `id` with null (subdocs have no _id).
+TableSchema.virtual('id').get(function() {
+  return this._id.toHexString();
+});
+
+TableSchema.set('toJSON', {
+  virtuals: true
+});
 
 export const TableModel = model('Table', TableSchema);

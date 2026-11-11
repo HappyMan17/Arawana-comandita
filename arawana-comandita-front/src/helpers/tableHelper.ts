@@ -1,3 +1,5 @@
+import { normalizePlate } from "./plateHelper";
+
 function isValidDate(dateString: string) {
   // Try creating a new Date object with the given string
   if (dateString === '' || !dateString) return false;
@@ -23,7 +25,7 @@ export const normalizeTable = (table: any) => {
   return {
     ...table,
     commands: table.commands || [],
-    plates: table.plates || [],
+    plates: (table.plates || []).map((plate: any) => normalizePlate(plate)),
     total: table.total || 0,
     comments: table.comments || '',
     name: table.name || '',
