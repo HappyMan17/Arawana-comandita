@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useCallback, useEffect, useState } from "react";
 import { getInitTimer } from "../helpers";
 import { Command, State } from "../types";
@@ -69,12 +68,12 @@ export const Chronometer: React.FC<ChronometerProps> = ({ state, command }) => {
   }, [isRunning, time]);
 
   return (
-    <div className="absolute bottom-1 right-2 w-[50px] justify-center">
+    <div>
       {
         (!command?.initCommand || command.platesServed) ? (
           <div></div>
         ) : (
-          <p className="font-medium text-lg">
+          <p className="font-medium tabular-nums">
             {hours}:{minutes.toString().padStart(2, "0")}:
             {seconds.toString().padStart(2, "0")}
           </p>
