@@ -1,15 +1,42 @@
 /* eslint-disable max-len */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, useUser } from "../../hooks";
 import Swal from "sweetalert2";
 import { DarkMode } from "../../components";
 import { getEnvVariables } from "../../helpers";
+import { restaurantApi } from "../../api";
+
+// Render free tier sleeps; poll the health route until the server answers
+const useServerReady = () => {
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    let retryId: number;
+    const ping = async () => {
+      try {
+        await restaurantApi.get('/');
+        if (!cancelled) setIsReady(true);
+      } catch {
+        if (!cancelled) retryId = setTimeout(ping, 5000);
+      }
+    };
+    ping();
+    return () => {
+      cancelled = true;
+      clearTimeout(retryId);
+    };
+  }, []);
+
+  return isReady;
+};
 
 export const Login = () => {
   // const navigate = useNavigate();
   const { onChangeValue, email, password } = useForm();
   const { startLogin, errorMessage, darkMode, changeDarkMode } = useUser();
+  const isServerReady = useServerReady();
 
   const onSubmit = (event: any) => {
     event.preventDefault();
@@ -33,7 +60,7 @@ export const Login = () => {
   return (
     <section className={`${darkMode} ${darkMode ? 'bg-gray-900' : 'bg-gray-200'} h-screen`}>
       <DarkMode changeDarkMode={changeDarkMode} />
-      <ServerInitializing />
+      { !isServerReady && <ServerInitializing /> }
 
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
@@ -76,8 +103,8 @@ export const Login = () => {
               {
                 hasDemo && (
                   <div className="space-y-2">
-                    <button type="button" onClick={onDemoLogin} className="w-full min-h-10 border border-blue-600 text-blue-700 bg-transparent hover:bg-blue-50 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:border-blue-400 dark:text-blue-300 dark:hover:bg-gray-700">
-                      Try the demo
+                    <button type="button" onClick={onDemoLogin} disabled={!isServerReady} className="w-full min-h-10 disabled:opacity-50 disabled:cursor-not-allowed border border-blue-600 text-blue-700 bg-transparent hover:bg-blue-50 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:border-blue-400 dark:text-blue-300 dark:hover:bg-gray-700">
+                      { isServerReady ? 'Try the demo' : 'Waking up the server…' }
                     </button>
                     <p className="text-xs text-center text-gray-600 dark:text-gray-300">
                       Demo data resets regularly, so feel free to play around.
