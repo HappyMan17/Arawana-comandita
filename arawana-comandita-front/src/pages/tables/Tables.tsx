@@ -249,7 +249,7 @@ export const Tables = () => {
       <h1 className="w-full font-semibold text-4xl text-dark dark:text-white">
         Tables
       </h1>
-      <section className="min-w-[700px] grid grid-cols-1 sm:grid-cols-3 2xl:grid-cols-5 grid-flow-row gap-4 my-5">
+      <section className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4 my-5">
         {
           tables.map(table => {
             return (
@@ -268,10 +268,11 @@ export const Tables = () => {
           })
         }
         {/* Create new table card */}
-        <button onClick={() => showFormModal('Create Table', null)} className="flex justify-center items-center min-h-80 min-w-[200px] m-1 w-full max-w-[320px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:hover:bg-gray-900 dark:border-gray-700">
-          <svg className="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+        <button onClick={() => showFormModal('Create Table', null)} className="flex flex-col gap-2 justify-center items-center min-h-48 w-full rounded-lg border-2 border-dashed border-gray-300 bg-transparent text-gray-600 hover:border-blue-500 hover:text-blue-600 dark:border-gray-600 dark:text-gray-300 dark:hover:border-blue-400 dark:hover:text-blue-400">
+          <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
           </svg>
+          <span className="text-sm font-medium">Add table</span>
         </button>
       </section>
       {/* Modals: */}

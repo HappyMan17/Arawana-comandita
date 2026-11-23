@@ -1,12 +1,8 @@
-export const convertToCurrency = (value: number) => {
-  const COP = new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
-  });
+const COP = new Intl.NumberFormat('es-CO', {
+  style: 'currency',
+  currency: 'COP',
+  minimumFractionDigits: 0, // COP has no cents
+  maximumFractionDigits: 0,
+});
 
-  if (!value) {
-    COP.format(0);
-  }
-
-  return COP.format(value);
-};
+export const convertToCurrency = (value: number) => COP.format(value || 0);

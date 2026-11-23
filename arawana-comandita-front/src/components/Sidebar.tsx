@@ -1,6 +1,5 @@
 import { ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DarkMode } from ".";
 import { useUser } from "../hooks";
 
 /* eslint-disable max-len */
@@ -10,6 +9,7 @@ type SidebarProps = {
 }
 
 const initState = {
+  home: false,
   summaries: false,
   tables: false,
   plates: false,
@@ -17,7 +17,8 @@ const initState = {
 
 export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
   const navigate = useNavigate();
-  const { darkMode, changeDarkMode } = useUser();
+  const { darkMode, changeDarkMode, user } = useUser();
+  const today = new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
 
   const [isActive, setIsActive] = useState(initState);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -46,7 +47,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
   return (
     <main onClick={onCloseSidebar} className={ `${darkMode} max-h-dvh h-screen overflow-y-scroll ${darkMode ? 'bg-gray-900' : 'bg-gray-100'}` }>
       <nav className="fixed top-0 z-50 left-0 w-full border-gray-700 bg-blue-950 dark:bg-gray-800 dark:border-gray-700">
-        <div className="max-w-screen-xl flex flex-wrap items-center mx-auto p-5 justify-between sm:justify-end">
+        <div className="w-full flex items-center p-4 gap-3">
           <button onClick={onOpenSidebar} data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" className={`inline-flex items-center ms-3 text-sm text-gray-500 rounded-lg ${isSidebarOpen ? 'hidden' : 'flex'} sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600`} >
             <span className="sr-only">Open sidebar</span>
             {/* hamburguer logo */}
@@ -55,18 +56,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
             </svg>
           </button>
           {/* Restaurant logo */}
-          <a className="mx-3 flex items-center space-x-3 rtl:space-x-reverse">
-            <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">Restaurant</span>
-          </a>
+          <span className="text-2xl font-semibold whitespace-nowrap text-white">Arawana</span>
+          <div className="ms-auto text-right text-sm text-white leading-tight">
+            <p className="font-medium">{ user?.name }</p>
+            <p className="text-blue-200 dark:text-gray-400 capitalize">{ today }</p>
+          </div>
         </div>
       </nav>
-      <DarkMode changeDarkMode={changeDarkMode} />
 
       {/* Sidebar */}
       <aside id="default-sidebar" className={`fixed top-16 left-0 z-40 w-64 h-[calc(100vh-4rem)] transition-transform sm:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full hidden'} sm:flex`} aria-label="Sidebar">
         <div className="h-full px-3 py-4 overflow-y-auto bg-blue-950 dark:bg-gray-800 w-[250px] flex flex-col justify-between">
           <ul className="space-y-2 font-medium">
+            <li>
+              <button onClick={() => onSelectPage('/home')} className={`flex items-center p-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 ${isActive.home && 'enabled:bg-blue-700 enabled:dark:bg-gray-700'} group w-full`} >
+                <svg className="w-5 h-5 text-white dark:text-gray-400 group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8v10a1 1 0 0 0 1 1h4v-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5h4a1 1 0 0 0 1-1V8M1 10l9-9 9 9"/>
+                </svg>
+                <span className="flex-1 ms-3 whitespace-nowrap text-left text-white">Home</span>
+              </button>
+            </li>
             <li>
               <button onClick={() => onSelectPage('/summaries')} className={`flex items-center p-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 ${isActive.summaries && 'enabled:bg-blue-700 enabled:dark:bg-gray-700'} group w-full`} >
                 <svg className="w-6 h-6 text-white dark:text-gray-400 group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 20">
@@ -93,6 +102,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, logout }) => {
             </li>
           </ul>
           <ul className="space-y-2 font-medium">
+            <li>
+              <button className="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-blue-700 dark:hover:bg-gray-700 group w-full" onClick={changeDarkMode}>
+                <svg className="flex-shrink-0 w-5 h-5 text-white dark:text-gray-400 group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                </svg>
+                <span className="flex-1 ms-3 whitespace-nowrap text-left text-white">{ darkMode ? 'Light mode' : 'Dark mode' }</span>
+              </button>
+            </li>
             <li>
               <button className="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-blue-700 dark:hover:bg-gray-700 group w-full" onClick={logout}>
                 <svg className="flex-shrink-0 w-5 h-5 text-white transition duration-75 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
