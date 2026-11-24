@@ -56,7 +56,6 @@ export const SelectProduct: React.FC<SelectProductProps> = ({
       getTablePlates();
     }
     // setPlateGroupSelected(plateGroups[0]?.name ?? null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plates, plateGroups, tablePlates]);
 
   return (
