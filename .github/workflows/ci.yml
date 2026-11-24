@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      # root install covers both workspaces via the root package-lock.json
+      - run: npm ci
+
+      - name: Front - lint
+        run: npm run lint -w arawana-comandita-front
+      - name: Front - test
+        run: npm test -w arawana-comandita-front -- --ci
+      - name: Front - build
+        run: npm run build -w arawana-comandita-front
+
+      - name: Back - lint
+        run: npm run lint -w arawana-comandita-back

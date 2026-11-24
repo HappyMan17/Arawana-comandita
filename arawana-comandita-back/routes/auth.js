@@ -4,7 +4,7 @@
 */
 
 import express from "express";
-import { createUser, loginUser, checkUserToken, updatePassword } from "../controllers/auth.js";
+import { createUser, loginUser, checkUserToken } from "../controllers/auth.js";
 import { check } from "express-validator";
 import { JWTValidation, validateFields } from "../middlewares/index.js";
 
